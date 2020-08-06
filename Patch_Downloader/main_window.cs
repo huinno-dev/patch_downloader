@@ -285,53 +285,39 @@ namespace Huinno_Downloader
             Thread.Sleep(500);
             
             string serialNum = "UNKNOWN";
-            //if (!isDevNameSet)
-            //{
-            //    string str_tx = cSerialPort.ReadExisting();
+            if (!isDevNameSet)
+            {
+                string str_tx = cSerialPort.ReadExisting();
 
-            //    if (str_tx.Contains("[INFO] "))
-            //    {
-            //        ParseDeviceInfo(str_tx);
+                if (str_tx.Contains("[INFO] "))
+                {
+                    ParseDeviceInfo(str_tx);
 
-            //        InitSerialTextBox(
-            //            a_huinno
-            //            , b_category
-            //            , c_assembleType
-            //            , d_version
-            //            , e_usageType
-            //            , f_country
-            //            , g_serialNum
-            //            );
+                    InitSerialTextBox(
+                        a_huinno
+                        , b_category
+                        , c_assembleType
+                        , d_version
+                        , e_usageType
+                        , f_country
+                        , g_serialNum
+                        );
 
-            //        serialNum = g_serialNum;
-            //        isDevNameSet = true;
-            //    }
+                    serialNum = g_serialNum;
+                    isDevNameSet = true;
+                }
+            }
 
-            //    //if (str.Contains("BLE device name: "))
-            //    //{
-            //    //    int st = str.IndexOf("BLE device name: ");
-            //    //    st += 17;
-
-            //    //    string bt_name = str.Substring(st, 10);
-            //    //    ControlTextBox(TB_LogMsg, "BLE device name: " + bt_name);
-
-            //    //    serialNum = str.Substring(st + 5, 5);
-            //    //    InitSerialTextBox(serialNum);
-
-            //    //    isDevNameSet = true;
-            //    //}
-            //}
-
-            //if (!isDevNameSet)
-            //{
-            //    ControlTextBox(TB_LogMsg, "Try again after few sencond.");
-            //    ControlButton(BT_StartDown, true);
-            //    return;
-            //}
+            if (!isDevNameSet)
+            {
+                ControlTextBox(TB_LogMsg, "Try again after few sencond.");
+                ControlButton(BT_StartDown, true);
+                return;
+            }
             ControlButton(BT_StartDown, false);
 
             //
-            //total_len = (nand1EdIdx - nand1StIdx + 1);
+            total_len = (nand1EdIdx - nand1StIdx + 1);
 
             // send command to get data
             RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
@@ -364,7 +350,7 @@ namespace Huinno_Downloader
                 int rCnt = cSerialPort.Read(rBuf);
                 if (rCnt < 0)
                 {
-                    if (rCnt == -1) break;
+                    //if (rCnt == -1) break;
 
                     Thread.Sleep(10);
                     Console.WriteLine(String.Format("err: {0}", rCnt));
@@ -378,20 +364,20 @@ namespace Huinno_Downloader
                 wCnt += 1;
                 Array.Clear(rBuf, 0, rCnt);
 
-                //if (wCnt % 55 == 0)
-                //{
-                //    int val = 100 * wCnt / total_len;
-                //    ControlProgressBar(progressBar1, val);
-                //    ControlLabel(LB_ProgVal, val.ToString() );
-                //}
+                if (wCnt % 55 == 0)
+                {
+                    int val = 100 * wCnt / total_len;
+                    ControlProgressBar(progressBar1, val);
+                    ControlLabel(LB_ProgVal, val.ToString());
+                }
 
-                //if (wCnt == total_len)
-                //{
-                //    int val = 100;
-                //    ControlProgressBar(progressBar1, val);
-                //    ControlLabel(LB_ProgVal, val.ToString() );
-                //    break;
-                //}
+                if (wCnt == total_len)
+                {
+                    int val = 100;
+                    ControlProgressBar(progressBar1, val);
+                    ControlLabel(LB_ProgVal, val.ToString());
+                    break;
+                }
             }
             wCnt = 0;
             bw.Close();
@@ -400,7 +386,7 @@ namespace Huinno_Downloader
             isDevNameSet = false;
             ControlButton(BT_StartDown, true);
 
-            if (MessageBox.Show("선택하신 정보가 저장됩니다", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("서버 업로드", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 MessageBox.Show("예 클릭");
             }
@@ -492,7 +478,6 @@ namespace Huinno_Downloader
             // loop until we can't read any more
             while (true)
             {
-                byte[] convertedImage;
                 // All ints are 4-bytes
                 byte[] pageData = new byte[4096];
                 // Read size
@@ -553,11 +538,17 @@ namespace Huinno_Downloader
             if (e.KeyCode == Keys.D && (ModifierKeys & (Keys.Control| Keys.ShiftKey) )== Keys.Control)
             {
                 // CTRL + UP was pressed
-                win_password form_password = new win_password();
-                form_password.ShowDialog();
+                win_password frm2 = new win_password();
+                frm2.ShowDialog();
 
-                m_bDevMode = true;
+                m_bDevMode = frm2.Passvalue;
 
+                if(m_bDevMode)
+                {
+
+                    //
+                    ShowDevMode(m_bDevMode);
+                }
             }
         }
     }

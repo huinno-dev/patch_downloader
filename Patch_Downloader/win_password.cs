@@ -17,12 +17,22 @@ namespace Huinno_Downloader
             InitializeComponent();
         }
 
+        bool m_devMode = false;
         private void BT_EnterPw_Click(object sender, EventArgs e)
         {
             if( TB_DevPw.Text!="1234")
                 MessageBox.Show("Check Password.");
 
-            this.Close();
+            Passvalue = true; // Form1 으로 값을 전달하기 위해
+            this.Hide();
         }
+
+        private bool Form2_value;
+        public bool Passvalue
+        {
+            get { return this.Form2_value; } // Form2에서 얻은(get) 값을 다른폼(Form1)으로 전달 목적
+            set { this.Form2_value = value; }  // 다른폼(Form1)에서 전달받은 값을 쓰기
+        }
+
     }
 }

@@ -147,7 +147,7 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.Location = new System.Drawing.Point(184, 126);
+            this.BT_ConnPort.Location = new System.Drawing.Point(184, 129);
             this.BT_ConnPort.Name = "BT_ConnPort";
             this.BT_ConnPort.Size = new System.Drawing.Size(152, 37);
             this.BT_ConnPort.TabIndex = 10;

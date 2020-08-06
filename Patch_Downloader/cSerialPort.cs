@@ -36,7 +36,7 @@ namespace Huinno_Downloader
         public static string Open(string cport_name, int cport_baud)
         {
             gComPort = new SerialPort(cport_name, cport_baud);
-            gComPort.ReadTimeout = 1000; //Setting ReadTimeout =3500 ms or 3.5 seconds
+            gComPort.ReadTimeout = 3500; //Setting ReadTimeout =3500 ms or 3.5 seconds
 
             //int size = gComPort.ReadBufferSize;
             gComPort.ReadBufferSize = 1024*4;
@@ -117,20 +117,6 @@ namespace Huinno_Downloader
         {
             return gComPort.ReadLine();
         }
-        //private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        //{
-        //    int intBuffer;
-        //    intBuffer = gComPort.BytesToRead;
-        //    byte[] byteBuffer = new byte[intBuffer];
-        //    gComPort.Read(byteBuffer, 0, intBuffer);
-        //    this.Invoke(new EventHandler(DoUpDate));
-        //}
-
-        //private void DoUpDate(object s, EventArgs e)
-        //{
-        //    sendRead.Text = port.ReadLine();
-        //}
-
 
         public static int ReadCnt(byte[] rBuf)
         {
@@ -193,8 +179,8 @@ namespace Huinno_Downloader
                 catch (TimeoutException ex)
                 {
 
-
-                    return -1;
+                    continue;
+                    //return -1;
                 }
                 catch (System.UnauthorizedAccessException ex)
                 {
