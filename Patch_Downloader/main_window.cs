@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.IO;
 
 using System.Threading;
+//using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace Huinno_Downloader
 {
@@ -17,17 +20,58 @@ namespace Huinno_Downloader
     {
         Thread gReadSerialThd;
 
-        //byte[] rBuf;
+        string config_comport;
+        string config_comportbaud;
+        string config_savepath;
+
+        private bool m_bDevMode = false;
 
         public main_window()
         {
             InitializeComponent();
 
-            // get comport name list
-            string[] nameArray = cSerialPort.GetSerialComPortNameList();
+            // Init val
+            LB_ProgVal.Text = "";
 
             // config: comport
-            string config_comport = AppConfiguration.GetAppConfig("ComPortName");
+            config_comport = AppConfiguration.GetAppConfig("ComPortName");
+            config_comportbaud = "3000000";
+            //config_comportbaud = AppConfiguration.GetAppConfig("ComPortBaud");
+            config_savepath = AppConfiguration.GetAppConfig("SavePath");
+
+            // set save path
+            if (config_savepath == "")
+            {
+                TB_SavePath.Text = Application.StartupPath + "\\Downloads";
+            }
+
+            // get comport name list
+            RefreshComPortList();
+
+
+            // add event handler
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(main_window_KeyDown);
+
+            //
+            ShowDevMode(m_bDevMode);
+        }
+
+        private void ShowDevMode(bool isShow)
+        {
+            TB_Serial1.Visible = isShow;
+            TB_Serial2.Visible = isShow;
+            TB_Serial3.Visible = isShow;
+            TB_Serial4.Visible = isShow;
+            TB_Serial5.Visible = isShow;
+            TB_Serial6.Visible = isShow;
+        }
+
+        private void RefreshComPortList()
+        {
+            string[] nameArray = cSerialPort.GetSerialComPortNameList();
+
+            CB_ComPortNameList.Items.Clear();
             CB_ComPortNameList.Items.AddRange(nameArray);
             for (int i = 0; i < nameArray.Length; ++i)
             {
@@ -37,25 +81,7 @@ namespace Huinno_Downloader
                     break;
                 }
             }
-            string config_comportbaud = AppConfiguration.GetAppConfig("ComPortBaud");
             CB_ComPortBaudList.Text = config_comportbaud;
-
-
-            // config: save path
-            string config_savepath = AppConfiguration.GetAppConfig("SavePath");
-            if (config_savepath == "")
-            {
-                string sDirPath;
-                sDirPath = Application.StartupPath + "\\Downloads";
-                DirectoryInfo di = new DirectoryInfo(sDirPath);
-                if (di.Exists == false)
-                {
-                    di.Create();
-                }
-                TB_SavePath.Text = sDirPath;
-            }
-
-            //rBuf = new byte[PACKETSIZE * 4 * 4];
         }
 
         private void InitSerialTextBox( string a_huinno
@@ -77,11 +103,26 @@ namespace Huinno_Downloader
 
         private void BT_OpenSavePath_Click(object sender, EventArgs e)
         {
-
+            Process.Start(TB_SavePath.Text);
         }
 
         private void BT_SelSavePath_Click(object sender, EventArgs e)
         {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+                TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
+
+            // CommonOpenFileDialog 클래스 생성 
+            //CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            //// 처음 보여줄 폴더 설정(안해도 됨) 
+            ////dialog.InitialDirectory = "";
+            ////dialog.IsFolderPicker = true;
+            ////dialog.
+            //if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            //{
+            //    TB_SavePath.Text = dialog.FileName;
+            //    // 테스트용, 폴더 선택이 완료되면 선택된 폴더를 label에 출력
+            //}
 
         }
 
@@ -133,12 +174,6 @@ namespace Huinno_Downloader
             URX_CMD_RD_NAND_USER_MARK,        // 3
             URX_CMD_SYSTEM_RESET,         // 4
             URX_CMD_GET_SYS_INFO,           // 5
-                                            //    RD_USER_MARK,         // 5
-                                            //    RESET_USER_MARK,      // 6
-                                            //    ECG_VIEW_START,       // 7
-                                            //    ECG_VIEW_END,         // 8
-                                            //    FW_UPGRADE,           // 9
-                                            //    WR_USER_SN,           // 10
             UART_RX_CMD_NUM_MAX
         }
 
@@ -164,131 +199,160 @@ namespace Huinno_Downloader
         int nand0EdIdx = 0;
         int nand1StIdx = 0;
         int nand1EdIdx = 0;
+
+        bool isCreateSaveDir = false;
+        private void CreateSaveDir()
+        {
+            if (!isCreateSaveDir)
+            {
+                isCreateSaveDir = true;
+                DirectoryInfo di = new DirectoryInfo(BT_ConnPort.Text);
+                if (di.Exists == false)
+                {
+                    di.Create();
+                }
+            }
+        }
+
+        private void ParseDeviceInfo(string str_tx)
+        {
+            ControlTextBox(TB_LogMsg, "Load device info.");
+
+            int pos = str_tx.IndexOf("[INFO] ");
+            pos += 7;
+
+            a_huinno = str_tx.Substring(pos, 1); pos += 2;
+            b_category = str_tx.Substring(pos, 2); pos += 3;
+            c_assembleType = str_tx.Substring(pos, 1); pos += 2;
+            d_version = str_tx.Substring(pos, 1); pos += 2;
+            e_usageType = str_tx.Substring(pos, 1); pos += 2;
+            f_country = str_tx.Substring(pos, 2); pos += 3;
+            g_serialNum = str_tx.Substring(pos, 5); pos += 6;
+
+            //
+            string sub;
+            sub = str_tx.Substring(pos, str_tx.Length - pos);
+            ControlTextBox(TB_LogMsg, sub);
+            pos = sub.IndexOf(".");
+            string str_0st_idx = sub.Substring(0, pos);
+
+            sub = sub.Substring(pos + 1, sub.Length - pos - 1);
+            pos = sub.IndexOf(".");
+            string str_0ed_idx = sub.Substring(0, pos);
+
+            sub = sub.Substring(pos + 1, sub.Length - pos - 1);
+            pos = sub.IndexOf(".");
+            string str_1st_idx = sub.Substring(0, pos);
+
+            sub = sub.Substring(pos + 1, sub.Length - pos - 1);
+            if (sub.Contains("?"))
+            {
+                int pos2 = sub.IndexOf("?");
+                sub = sub.Substring(0, pos2);
+
+            }
+            string str_1ed_idx = sub;
+
+            //
+            nand0StIdx = Int32.Parse(str_0st_idx);
+            nand0EdIdx = Int32.Parse(str_0ed_idx);
+            nand1StIdx = Int32.Parse(str_1st_idx);
+            nand1EdIdx = Int32.Parse(str_1ed_idx);
+        }
+
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
             if (!cSerialPort.isConnected)
                 return;
 
-            BT_StartDown.Enabled = false;
+            // set ui
+            ControlButton(BT_StartDown, false);
 
+            // init value
+            LB_ProgVal.Text = "";
+
+            //
+            CreateSaveDir();
+
+            // send command to get device info
             UART_RX_CMD_T RxCmd;
-
-            cSerialPort.Clear();
             RxCmd = UART_RX_CMD_T.URX_CMD_GET_SYS_INFO;
             sendMsg[0] = (byte)RxCmd;
+
+            cSerialPort.Clear();
             cSerialPort.Write(sendMsg, UART_RX_CHAR_LEN_MAX);
 
             Thread.Sleep(500);
             
             string serialNum = "UNKNOWN";
-            if (!isDevNameSet)
-            {
-                string str_tx = cSerialPort.ReadExisting();
+            //if (!isDevNameSet)
+            //{
+            //    string str_tx = cSerialPort.ReadExisting();
 
-                if (str_tx.Contains("[INFO] "))
-                {
-                    ControlTextBox(TB_LogMsg, "Load device info.");
+            //    if (str_tx.Contains("[INFO] "))
+            //    {
+            //        ParseDeviceInfo(str_tx);
 
-                    int pos = str_tx.IndexOf("[INFO] ");
-                    pos += 7;
+            //        InitSerialTextBox(
+            //            a_huinno
+            //            , b_category
+            //            , c_assembleType
+            //            , d_version
+            //            , e_usageType
+            //            , f_country
+            //            , g_serialNum
+            //            );
 
-                    a_huinno         = str_tx.Substring(pos, 1); pos += 2;
-                    b_category       = str_tx.Substring(pos, 2); pos += 3;
-                    c_assembleType   = str_tx.Substring(pos, 1); pos += 2;
-                    d_version        = str_tx.Substring(pos, 1); pos += 2;
-                    e_usageType      = str_tx.Substring(pos, 1); pos += 2;
-                    f_country        = str_tx.Substring(pos, 2); pos += 3;
-                    g_serialNum      = str_tx.Substring(pos, 5); pos += 6;
+            //        serialNum = g_serialNum;
+            //        isDevNameSet = true;
+            //    }
 
-                    string sub;
-                    sub = str_tx.Substring(pos, str_tx.Length-pos);
-                    ControlTextBox(TB_LogMsg, "Start: "+ sub);
-                    pos = sub.IndexOf(".");
-                    string str_0st_idx = sub.Substring(0, pos);
+            //    //if (str.Contains("BLE device name: "))
+            //    //{
+            //    //    int st = str.IndexOf("BLE device name: ");
+            //    //    st += 17;
 
-                    sub = sub.Substring(pos+1, sub.Length - pos-1);
-                    pos = sub.IndexOf(".");
-                    string str_0ed_idx = sub.Substring(0, pos);
+            //    //    string bt_name = str.Substring(st, 10);
+            //    //    ControlTextBox(TB_LogMsg, "BLE device name: " + bt_name);
 
-                    sub = sub.Substring(pos + 1, sub.Length - pos - 1);
-                    pos = sub.IndexOf(".");
-                    string str_1st_idx = sub.Substring(0, pos);
+            //    //    serialNum = str.Substring(st + 5, 5);
+            //    //    InitSerialTextBox(serialNum);
 
-                    sub = sub.Substring(pos + 1, sub.Length - pos - 1);
-                    if (sub.Contains("?"))
-                    {
-                        int pos2 = sub.IndexOf("?");
-                        sub = sub.Substring(0, pos2);
+            //    //    isDevNameSet = true;
+            //    //}
+            //}
 
-                    }
-                    string str_1ed_idx = sub; 
-                    nand0StIdx = Int32.Parse(str_0st_idx);
-                    nand0EdIdx = Int32.Parse(str_0ed_idx);
-                    nand1StIdx = Int32.Parse(str_1st_idx);
-                    nand1EdIdx = Int32.Parse(str_1ed_idx);
+            //if (!isDevNameSet)
+            //{
+            //    ControlTextBox(TB_LogMsg, "Try again after few sencond.");
+            //    ControlButton(BT_StartDown, true);
+            //    return;
+            //}
+            ControlButton(BT_StartDown, false);
 
+            //
+            //total_len = (nand1EdIdx - nand1StIdx + 1);
 
-                    InitSerialTextBox(
-                        a_huinno
-                        , b_category
-                        , c_assembleType
-                        , d_version
-                        , e_usageType
-                        , f_country
-                        , g_serialNum
-                        );
-                    serialNum = g_serialNum;
-                    isDevNameSet = true;
-                }
-
-                //if (str.Contains("BLE device name: "))
-                //{
-                //    int st = str.IndexOf("BLE device name: ");
-                //    st += 17;
-
-                //    string bt_name = str.Substring(st, 10);
-                //    ControlTextBox(TB_LogMsg, "BLE device name: " + bt_name);
-
-                //    serialNum = str.Substring(st + 5, 5);
-                //    InitSerialTextBox(serialNum);
-
-                //    isDevNameSet = true;
-                //}
-
-            }
-
-            //return;
-
-            if (!isDevNameSet)
-            {
-
-                ControlTextBox(TB_LogMsg, "Try Again.");
-                BT_StartDown.Enabled = true;
-                return;
-            }
-
-            BT_StartDown.Enabled = false;
-
-            //RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
-            RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
+            // send command to get data
+            RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
+            //RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
             sendMsg[0] = (byte)RxCmd;
 
             cSerialPort.Clear();
             cSerialPort.Write(sendMsg, UART_RX_CHAR_LEN_MAX);
 
             // generates output
-            string genTime = DateTime.Now.ToString("yyyyMMdd_HH-mm-ss");
-            resFileName = "result_" + serialNum + "_" + genTime + ".bin";
+            string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            resFileName = genTime + "_" + serialNum + ".bin";
 
-            fs = new FileStream(resFileName, FileMode.CreateNew, FileAccess.Write);
+            string filePath = TB_SavePath.Text + "\\" + resFileName;
+            fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write);
             bw = new BinaryWriter(fs);
-            //ReadBytes += 1024;
-            //bw.Write(rBuffer, 0, 1024);
-            total_len = (nand1EdIdx - nand1StIdx + 1);
 
+            ControlTextBox(TB_LogMsg, "START");
+            // start thread
             gReadSerialThd = new Thread(new ThreadStart(readRun));
             gReadSerialThd.Start();
-
         }
 
         int total_len;
@@ -300,127 +364,93 @@ namespace Huinno_Downloader
                 int rCnt = cSerialPort.Read(rBuf);
                 if (rCnt < 0)
                 {
+                    if (rCnt == -1) break;
+
                     Thread.Sleep(10);
                     Console.WriteLine(String.Format("err: {0}", rCnt));
                     continue;
                 }
 
                 Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, wCnt));
-#if (USE0)
-                switch (rBuf[0])
-                {
-                    case UART_TX_CMD_MEM:  // cmd  - Nand Data
-                        ControlTextBox(TB_LogMsg, rCnt.ToString());
-                        //saveECGNandData();
-                        break;
-#if (USE_ECG_DATA)
-                                    //case UART_TX_CMD_ECG:  // cmd - ECG Data
-                                    //    /*
-                                    //            if (veryIdx == -1)
-                                    //                veryIdx = rBuffer[1];
-                                    //            else
-                                    //            {
-                                    //                if(rBuffer[1] != (veryIdx+ 1)%256)
-                                    //                {
-                                    //                    int error = 1;
-                                    //                }
-                                    //            }
-                                    //            setText_Control(TextBox_System_Log, "txIdx" + rBuffer[1].ToString() + Environment.NewLine);
-                                    //    */
 
-                                    //    if (RADIO_ECG_24B.Checked == true)
-                                    //    {
-                                    //        netDataLen = rBuffer[2] - 6;
-                                    //        dataStartOffset = 6;
-
-                                    //    }
-                                    //    else if (RADIO_ECG_16B.Checked == true)
-                                    //    {
-                                    //        netDataLen = rBuffer[2] - 4;
-                                    //        dataStartOffset = 4;
-                                    //    }
-                                    //    else if (RADIO_ECG_12B.Checked == true)
-                                    //    {
-                                    //        netDataLen = rBuffer[2] - 6;
-                                    //        dataStartOffset = 6;
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        netDataLen = rBuffer[2];
-                                    //    }
-                                    //    BufLen = (UInt16)netDataLen;
-                                    //    totalRevEcgBytes += netDataLen;
-                                    //    // if (RADIO_COMPRESSED.Checked == true)
-                                    //    //     verifyNandBuf();
-                                    //    if (nandWOffset + netDataLen < nandPageBuf.Length)
-                                    //    {
-                                    //        Array.Copy(rBuffer, 3 + dataStartOffset, nandPageBuf, nandWOffset, netDataLen);
-                                    //        nandWOffset += netDataLen;
-                                    //    }
-                                    //    else
-                                    //    {
-
-                                    //        int r = nandWOffset + netDataLen - nandPageBuf.Length;
-                                    //        int h = netDataLen - r;
-                                    //        Array.Copy(rBuffer, 3 + dataStartOffset, nandPageBuf, nandWOffset, h);
-                                    //        Array.Copy(rBuffer, 3 + dataStartOffset + h, nandPageBuf, 0, r);
-                                    //        nandWOffset = r;
-                                    //    }
-                                    //    //setText_Control(TextBox_System_Log, "Comm round:" + commNum.ToString() + Environment.NewLine);
-                                    //    commNum++;
-
-                                    //break;
-#endif //USE_ECG_DATA
-                    case 0xE8:  // log
-                        string result = System.Text.Encoding.UTF8.GetString(rBuf, 3, rBuf[2]);
-                        ControlTextBox(TB_LogMsg, result);
-
-                        break;
-
-                }
-#endif 
+                //
                 bw.Write(rBuf, 0, 1024*4);
                 wCnt += 1;
                 Array.Clear(rBuf, 0, rCnt);
 
-                if (wCnt % 50 == 0)
-                    Progress(wCnt);
+                //if (wCnt % 55 == 0)
+                //{
+                //    int val = 100 * wCnt / total_len;
+                //    ControlProgressBar(progressBar1, val);
+                //    ControlLabel(LB_ProgVal, val.ToString() );
+                //}
 
-                if (wCnt == total_len)
-                {
-                    break;
-                }
+                //if (wCnt == total_len)
+                //{
+                //    int val = 100;
+                //    ControlProgressBar(progressBar1, val);
+                //    ControlLabel(LB_ProgVal, val.ToString() );
+                //    break;
+                //}
             }
             wCnt = 0;
             bw.Close();
             fs.Close();
             ControlTextBox(TB_LogMsg, "End: " + resFileName);
             isDevNameSet = false;
-            Done();
-        }
+            ControlButton(BT_StartDown, true);
 
-        private delegate void SetTextSafeDelegate(int val);
-
-        private void Progress(int val)
-        {
-            int progVal = val / total_len * 100;
-            if (progressBar1.InvokeRequired) { 
-                SetTextSafeDelegate del = new SetTextSafeDelegate(Progress);
-                progressBar1.Invoke(del, new object[] { progVal }); 
-            } else
+            if (MessageBox.Show("선택하신 정보가 저장됩니다", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                progressBar1.Value = progVal;
+                MessageBox.Show("예 클릭");
+            }
+            else
+            {
+                MessageBox.Show("아니요 클릭");
+            }
+
+        }
+        delegate void ctrl_Invoke_Button(System.Windows.Forms.Button ctrl, bool enable);
+        public void ControlButton(System.Windows.Forms.Button ctr, bool enable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_Button CI = new ctrl_Invoke_Button(ControlButton);
+                ctr.Invoke(CI, ctr, enable);
+            }
+            else
+            {
+                ctr.Enabled = enable;
             }
         }
 
-        private void Done()
+        delegate void ctrl_Invoke_progressBar(System.Windows.Forms.ProgressBar ctrl, int val);
+        public void ControlProgressBar(System.Windows.Forms.ProgressBar ctr, int val)
         {
-            this.Invoke(new Action(delegate () // this == Form 이다. Form이 아닌 컨트롤의 Invoke를 직접호출해도 무방하다. 
+            if (ctr.InvokeRequired)
             {
-                progressBar1.Value = 100;
-                //Invoke를 통해 lbl_Result 컨트롤에 결과값을 업데이트한다. 
-                BT_StartDown.Enabled = true;
-            }));
+                ctrl_Invoke_progressBar CI = new ctrl_Invoke_progressBar(ControlProgressBar);
+                ctr.Invoke(CI, ctr, val);
+            }
+            else
+            {
+                ctr.Value = val;
+            }
+        }
+
+        delegate void ctrl_Invoke_Label(System.Windows.Forms.Label ctrl, string str);
+        public void ControlLabel(System.Windows.Forms.Label ctr, string str)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_Label CI = new ctrl_Invoke_Label(ControlLabel);
+                ctr.Invoke(CI, ctr, str);
+            }
+            else
+            {
+                string strVal = str + "%";
+                ctr.Text = strVal;
+            }
         }
 
         delegate void ctrl_Invoke(System.Windows.Forms.TextBox ctrl, string text);
@@ -441,5 +471,94 @@ namespace Huinno_Downloader
 
         }
 
+        private void CB_ComPortNameList_Click(object sender, EventArgs e)
+        {
+            RefreshComPortList();
+        }
+
+        private void BT_ConvUserMark_Click(object sender, EventArgs e)
+        {
+
+            string filePath1 = "C:\\binna\\git\\patch_downloader\\Patch_Downloader\\bin\\Debug\\Downloads\\2020-08-04_18-42-37_UNKNOWN.bin";
+            string filePath2 = "C:\\binna\\git\\patch_downloader\\Patch_Downloader\\bin\\Debug\\Downloads\\2020-08-04_16-53-09_UNKNOWN.bin";
+            ExtractUserMarkFromFile(filePath1);
+            ExtractEcgDataFromFile(filePath2);
+        }
+
+        private void ExtractEcgDataFromFile(string tempFile)
+        {
+            FileStream stream = new FileStream(tempFile, FileMode.Open);
+
+            // loop until we can't read any more
+            while (true)
+            {
+                byte[] convertedImage;
+                // All ints are 4-bytes
+                byte[] pageData = new byte[4096];
+                // Read size
+                int numRead = stream.Read(pageData, 0, 4096);
+                if (numRead <= 0)
+                {
+                    break;
+                }
+            } // end while
+
+            stream.Close();
+        }
+
+
+        const int PAGE_SIZE = 4096;
+        const int USER_MARK_SIZE = 256;
+
+        private void ExtractUserMarkFromFile(string filePath)
+        {
+            //byte[] fileData = File.ReadAllBytes(filePath);
+
+            byte[] d = File.ReadAllBytes(filePath);
+
+            byte[] fileData = new byte[4096];
+
+            Array.Copy(d, 20, fileData, 0, 4096 - 20);
+
+            int rCnt = 0;
+            while (rCnt < PAGE_SIZE)
+            {
+                byte[] um = new byte[USER_MARK_SIZE];
+                Array.Copy(fileData, rCnt, um, 0, 256);
+
+                if (um[0] == 0xff)
+                    break;
+
+                rCnt += 256;
+
+                int year = um[0] * 100 + um[1];
+                int mon = um[2];
+                int day = um[3];
+                int time = um[4] * 256 * 256 + um[5] * 256 + um[6];
+                int type = um[243];
+                int id = (um[247] << 24) + (um[246] << 16) + (um[245] << 8) + um[244];
+                int page_idx = (um[251] << 24) + (um[250] << 16) + (um[249] << 8) + um[248];
+                Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} ", year, mon, day, time, type, id, page_idx));
+                int t_hour = time / 3600;
+                int t_min = (time - t_hour * 3600) / 60;
+                int t_sec = (time - t_hour * 3600 - t_min * 60);
+                Console.WriteLine(String.Format("{0}:{1}:{2}  ", t_hour, t_min, t_sec));
+            }
+            Console.WriteLine(String.Format("total {0} ", rCnt / 256));
+        }
+
+
+        private void main_window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.D && (ModifierKeys & (Keys.Control| Keys.ShiftKey) )== Keys.Control)
+            {
+                // CTRL + UP was pressed
+                win_password form_password = new win_password();
+                form_password.ShowDialog();
+
+                m_bDevMode = true;
+
+            }
+        }
     }
 }

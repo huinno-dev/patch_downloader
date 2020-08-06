@@ -16,6 +16,7 @@ namespace Huinno_Downloader
         public static string[] GetSerialComPortNameList()
         {
             string[] nameArray = SerialPort.GetPortNames();
+        
             nameArray = DupCheck<string>(nameArray);
 
             return nameArray;
@@ -106,7 +107,7 @@ namespace Huinno_Downloader
         {
             gComPort.Write(msg, 0, length);
         }
-
+         
         public static UInt32 gSerialReadSize = 1024;
         public static string ReadExisting()
         {
@@ -193,7 +194,7 @@ namespace Huinno_Downloader
                 {
 
 
-                    //return -1;
+                    return -1;
                 }
                 catch (System.UnauthorizedAccessException ex)
                 {
