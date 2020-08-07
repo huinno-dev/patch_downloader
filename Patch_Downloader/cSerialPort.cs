@@ -16,7 +16,6 @@ namespace Huinno_Downloader
         public static string[] GetSerialComPortNameList()
         {
             string[] nameArray = SerialPort.GetPortNames();
-        
             nameArray = DupCheck<string>(nameArray);
 
             return nameArray;
@@ -36,10 +35,10 @@ namespace Huinno_Downloader
         public static string Open(string cport_name, int cport_baud)
         {
             gComPort = new SerialPort(cport_name, cport_baud);
-            gComPort.ReadTimeout = 3500; //Setting ReadTimeout =3500 ms or 3.5 seconds
+            gComPort.ReadTimeout = 1000; //Setting ReadTimeout =3500 ms or 3.5 seconds
 
             //int size = gComPort.ReadBufferSize;
-            gComPort.ReadBufferSize = 1024*4;
+            gComPort.ReadBufferSize = 1024 * 4;
             int size = gComPort.ReadBufferSize;
 
             #region
@@ -103,11 +102,11 @@ namespace Huinno_Downloader
             //Array.Clear(adcDrawArray, 0, adcDrawArray.Length);
         }
 
-        public static void Write( byte[] msg, int length)
+        public static void Write(byte[] msg, int length)
         {
             gComPort.Write(msg, 0, length);
         }
-         
+
         public static UInt32 gSerialReadSize = 1024;
         public static string ReadExisting()
         {
@@ -121,7 +120,8 @@ namespace Huinno_Downloader
         public static int ReadCnt(byte[] rBuf)
         {
             int rCnt = 0;
-            while (true) {
+            while (true)
+            {
                 try
                 {
                     rCnt += gComPort.Read(rBuf, 0, 1024);
@@ -163,8 +163,8 @@ namespace Huinno_Downloader
                     // Array.Copy(rBuffer, 0, rBuffer_tmp, 0, rBuffer_tmp.Length);
                     //readCnt += COMport.Read(rBuffer, offset, (int)PACKETSIZE - offset);
 
-                    readCnt += gComPort.Read(rBuf, readCnt, 1024*4 - readCnt);
-                    if (readCnt == 1024*4)
+                    readCnt += gComPort.Read(rBuf, readCnt, 1024 * 4 - readCnt);
+                    if (readCnt == 1024 * 4)
                         break;
 
                     //if (readCnt > 3 && rBuf[0] == 0xE8 && NandRead == false)
@@ -179,7 +179,7 @@ namespace Huinno_Downloader
                 catch (TimeoutException ex)
                 {
 
-                    continue;
+
                     //return -1;
                 }
                 catch (System.UnauthorizedAccessException ex)

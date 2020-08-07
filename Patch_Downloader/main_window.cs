@@ -49,12 +49,12 @@ namespace Huinno_Downloader
             RefreshComPortList();
 
 
-            // add event handler
-            this.KeyPreview = true;
-            this.KeyDown += new KeyEventHandler(main_window_KeyDown);
+            //// add event handler
+            //this.KeyPreview = true;
+            //this.KeyDown += new KeyEventHandler(main_window_KeyDown);
 
             //
-            ShowDevMode(m_bDevMode);
+            ShowDevMode(true);
         }
 
         private void ShowDevMode(bool isShow)
@@ -206,7 +206,7 @@ namespace Huinno_Downloader
             if (!isCreateSaveDir)
             {
                 isCreateSaveDir = true;
-                DirectoryInfo di = new DirectoryInfo(BT_ConnPort.Text);
+                DirectoryInfo di = new DirectoryInfo(TB_SavePath.Text);
                 if (di.Exists == false)
                 {
                     di.Create();
@@ -232,7 +232,7 @@ namespace Huinno_Downloader
             //
             string sub;
             sub = str_tx.Substring(pos, str_tx.Length - pos);
-            ControlTextBox(TB_LogMsg, sub);
+            //ControlTextBox(TB_LogMsg, sub);
             pos = sub.IndexOf(".");
             string str_0st_idx = sub.Substring(0, pos);
 
@@ -260,6 +260,8 @@ namespace Huinno_Downloader
             nand1EdIdx = Int32.Parse(str_1ed_idx);
         }
 
+        string serialNum;
+        int m_downMode = 1;
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
             if (!cSerialPort.isConnected)
@@ -283,45 +285,65 @@ namespace Huinno_Downloader
             cSerialPort.Write(sendMsg, UART_RX_CHAR_LEN_MAX);
 
             Thread.Sleep(500);
-            
-            string serialNum = "UNKNOWN";
-            if (!isDevNameSet)
-            {
-                string str_tx = cSerialPort.ReadExisting();
 
-                if (str_tx.Contains("[INFO] "))
+            if (m_downMode == 1)
+            {
+                if (!isDevNameSet)
                 {
-                    ParseDeviceInfo(str_tx);
+                    string str_tx = cSerialPort.ReadExisting();
 
-                    InitSerialTextBox(
-                        a_huinno
-                        , b_category
-                        , c_assembleType
-                        , d_version
-                        , e_usageType
-                        , f_country
-                        , g_serialNum
-                        );
+                    if (str_tx.Contains("[INFO] "))
+                    {
+                        ParseDeviceInfo(str_tx);
 
-                    serialNum = g_serialNum;
-                    isDevNameSet = true;
+                        InitSerialTextBox(
+                            a_huinno
+                            , b_category
+                            , c_assembleType
+                            , d_version
+                            , e_usageType
+                            , f_country
+                            , g_serialNum
+                            );
+
+                        serialNum = g_serialNum;
+                        isDevNameSet = true;
+                    }
                 }
-            }
-
-            if (!isDevNameSet)
-            {
-                ControlTextBox(TB_LogMsg, "Try again after few sencond.");
-                ControlButton(BT_StartDown, true);
-                return;
+                else
+                {
+                    serialNum = "UNKNOWN";
+                }
+                if (!isDevNameSet)
+                {
+                    ControlTextBox(TB_LogMsg, "Try again after few sencond.");
+                    ControlButton(BT_StartDown, true);
+                    return;
+                }
             }
             ControlButton(BT_StartDown, false);
 
             //
-            total_len = (nand1EdIdx - nand1StIdx + 1);
+            string exp = "";
+            if (m_downMode == 0)
+            {
+                RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
+                total_len = (nand0EdIdx - nand0StIdx + 1);
+                m_downMode = 1;
+                isDevNameSet = false;
+
+                exp = ".csv";
+            }
+            else if (m_downMode == 1)
+            {
+                RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
+                total_len = (nand1EdIdx - nand1StIdx + 1);
+                m_downMode = 0;
+
+                exp = ".bin";
+            }
 
             // send command to get data
-            RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
-            //RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
             sendMsg[0] = (byte)RxCmd;
 
             cSerialPort.Clear();
@@ -329,13 +351,13 @@ namespace Huinno_Downloader
 
             // generates output
             string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            resFileName = genTime + "_" + serialNum + ".bin";
+            resFileName = genTime + "_" + serialNum + exp;
 
             string filePath = TB_SavePath.Text + "\\" + resFileName;
             fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write);
             bw = new BinaryWriter(fs);
 
-            ControlTextBox(TB_LogMsg, "START");
+            ControlTextBox(TB_LogMsg, "시작: "+ resFileName);
             // start thread
             gReadSerialThd = new Thread(new ThreadStart(readRun));
             gReadSerialThd.Start();
@@ -382,18 +404,17 @@ namespace Huinno_Downloader
             wCnt = 0;
             bw.Close();
             fs.Close();
-            ControlTextBox(TB_LogMsg, "End: " + resFileName);
-            isDevNameSet = false;
+            ControlTextBox(TB_LogMsg, "완료");
             ControlButton(BT_StartDown, true);
 
-            if (MessageBox.Show("서버 업로드", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("지금 서버로 업로드하시겠습니까?", "다운로드 완료", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MessageBox.Show("예 클릭");
+                MessageBox.Show("예");
             }
-            else
-            {
-                MessageBox.Show("아니요 클릭");
-            }
+            //else
+            //{
+            //    MessageBox.Show("아니요");
+            //}
 
         }
         delegate void ctrl_Invoke_Button(System.Windows.Forms.Button ctrl, bool enable);
