@@ -151,7 +151,8 @@ namespace Huinno_Downloader
             }
             return rCnt;
         }
-        public static int Read(byte[] rBuf)
+
+        public static int Read(byte[] rBuf, int rdBufSize)
         {
             int readCnt = 0;
 
@@ -163,18 +164,10 @@ namespace Huinno_Downloader
                     // Array.Copy(rBuffer, 0, rBuffer_tmp, 0, rBuffer_tmp.Length);
                     //readCnt += COMport.Read(rBuffer, offset, (int)PACKETSIZE - offset);
 
-                    readCnt += gComPort.Read(rBuf, readCnt, 1024 * 4 - readCnt);
-                    if (readCnt == 1024 * 4)
+                    readCnt += gComPort.Read(rBuf, readCnt, rdBufSize - readCnt);
+                    if (readCnt == rdBufSize)
                         break;
 
-                    //if (readCnt > 3 && rBuf[0] == 0xE8 && NandRead == false)
-                    //{
-                    //    if (rBuffer[2] + 3 == readCnt)
-                    //    {
-                    //        readCnt = 0;
-                    //        break;
-                    //    }
-                    //}
                 }
                 catch (TimeoutException ex)
                 {
