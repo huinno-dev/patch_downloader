@@ -25,6 +25,7 @@ namespace Huinno_Downloader
         string config_comport;
         string config_comportbaud;
         string config_savepath;
+        public string config_uploadurl;
 
         private bool m_bDevMode = false;
 
@@ -40,11 +41,21 @@ namespace Huinno_Downloader
             config_comportbaud = "3000000";
             //config_comportbaud = AppConfiguration.GetAppConfig("ComPortBaud");
             config_savepath = AppConfiguration.GetAppConfig("SavePath");
+            config_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
 
+            if(config_uploadurl=="")
+            {
+                MessageBox.Show("Please set url.");
+            }
             // set save path
             if (config_savepath == "")
             {
                 TB_SavePath.Text = Application.StartupPath + "\\Downloads";
+                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
+            }
+            else
+            {
+                TB_SavePath.Text = config_savepath;
             }
 
             // get comport name list
@@ -112,7 +123,10 @@ namespace Huinno_Downloader
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
+            {
                 TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
+                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
+            }
         }
 
         private void BT_ConnPort_Click(object sender, EventArgs e)
@@ -313,16 +327,26 @@ namespace Huinno_Downloader
 
                 if (!isDevNameSet)
                 {
-                    ControlTextBox(TB_LogMsg, "Failed to download. Please reconnect patch with PC.");
+                    ControlTextBox(TB_LogMsg, "Failed to connect. Check COM port or reconnect patch to PC.");
                     ControlButton(BT_StartDown, true);
                     CloseSerial();
                     return;
                 }
-                ControlTextBox(TB_LogMsg, "Succeed to load device info.");
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum);
             }
             ControlButton(BT_StartDown, false);
 
-            //
+            // start thread
+            gThreadCheckThd = new Thread(new ThreadStart(checkfirstDataDone));
+            gThreadCheckThd.Start();
+
+            readData();
+
+        }
+
+        void readData()
+        {
+            UART_RX_CMD_T RxCmd = (UART_RX_CMD_T)0;
             string exp = "";
             if (m_downMode == 0)
             {
@@ -333,11 +357,6 @@ namespace Huinno_Downloader
             }
             else if (m_downMode == 1)
             {
-                //    RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_PAGE_ST_ED;
-                //    nand1EdIdx = 73;
-                //    nand1StIdx = 64;
-
-
                 RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
                 total_len = (nand1EdIdx - nand1StIdx + 1);
 
@@ -354,48 +373,64 @@ namespace Huinno_Downloader
             {
                 // generates output
                 string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                resFileName = genTime + "_" + serialNum ;
+                resFileName = genTime + "_" + serialNum;
             }
 
             m_resFilePath = TB_SavePath.Text + "\\" + resFileName + exp;
             fs = new FileStream(m_resFilePath, FileMode.CreateNew, FileAccess.Write);
             bw = new BinaryWriter(fs);
 
-            ControlTextBox(TB_LogMsg, "Downloading..: "+ resFileName + exp);
+            ControlTextBox(TB_LogMsg, "Downloading.. " + resFileName + exp);
 
             // start thread
             gReadSerialThd = new Thread(new ThreadStart(readRun));
             gReadSerialThd.Start();
-
-
-            //
-            //System.Threading.Timer timer = new System.Threading.Timer(TimerCallBack);
-
         }
 
-        //delegate void TimerEventFiredDelegate();
-        //void TimerCallBack(object status)
-        //{
-        //    BeginInvoke(new)
-        //}
         Thread gThreadCheckThd;
-        void checkThreadStopped()
+        bool m_start2ndData = false;
+        void checkfirstDataDone()
         {
             while(true)
             {
                 Thread.Sleep(500);
                 Console.WriteLine(String.Format("TEST"));
-                if (thread_stop == 1)
+                if (thread1_stop == 1)
                 {
-                    gReadSerialThd = new Thread(new ThreadStart(readRun));
-                    gReadSerialThd.Start();
-                    break;
+                    if (m_start2ndData == false)
+                    {
+                        m_start2ndData = true;
+                        readData();
+                    }
+                    if (thread2_stop == 1)
+                        break;
                 }
             }
-            thread_stop = 0;
+            if (MessageBox.Show("Upload files to server?", "Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                //MessageBox.Show("Yes");
+                if (config_uploadurl == "")
+                {
+                    MessageBox.Show("Please set url.");
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(config_uploadurl);
+                }
+            }
+            //else
+            //{
+            //    MessageBox.Show("아니요");
+            //}
+            m_start2ndData = false;
+            isDevNameSet = false;
+            thread1_stop = 0;
+            thread2_stop = 0;
+            ControlButton(BT_StartDown, true);
         }
 
-        int thread_stop = 0;
+        int thread1_stop = 0;
+        int thread2_stop = 0;
         int total_len;
         static int rdBufSize = MEM_PAGE_SZ;
         void readRun()
@@ -436,32 +471,22 @@ namespace Huinno_Downloader
             wCnt = 0;
             bw.Close();
             fs.Close();
-            ControlTextBox(TB_LogMsg, "Succeed to download.");
-            ControlButton(BT_StartDown, true);
             if (m_downMode == 1)
             {
                 ConvertData(m_resFilePath);
                 m_downMode = 0;
 
-                isDevNameSet = false;
-                if (MessageBox.Show("Upload files to server?", "Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    MessageBox.Show("Yes");
-                }
-                //else
-                //{
-                //    MessageBox.Show("아니요");
-                //}
+                ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + g_serialNum+ Environment.NewLine);
+                thread2_stop = 1;
             }
             else if (m_downMode == 0)
             {
                 ExtractUserMarkFromFile(m_resFilePath);
                 m_downMode = 1;
+                thread1_stop = 1;
             }
-
-            thread_stop = 1;
-
         }
+
         delegate void ctrl_Invoke_Button(System.Windows.Forms.Button ctrl, bool enable);
         public void ControlButton(System.Windows.Forms.Button ctr, bool enable)
         {
@@ -694,6 +719,7 @@ namespace Huinno_Downloader
             {
                 // CTRL + UP was pressed
                 win_password frm2 = new win_password();
+                frm2.PassStr = config_uploadurl;
                 frm2.ShowDialog();
 
                 m_bDevMode = frm2.Passvalue;
@@ -703,6 +729,8 @@ namespace Huinno_Downloader
 
                     //
                     ShowDevMode(m_bDevMode);
+                    config_uploadurl = frm2.PassStr;
+                    AppConfiguration.SetAppConfig("UploadUrl", config_uploadurl);
                 }
             }
         }
@@ -913,6 +941,15 @@ namespace Huinno_Downloader
 
             bw1.Close();
             fs1.Close();
+        }
+
+        private void main_window_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            if (cSerialPort.isConnected)
+            {
+                CloseSerial();
+            }
         }
     }
 }

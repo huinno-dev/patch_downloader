@@ -30,13 +30,14 @@
         {
             this.TB_DevPw = new System.Windows.Forms.TextBox();
             this.BT_EnterPw = new System.Windows.Forms.Button();
+            this.TB_UploadUrl = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // TB_DevPw
             // 
             this.TB_DevPw.Location = new System.Drawing.Point(44, 68);
             this.TB_DevPw.Name = "TB_DevPw";
-            this.TB_DevPw.Size = new System.Drawing.Size(244, 32);
+            this.TB_DevPw.Size = new System.Drawing.Size(84, 32);
             this.TB_DevPw.TabIndex = 0;
             // 
             // BT_EnterPw
@@ -49,11 +50,19 @@
             this.BT_EnterPw.UseVisualStyleBackColor = true;
             this.BT_EnterPw.Click += new System.EventHandler(this.BT_EnterPw_Click);
             // 
+            // TB_UploadUrl
+            // 
+            this.TB_UploadUrl.Location = new System.Drawing.Point(44, 120);
+            this.TB_UploadUrl.Name = "TB_UploadUrl";
+            this.TB_UploadUrl.Size = new System.Drawing.Size(244, 32);
+            this.TB_UploadUrl.TabIndex = 2;
+            // 
             // win_password
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(459, 164);
+            this.Controls.Add(this.TB_UploadUrl);
             this.Controls.Add(this.BT_EnterPw);
             this.Controls.Add(this.TB_DevPw);
             this.Name = "win_password";
@@ -67,5 +76,6 @@
 
         private System.Windows.Forms.TextBox TB_DevPw;
         private System.Windows.Forms.Button BT_EnterPw;
+        private System.Windows.Forms.TextBox TB_UploadUrl;
     }
 }
