@@ -20,6 +20,7 @@ namespace Huinno_Downloader
 {
     public partial class main_window : Form
     {
+        bool m_dev = false;
         Thread gReadSerialThd;
 
         string config_comport;
@@ -266,6 +267,7 @@ namespace Huinno_Downloader
         string serialNum;
         int m_downMode = 0;
         string m_resFilePath;
+        string m_resFilePathExp;
 
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
@@ -344,23 +346,23 @@ namespace Huinno_Downloader
 
         }
 
+        string m_file_exp = "";
         void readData()
         {
             UART_RX_CMD_T RxCmd = (UART_RX_CMD_T)0;
-            string exp = "";
             if (m_downMode == 0)
             {
                 RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
                 total_len = (nand0EdIdx - nand0StIdx + 1);
 
-                exp = ".csv";
+                m_file_exp = ".csv";
             }
             else if (m_downMode == 1)
             {
                 RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
                 total_len = (nand1EdIdx - nand1StIdx + 1);
 
-                exp = ".bin";
+                m_file_exp = ".bin";
             }
 
             // send command to get data
@@ -376,11 +378,14 @@ namespace Huinno_Downloader
                 resFileName = genTime + "_" + serialNum;
             }
 
-            m_resFilePath = TB_SavePath.Text + "\\" + resFileName + exp;
-            fs = new FileStream(m_resFilePath, FileMode.CreateNew, FileAccess.Write);
+            // set file path
+            m_resFilePath = TB_SavePath.Text + "\\" + resFileName;
+            m_resFilePathExp = m_resFilePath + m_file_exp;
+
+            fs = new FileStream(m_resFilePathExp, FileMode.CreateNew, FileAccess.Write);
             bw = new BinaryWriter(fs);
 
-            ControlTextBox(TB_LogMsg, "Downloading.. " + resFileName + exp);
+            ControlTextBox(TB_LogMsg, "Downloading.. " + resFileName + m_file_exp);
 
             // start thread
             gReadSerialThd = new Thread(new ThreadStart(readRun));
@@ -432,7 +437,9 @@ namespace Huinno_Downloader
         int thread1_stop = 0;
         int thread2_stop = 0;
         int total_len;
+
         static int rdBufSize = MEM_PAGE_SZ;
+
         void readRun()
         {
             byte[] rBuf = new byte[rdBufSize];
@@ -473,17 +480,47 @@ namespace Huinno_Downloader
             fs.Close();
             if (m_downMode == 1)
             {
-                ConvertData(m_resFilePath);
+                ConvertData(m_resFilePathExp);
                 m_downMode = 0;
 
                 ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + g_serialNum+ Environment.NewLine);
                 thread2_stop = 1;
+
+                if (!m_dev)
+                {
+                    FileInfo fileDel = new FileInfo(m_resFilePathExp);
+                    if (fileDel.Exists) // 삭제할 파일이 있는지
+                    {
+                        fileDel.Delete(); // 없어도 에러안남
+                    }
+
+                    FileInfo fileRename = new FileInfo(m_resFilePathExp + "_conv.bin");
+                    if (fileRename.Exists)
+                    {
+                        fileRename.MoveTo(m_resFilePathExp); // 이미있으면 에러
+                    }
+                }
             }
             else if (m_downMode == 0)
             {
-                ExtractUserMarkFromFile(m_resFilePath);
+                ExtractUserMarkFromFile(m_resFilePathExp);
                 m_downMode = 1;
                 thread1_stop = 1;
+
+                if (!m_dev)
+                {
+                    FileInfo fileDel = new FileInfo(m_resFilePathExp);
+                    if (fileDel.Exists) // 삭제할 파일이 있는지
+                    {
+                        fileDel.Delete(); // 없어도 에러안남
+                    }
+
+                    FileInfo fileRename = new FileInfo(m_resFilePathExp + "_parse.csv");
+                    if (fileRename.Exists)
+                    {
+                        fileRename.MoveTo(m_resFilePathExp); // 이미있으면 에러
+                    }
+                }                
             }
         }
 
