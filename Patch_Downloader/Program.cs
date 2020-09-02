@@ -16,7 +16,14 @@ namespace Huinno_Downloader
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new main_window());
+
+            main_window w = new main_window();
+            if (w.config_uploadurl == "")
+            {
+                w.Close();
+                return;
+            }
+            Application.Run(w);
         }
     }
 }

@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Button BT_SelSavePath;
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.BT_StartDown = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.TB_Serial1 = new System.Windows.Forms.TextBox();
@@ -50,16 +53,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.CT_ECG = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.button1 = new System.Windows.Forms.Button();
             BT_SelSavePath = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.CT_ECG)).BeginInit();
             this.SuspendLayout();
             // 
             // BT_SelSavePath
             // 
             BT_SelSavePath.Location = new System.Drawing.Point(492, 41);
             BT_SelSavePath.Name = "BT_SelSavePath";
-            BT_SelSavePath.Size = new System.Drawing.Size(94, 40);
+            BT_SelSavePath.Size = new System.Drawing.Size(94, 58);
             BT_SelSavePath.TabIndex = 14;
-            BT_SelSavePath.Text = "선택";
+            BT_SelSavePath.Text = "Select Folder";
             BT_SelSavePath.UseVisualStyleBackColor = true;
             BT_SelSavePath.Click += new System.EventHandler(this.BT_SelSavePath_Click);
             // 
@@ -159,10 +165,9 @@
             // 
             this.BT_OpenSavePath.Location = new System.Drawing.Point(592, 42);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
-            this.BT_OpenSavePath.Size = new System.Drawing.Size(107, 39);
+            this.BT_OpenSavePath.Size = new System.Drawing.Size(107, 57);
             this.BT_OpenSavePath.TabIndex = 11;
-            this.BT_OpenSavePath.Text = "바로가기";
-            this.BT_OpenSavePath.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BT_OpenSavePath.Text = "Open Folder";
             this.BT_OpenSavePath.UseVisualStyleBackColor = true;
             this.BT_OpenSavePath.Click += new System.EventHandler(this.BT_OpenSavePath_Click);
             // 
@@ -218,11 +223,12 @@
             this.button2.TabIndex = 18;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 110);
+            this.label1.Location = new System.Drawing.Point(28, 110);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 21);
             this.label1.TabIndex = 19;
@@ -233,24 +239,60 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(28, 183);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 21);
+            this.label2.Size = new System.Drawing.Size(103, 21);
             this.label2.TabIndex = 20;
-            this.label2.Text = "패치 정보";
+            this.label2.Text = "Patch Info.";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(28, 23);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 21);
+            this.label3.Size = new System.Drawing.Size(160, 21);
             this.label3.TabIndex = 21;
-            this.label3.Text = "저장 경로";
+            this.label3.Text = "Path to save files";
+            // 
+            // CT_ECG
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.CT_ECG.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.CT_ECG.Legends.Add(legend4);
+            this.CT_ECG.Location = new System.Drawing.Point(750, 269);
+            this.CT_ECG.Name = "CT_ECG";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.CT_ECG.Series.Add(series4);
+            this.CT_ECG.Size = new System.Drawing.Size(715, 300);
+            this.CT_ECG.TabIndex = 22;
+            this.CT_ECG.Text = "chart1";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(960, 121);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(83, 27);
+            this.button1.TabIndex = 23;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(731, 599);
+            this.ClientSize = new System.Drawing.Size(729, 599);
+            this.Controls.Add(this.TB_Serial7);
+            this.Controls.Add(this.TB_Serial6);
+            this.Controls.Add(this.TB_Serial5);
+            this.Controls.Add(this.TB_Serial4);
+            this.Controls.Add(this.TB_Serial3);
+            this.Controls.Add(this.TB_Serial2);
+            this.Controls.Add(this.TB_Serial1);
+            this.Controls.Add(this.TB_SavePath);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.CT_ECG);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -260,23 +302,17 @@
             this.Controls.Add(this.CB_ComPortBaudList);
             this.Controls.Add(BT_SelSavePath);
             this.Controls.Add(this.TB_LogMsg);
-            this.Controls.Add(this.TB_SavePath);
             this.Controls.Add(this.BT_OpenSavePath);
             this.Controls.Add(this.BT_ConnPort);
             this.Controls.Add(this.CB_ComPortNameList);
-            this.Controls.Add(this.TB_Serial7);
-            this.Controls.Add(this.TB_Serial6);
-            this.Controls.Add(this.TB_Serial5);
-            this.Controls.Add(this.TB_Serial4);
-            this.Controls.Add(this.TB_Serial3);
-            this.Controls.Add(this.TB_Serial2);
-            this.Controls.Add(this.TB_Serial1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.BT_StartDown);
-            this.MinimumSize = new System.Drawing.Size(753, 643);
+            this.MinimumSize = new System.Drawing.Size(753, 642);
             this.Name = "main_window";
             this.Text = "[Huinno] Patch Downloader";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.main_window_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.main_window_KeyDown);
+            ((System.ComponentModel.ISupportInitialize)(this.CT_ECG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -305,6 +341,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataVisualization.Charting.Chart CT_ECG;
+        private System.Windows.Forms.Button button1;
     }
 }
 
