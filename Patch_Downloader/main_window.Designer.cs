@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Button BT_SelSavePath;
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.BT_StartDown = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.TB_Serial1 = new System.Windows.Forms.TextBox();
@@ -254,16 +254,16 @@
             // 
             // CT_ECG
             // 
-            chartArea4.Name = "ChartArea1";
-            this.CT_ECG.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.CT_ECG.Legends.Add(legend4);
+            chartArea1.Name = "ChartArea1";
+            this.CT_ECG.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.CT_ECG.Legends.Add(legend1);
             this.CT_ECG.Location = new System.Drawing.Point(750, 269);
             this.CT_ECG.Name = "CT_ECG";
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.CT_ECG.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.CT_ECG.Series.Add(series1);
             this.CT_ECG.Size = new System.Drawing.Size(715, 300);
             this.CT_ECG.TabIndex = 22;
             this.CT_ECG.Text = "chart1";

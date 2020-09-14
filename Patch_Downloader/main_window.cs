@@ -20,7 +20,7 @@ namespace Huinno_Downloader
 {
     public partial class main_window : Form
     {
-        bool m_dev = false;
+        bool m_dev = true;
         Thread gReadSerialThd;
 
         string config_comport;
@@ -235,7 +235,7 @@ namespace Huinno_Downloader
             //
             string sub;
             sub = str_tx.Substring(pos, str_tx.Length - pos);
-            //ControlTextBox(TB_LogMsg, sub);
+            if(m_dev) ControlTextBox(TB_LogMsg, sub);
             pos = sub.IndexOf(".");
             string str_0st_idx = sub.Substring(0, pos);
 
@@ -411,7 +411,7 @@ namespace Huinno_Downloader
                         break;
                 }
             }
-            if (MessageBox.Show("Upload files to server?", "Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Link web page to upload data.", "Upload data", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 //MessageBox.Show("Yes");
                 if (config_uploadurl == "")
@@ -431,6 +431,8 @@ namespace Huinno_Downloader
             isDevNameSet = false;
             thread1_stop = 0;
             thread2_stop = 0;
+
+            //CloseSerial();
             ControlButton(BT_StartDown, true);
         }
 
@@ -694,7 +696,7 @@ namespace Huinno_Downloader
                 // parsing data
                 if (MEM_PAGE_SZ == MEM_2G_PAGE_FULL_SZ)
                 {
-                    time = um[0] + (um[1] <<8) + (um[2] <<16) + (um[3] <<24) + (um[4] <<32);
+                    time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
                     update = um[15];
                     id = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
                     page_idx = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
@@ -738,10 +740,15 @@ namespace Huinno_Downloader
                     continue;
                 }
 
-                //msg_line += String.Format("{0},{1},{2},{3},{4},{5}"+ Environment.NewLine, id, type, time, page_idx, page_pos, update);
-                msg_line += String.Format("{0},{1},{2}" + Environment.NewLine, id, time, pos);
-
-                //Console.WriteLine(msg_line);
+                if (m_dev)
+                {
+                    msg_line += String.Format("{0},{1},{2},{3},{4},{5},{6}" + Environment.NewLine, id, (int)type, time, page_idx, page_pos, pos, update);
+                    //Console.WriteLine(msg_line);
+                }
+                else
+                {
+                    msg_line += String.Format("{0},{1},{2}" + Environment.NewLine, id, time, pos);
+                }
                 fs_um.Write(msg_line);
                 msg_line = "";
             }
