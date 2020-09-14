@@ -20,7 +20,7 @@ namespace Huinno_Downloader
 {
     public partial class main_window : Form
     {
-        bool m_dev = true;
+        bool m_dev = false;
         string m_str_failed_to_connect = "Connection Failed! Check COM port or reconnect patch to PC.";
         string m_str_download_completed = "Open web page to upload data.";
         string m_str_download_completed_title = "Download completed";
@@ -164,7 +164,7 @@ namespace Huinno_Downloader
                 AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
 
 
-                BT_ConnPort.Text = "Disconnect";
+                ControlButtonText(BT_ConnPort, "Disconnect");
             }
             else
             {
@@ -175,7 +175,7 @@ namespace Huinno_Downloader
         private void CloseSerial()
         {
             cSerialPort.Close();
-            BT_ConnPort.Text = "Connect";
+            ControlButtonText(BT_ConnPort, "Connect");
         }
 
         const int UART_RX_CHAR_LEN_MAX = 16;
@@ -457,7 +457,12 @@ namespace Huinno_Downloader
             ControlButton(BT_StartDown, true);
             ControlButton(BT_ConnPort, true);
 
+            int val = 100;
+            ControlProgressBar(progressBar1, val);
+            ControlLabel(LB_ProgVal, val.ToString());
             //BT_ConnPort_Click();
+
+            CloseSerial();
         }
 
         int thread1_stop = 0;
@@ -495,9 +500,6 @@ namespace Huinno_Downloader
 
                 if (wCnt == total_len)
                 {
-                    int val = 100;
-                    ControlProgressBar(progressBar1, val);
-                    ControlLabel(LB_ProgVal, val.ToString());
                     break;
                 }
             }
@@ -547,6 +549,19 @@ namespace Huinno_Downloader
                         fileRename.MoveTo(m_resFilePathExp); // 이미있으면 에러
                     }
                 }                
+            }
+        }
+        delegate void ctrl_Invoke_Button_Text(System.Windows.Forms.Button ctrl, string text);
+        public void ControlButtonText(System.Windows.Forms.Button ctr, string text)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_Button_Text CI = new ctrl_Invoke_Button_Text(ControlButtonText);
+                ctr.Invoke(CI, ctr, text);
+            }
+            else
+            {
+                ctr.Text = text;
             }
         }
 
