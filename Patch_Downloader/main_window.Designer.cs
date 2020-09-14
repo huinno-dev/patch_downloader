@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Button BT_SelSavePath;
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.BT_StartDown = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.TB_Serial1 = new System.Windows.Forms.TextBox();
@@ -61,9 +61,9 @@
             // 
             // BT_SelSavePath
             // 
-            BT_SelSavePath.Location = new System.Drawing.Point(492, 41);
+            BT_SelSavePath.Location = new System.Drawing.Point(492, 42);
             BT_SelSavePath.Name = "BT_SelSavePath";
-            BT_SelSavePath.Size = new System.Drawing.Size(94, 58);
+            BT_SelSavePath.Size = new System.Drawing.Size(98, 58);
             BT_SelSavePath.TabIndex = 14;
             BT_SelSavePath.Text = "Select Folder";
             BT_SelSavePath.UseVisualStyleBackColor = true;
@@ -88,6 +88,7 @@
             // 
             // TB_Serial1
             // 
+            this.TB_Serial1.Enabled = false;
             this.TB_Serial1.Location = new System.Drawing.Point(32, 207);
             this.TB_Serial1.Name = "TB_Serial1";
             this.TB_Serial1.ReadOnly = true;
@@ -96,6 +97,7 @@
             // 
             // TB_Serial2
             // 
+            this.TB_Serial2.Enabled = false;
             this.TB_Serial2.Location = new System.Drawing.Point(76, 207);
             this.TB_Serial2.Name = "TB_Serial2";
             this.TB_Serial2.ReadOnly = true;
@@ -104,6 +106,7 @@
             // 
             // TB_Serial3
             // 
+            this.TB_Serial3.Enabled = false;
             this.TB_Serial3.Location = new System.Drawing.Point(158, 207);
             this.TB_Serial3.Name = "TB_Serial3";
             this.TB_Serial3.ReadOnly = true;
@@ -112,6 +115,7 @@
             // 
             // TB_Serial4
             // 
+            this.TB_Serial4.Enabled = false;
             this.TB_Serial4.Location = new System.Drawing.Point(202, 207);
             this.TB_Serial4.Name = "TB_Serial4";
             this.TB_Serial4.ReadOnly = true;
@@ -120,6 +124,7 @@
             // 
             // TB_Serial5
             // 
+            this.TB_Serial5.Enabled = false;
             this.TB_Serial5.Location = new System.Drawing.Point(246, 207);
             this.TB_Serial5.Name = "TB_Serial5";
             this.TB_Serial5.ReadOnly = true;
@@ -128,6 +133,7 @@
             // 
             // TB_Serial6
             // 
+            this.TB_Serial6.Enabled = false;
             this.TB_Serial6.Location = new System.Drawing.Point(290, 207);
             this.TB_Serial6.Name = "TB_Serial6";
             this.TB_Serial6.ReadOnly = true;
@@ -136,6 +142,7 @@
             // 
             // TB_Serial7
             // 
+            this.TB_Serial7.Enabled = false;
             this.TB_Serial7.Location = new System.Drawing.Point(360, 207);
             this.TB_Serial7.Name = "TB_Serial7";
             this.TB_Serial7.ReadOnly = true;
@@ -153,7 +160,7 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.Location = new System.Drawing.Point(184, 129);
+            this.BT_ConnPort.Location = new System.Drawing.Point(184, 134);
             this.BT_ConnPort.Name = "BT_ConnPort";
             this.BT_ConnPort.Size = new System.Drawing.Size(152, 37);
             this.BT_ConnPort.TabIndex = 10;
@@ -163,9 +170,9 @@
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.Location = new System.Drawing.Point(592, 42);
+            this.BT_OpenSavePath.Location = new System.Drawing.Point(601, 42);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
-            this.BT_OpenSavePath.Size = new System.Drawing.Size(107, 57);
+            this.BT_OpenSavePath.Size = new System.Drawing.Size(98, 58);
             this.BT_OpenSavePath.TabIndex = 11;
             this.BT_OpenSavePath.Text = "Open Folder";
             this.BT_OpenSavePath.UseVisualStyleBackColor = true;
@@ -254,16 +261,16 @@
             // 
             // CT_ECG
             // 
-            chartArea4.Name = "ChartArea1";
-            this.CT_ECG.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.CT_ECG.Legends.Add(legend4);
+            chartArea1.Name = "ChartArea1";
+            this.CT_ECG.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.CT_ECG.Legends.Add(legend1);
             this.CT_ECG.Location = new System.Drawing.Point(750, 269);
             this.CT_ECG.Name = "CT_ECG";
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.CT_ECG.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.CT_ECG.Series.Add(series1);
             this.CT_ECG.Size = new System.Drawing.Size(715, 300);
             this.CT_ECG.TabIndex = 22;
             this.CT_ECG.Text = "chart1";
