@@ -21,6 +21,11 @@ namespace Huinno_Downloader
     public partial class main_window : Form
     {
         bool m_dev = true;
+        string m_str_failed_to_connect = "Connection Failed! Check COM port or reconnect patch to PC.";
+        string m_str_download_completed = "Open web page to upload data.";
+        string m_str_download_completed_title = "Download completed";
+        string m_str_not_setup_url = "Please set url.";
+
         Thread gReadSerialThd;
 
         string config_comport;
@@ -117,8 +122,12 @@ namespace Huinno_Downloader
 
         private void BT_OpenSavePath_Click(object sender, EventArgs e)
         {
-            Process.Start(TB_SavePath.Text);
-        }
+            DirectoryInfo di = new DirectoryInfo(TB_SavePath.Text);
+            if (di.Exists)
+            {
+                Process.Start(TB_SavePath.Text);
+            }
+        } 
 
         private void BT_SelSavePath_Click(object sender, EventArgs e)
         {
@@ -127,6 +136,8 @@ namespace Huinno_Downloader
             {
                 TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
                 AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
+
+                isCreateSaveDir = false;
             }
         }
 
@@ -219,6 +230,12 @@ namespace Huinno_Downloader
             }
         }
 
+        string str_0st_idx;
+        string str_0ed_idx;
+        string str_1st_idx;
+        string str_1ed_idx;
+
+        string m_str_index;
         private void ParseDeviceInfo(string str_tx)
         {
             int pos = str_tx.IndexOf("[INFO] ");
@@ -235,17 +252,18 @@ namespace Huinno_Downloader
             //
             string sub;
             sub = str_tx.Substring(pos, str_tx.Length - pos);
-            if(m_dev) ControlTextBox(TB_LogMsg, sub);
+            m_str_index = sub;
+
             pos = sub.IndexOf(".");
-            string str_0st_idx = sub.Substring(0, pos);
+            str_0st_idx = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
             pos = sub.IndexOf(".");
-            string str_0ed_idx = sub.Substring(0, pos);
+            str_0ed_idx = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
             pos = sub.IndexOf(".");
-            string str_1st_idx = sub.Substring(0, pos);
+            str_1st_idx = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
             if (sub.Contains("?"))
@@ -254,7 +272,7 @@ namespace Huinno_Downloader
                 sub = sub.Substring(0, pos2);
 
             }
-            string str_1ed_idx = sub;
+            str_1ed_idx = sub;
 
             //
             nand0StIdx = Int32.Parse(str_0st_idx);
@@ -276,6 +294,7 @@ namespace Huinno_Downloader
 
             // set ui
             ControlButton(BT_StartDown, false);
+            ControlButton(BT_ConnPort, false);
             ControlProgressBar(progressBar1, 0);
 
             // init value
@@ -329,14 +348,16 @@ namespace Huinno_Downloader
 
                 if (!isDevNameSet)
                 {
-                    ControlTextBox(TB_LogMsg, "Failed to connect. Check COM port or reconnect patch to PC.");
+                    ControlTextBox(TB_LogMsg, m_str_failed_to_connect);
                     ControlButton(BT_StartDown, true);
+                    ControlButton(BT_ConnPort, true);
                     CloseSerial();
                     return;
                 }
-                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum);
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum + " ["+ m_str_index + "]");
             }
             ControlButton(BT_StartDown, false);
+            ControlButton(BT_ConnPort, false);
 
             // start thread
             gThreadCheckThd = new Thread(new ThreadStart(checkfirstDataDone));
@@ -411,12 +432,12 @@ namespace Huinno_Downloader
                         break;
                 }
             }
-            if (MessageBox.Show("Link web page to upload data.", "Upload data", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 //MessageBox.Show("Yes");
                 if (config_uploadurl == "")
                 {
-                    MessageBox.Show("Please set url.");
+                    MessageBox.Show(m_str_not_setup_url);
                 }
                 else
                 {
@@ -434,6 +455,9 @@ namespace Huinno_Downloader
 
             //CloseSerial();
             ControlButton(BT_StartDown, true);
+            ControlButton(BT_ConnPort, true);
+
+            //BT_ConnPort_Click();
         }
 
         int thread1_stop = 0;

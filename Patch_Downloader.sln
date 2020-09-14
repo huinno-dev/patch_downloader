@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patch_Downloader", "Patch_Downloader\Patch_Downloader.csproj", "{A03D278C-4B79-41E0-8567-BA6BF41B76DE}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Huinno_Patch_Downloader", "Huinno_Patch_Downloader\Huinno_Patch_Downloader.vdproj", "{523DC7EA-B29A-4A75-AA07-2C88B0E1FAB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{A03D278C-4B79-41E0-8567-BA6BF41B76DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A03D278C-4B79-41E0-8567-BA6BF41B76DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A03D278C-4B79-41E0-8567-BA6BF41B76DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{523DC7EA-B29A-4A75-AA07-2C88B0E1FAB1}.Debug|Any CPU.ActiveCfg = Debug
+		{523DC7EA-B29A-4A75-AA07-2C88B0E1FAB1}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
