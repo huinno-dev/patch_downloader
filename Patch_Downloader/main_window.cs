@@ -235,7 +235,6 @@ namespace Huinno_Downloader
         string str_1st_idx;
         string str_1ed_idx;
 
-        string m_str_index;
         private void ParseDeviceInfo(string str_tx)
         {
             int pos = str_tx.IndexOf("[INFO] ");
@@ -252,7 +251,6 @@ namespace Huinno_Downloader
             //
             string sub;
             sub = str_tx.Substring(pos, str_tx.Length - pos);
-            m_str_index = sub;
 
             pos = sub.IndexOf(".");
             str_0st_idx = sub.Substring(0, pos);
@@ -354,7 +352,7 @@ namespace Huinno_Downloader
                     CloseSerial();
                     return;
                 }
-                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum + " ["+ m_str_index + "]");
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum + " ["+ str_0st_idx + "." + str_0ed_idx + "." + str_1st_idx + "." + str_1ed_idx + "]");
             }
             ControlButton(BT_StartDown, false);
             ControlButton(BT_ConnPort, false);
@@ -432,6 +430,11 @@ namespace Huinno_Downloader
                         break;
                 }
             }
+
+            int val = 100;
+            ControlProgressBar(progressBar1, val);
+            ControlLabel(LB_ProgVal, val.ToString());
+            
             if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 //MessageBox.Show("Yes");
@@ -457,9 +460,6 @@ namespace Huinno_Downloader
             ControlButton(BT_StartDown, true);
             ControlButton(BT_ConnPort, true);
 
-            int val = 100;
-            ControlProgressBar(progressBar1, val);
-            ControlLabel(LB_ProgVal, val.ToString());
             //BT_ConnPort_Click();
 
             CloseSerial();
