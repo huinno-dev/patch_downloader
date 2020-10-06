@@ -18,7 +18,7 @@ namespace Huinno_Downloader
             Application.SetCompatibleTextRenderingDefault(false);
 
             main_window w = new main_window();
-            if (w.config_uploadurl == "")
+            if (w.m_strCfg_uploadurl == "")
             {
                 w.Close();
                 return;

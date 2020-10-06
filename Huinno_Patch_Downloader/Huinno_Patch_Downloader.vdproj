@@ -15,7 +15,19 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0E1A358D785A426594DC17C7EEDC6B38"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_522C1960FF134D5FA2F05597E463D2DB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5E4634FB8FF42328E1939345465B7A2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -49,6 +61,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -65,6 +93,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -94,10 +138,50 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E1A358D785A426594DC17C7EEDC6B38"
+            {
+            "SourcePath" = "8:..\\Patch_Downloader\\huinno-icon01.ico"
+            "TargetName" = "8:huinno-icon01.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_522C1960FF134D5FA2F05597E463D2DB"
             {
             "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Downloader.exe.config"
             "TargetName" = "8:Huinno_Downloader.exe.config"
+            "Tag" = "8:"
+            "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5E4634FB8FF42328E1939345465B7A2"
+            {
+            "SourcePath" = "8:..\\Patch_Downloader\\huinno-icon02.ico"
+            "TargetName" = "8:huinno-icon02.ico"
             "Tag" = "8:"
             "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
             "Condition" = "8:"
@@ -153,20 +237,31 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
+            "DefaultLocation" = "8:c:\\[Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2B92ACDD91C34DD1A48BCC4CA3BB90E5"
+                    {
+                    "Name" = "8:Downloads"
+                    "AlwaysCreate" = "11:TRUE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_F475D616DCCB48D3B1FB2A5A6DF06B3D"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_913645DE055649B18C821B2655B02333"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -183,6 +278,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_75046B74C1F643EF92AF80B6D929C598"
+                    {
+                    "Name" = "8:Huinno"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_DA774B5E04BE49719CC80E22FA50B453"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -200,20 +306,20 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Huinno_Patch_Downloader"
-        "ProductCode" = "8:{7A8FEB9A-C3C5-491E-9CE4-C993D0A80E80}"
-        "PackageCode" = "8:{E36F1CC6-AC51-4ADF-AE15-EBFC6691FFE9}"
+        "ProductName" = "8:Huinno_Downloader"
+        "ProductCode" = "8:{65F9B7A1-00C2-4E5D-8193-2A948CC7C51E}"
+        "PackageCode" = "8:{ECE1EE80-5B79-4452-B023-39949147DADB}"
         "UpgradeCode" = "8:{7F2605F6-48C0-4321-B4C0-2D008E6CF755}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Huinno"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Huinno_Patch_Downloader"
+        "Title" = "8:Huinno_Downloader"
         "Subject" = "8:"
         "ARPCONTACT" = "8:annibuy@gmail.com"
         "Keywords" = "8:"
@@ -322,6 +428,34 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_99B2B53C015046AF8B2D62056A34DD38"
+            {
+            "Name" = "8:Patch Downloader"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Folder" = "8:_75046B74C1F643EF92AF80B6D929C598"
+            "WorkingFolder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Icon" = "8:_0E1A358D785A426594DC17C7EEDC6B38"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E0338F1946B14CB989FD8DEB4F5DDE6C"
+            {
+            "Name" = "8:Huinno_Downloader.exe"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_B66F1CBD6D894164B205916561A3708A"
+            "Folder" = "8:_75046B74C1F643EF92AF80B6D929C598"
+            "WorkingFolder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Icon" = "8:_A5E4634FB8FF42328E1939345465B7A2"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
