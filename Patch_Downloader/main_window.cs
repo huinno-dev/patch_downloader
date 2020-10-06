@@ -20,70 +20,171 @@ namespace Huinno_Downloader
 {
     public partial class main_window : Form
     {
-        bool m_dev = false;
-        string m_str_failed_to_connect = "Connection Failed! Check COM port or reconnect patch to PC.";
+        bool m_dev = true;
+        
+        // string
+        string m_str_failed_to_connect = "Connection Failed! Chem_config_comportck COM port or reconnect patch to PC.";
         string m_str_download_completed = "Open web page to upload data.";
         string m_str_download_completed_title = "Download completed";
         string m_str_not_setup_url = "Please set url.";
 
-        Thread gReadSerialThd;
+        // params for config
+        string m_strCfg_comport;
+        string m_strCfg_baudrate;
+        string m_strCfg_savepath;
+        public string m_strCfg_uploadurl;   // public for check in main()
 
-        string config_comport;
-        string config_comportbaud;
-        string config_savepath;
-        public string config_uploadurl;
+        //
+        bool m_isCreateSaveDir = false;
+        string m_curSavePath;
 
-        private bool m_bDevMode = false;
+        string m_resFileName;       // only file_name without exp
+        string m_resFilePath;       // dir + file_name
+        string m_resFilePathExp;    // dir + file_name + exp
+
+        //
+        Thread m_RdSerialDataThd;
+        Thread m_CheckRunningThd;
+
+        DOWN_MODE_T m_downMode = 0;
+
+        // for header
+        byte[] m_EcgHeader = new byte[32];
+        int m_pairStTime = -1;
+        int m_pairStPos = 0;
+
+        // uart 
+        const int UART_RX_CHAR_LEN_MAX = 16;
+        byte[] m_uartSendMsg = new byte[UART_RX_CHAR_LEN_MAX];
+
+        FileStream m_fs;
+        BinaryWriter m_bw;
+        int m_wrCnt = 0;
+
+        public enum UART_RX_CMD_T
+        {
+            URX_CMD_SET_PRODUCT_NAME = 0,   // 0
+            URX_CMD_INIT_NAND_PAGE,         // 1
+            URX_CMD_RD_NAND_ECG_DATA,       // 2
+            URX_CMD_RD_NAND_USER_MARK,      // 3
+            URX_CMD_SYSTEM_RESET,           // 4
+            URX_CMD_GET_SYS_INFO,           // 5
+            URX_CMD_RD_NAND_PAGE_ST_ED,     // 6
+            UART_RX_CMD_NUM_MAX
+        }
+
+        public enum PD_NAME_T
+        {
+            PD_NAME_HUINNO = 0,
+            PD_NAME_CATEGORY,
+            PD_NAME_ASSMTYPE,
+            PD_NAME_VERSION,
+            PD_NAME_USAGETYPE,
+            PD_NAME_COUNTRY,
+            PD_NAME_SERIALNUM,
+            PD_NAME_NUM_MAX
+        }
+
+        public enum DOWN_MODE_T
+        {
+            DOWN_MODE_USRMARK = 0,        // 0
+            DOWN_MODE_ECGDATA,         // 1
+            DOWN_MODE_NUM_MAX
+        }
+
+        public enum USER_MARK_T
+        {
+            USER_MARK_PAIRING_ST = 0,        // 0
+            USER_MARK_PAIRING_ED,         // 1
+            USER_MARK_EVENT_APP,        // 2
+            USER_MARK_EVENT_BTN,        // 3
+            USER_MARK_TYPE_NUM_MAX
+        }
+
+        // product name
+        bool m_isProductNameSet = false;
+
+        string[] m_productName = new string[(int)PD_NAME_T.PD_NAME_NUM_MAX];
+        string m_curSerialName;
+        byte[] m_productNameByte = new byte[13];
+
+        // nand index
+        string[] m_strNandIdx_St = new string[(int)DOWN_MODE_T.DOWN_MODE_NUM_MAX];
+        string[] m_strNandIdx_Ed = new string[(int)DOWN_MODE_T.DOWN_MODE_NUM_MAX];
+        int[] m_nandIdx_St = new int[(int)DOWN_MODE_T.DOWN_MODE_NUM_MAX];
+        int[] m_nandIdx_Ed = new int[(int)DOWN_MODE_T.DOWN_MODE_NUM_MAX];
+        int m_RdPageTotalCnt;
+
+
+        // flag to control thread
+        bool m_startThd_2nd = false;
+        int m_stopThd_1st = 0;
+        int m_stopThd_2nd = 0;
+
+        /// <summary>
+        /// Select memory size
+        /// </summary>
+        //////////////////////////////////////////////////
+        const int USER_MARK_SIZE = 32;
+        const int MEM_INIT_VAL = 0xFF;
+
+        const int MEM_4G_PAGE_FULL_SZ = 4096;
+        const int MEM_4G_PAGE_USE_SZ = 4095;
+        const int MEM_2G_PAGE_FULL_SZ = 2048;
+        const int MEM_2G_PAGE_USE_SZ = 2046;
+
+        //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
+        //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
+        const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+        const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+        //////////////////////////////////////////////////
+
 
         public main_window()
         {
             InitializeComponent();
 
             // Init val
-            LB_ProgVal.Text = "";
+            ControlLabel(LB_ProgVal, "0");
 
             // config: comport
-            config_comport = AppConfiguration.GetAppConfig("ComPortName");
-            config_comportbaud = "3000000";
-            //config_comportbaud = AppConfiguration.GetAppConfig("ComPortBaud");
-            config_savepath = AppConfiguration.GetAppConfig("SavePath");
-            config_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
+            m_strCfg_comport = AppConfiguration.GetAppConfig("ComPortName");
+            m_strCfg_baudrate = "3000000";
+            //m_config_baudrate = AppConfiguration.GetAppConfig("ComPortBaud");
+            m_strCfg_savepath = AppConfiguration.GetAppConfig("SavePath");
+            m_strCfg_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
 
-            if(config_uploadurl=="")
+            if(m_strCfg_uploadurl == "")
             {
                 MessageBox.Show("Please set url.");
             }
             // set save path
-            if (config_savepath == "")
+            if (m_strCfg_savepath == "")
             {
                 TB_SavePath.Text = Application.StartupPath + "\\Downloads";
                 AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
+                CreateSaveDir(TB_SavePath.Text);
             }
             else
             {
-                TB_SavePath.Text = config_savepath;
+                TB_SavePath.Text = m_strCfg_savepath;
             }
 
             // get comport name list
             RefreshComPortList();
-
-
-            //// add event handler
-            //this.KeyPreview = true;
-            //this.KeyDown += new KeyEventHandler(main_window_KeyDown);
-
-            //
-            ShowDevMode(true);
         }
 
-        private void ShowDevMode(bool isShow)
+        private void CreateSaveDir(string path)
         {
-            TB_Serial1.Visible = isShow;
-            TB_Serial2.Visible = isShow;
-            TB_Serial3.Visible = isShow;
-            TB_Serial4.Visible = isShow;
-            TB_Serial5.Visible = isShow;
-            TB_Serial6.Visible = isShow;
+            if (!m_isCreateSaveDir)
+            {
+                m_isCreateSaveDir = true;
+                DirectoryInfo di = new DirectoryInfo(path);
+                if (di.Exists == false)
+                {
+                    di.Create();
+                }
+            }
         }
 
         private void RefreshComPortList()
@@ -94,30 +195,24 @@ namespace Huinno_Downloader
             CB_ComPortNameList.Items.AddRange(nameArray);
             for (int i = 0; i < nameArray.Length; ++i)
             {
-                if (nameArray[i] == config_comport)
+                if (nameArray[i] == m_strCfg_comport)
                 {
-                    CB_ComPortNameList.Text = config_comport;
+                    CB_ComPortNameList.Text = m_strCfg_comport;
                     break;
                 }
             }
-            CB_ComPortBaudList.Text = config_comportbaud;
+            CB_ComPortBaudList.Text = m_strCfg_baudrate;
         }
 
-        private void InitSerialTextBox( string a_huinno
-                                        , string b_category
-                                        , string c_assembleType
-                                        , string d_version
-                                        , string e_usageType
-                                        , string f_country
-                                        , string g_serialNum )
+        private void TB_Serial_SetProductName()
         {
-            TB_Serial1.Text = a_huinno;
-            TB_Serial2.Text = b_category;
-            TB_Serial3.Text = c_assembleType;
-            TB_Serial4.Text = d_version;
-            TB_Serial5.Text = e_usageType;
-            TB_Serial6.Text = f_country;
-            TB_Serial7.Text = g_serialNum;
+            TB_Serial1.Text = m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]    ;
+            TB_Serial2.Text = m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY ] ;
+            TB_Serial3.Text = m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE ] ;
+            TB_Serial4.Text = m_productName[(int)PD_NAME_T.PD_NAME_VERSION  ] ;
+            TB_Serial5.Text = m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE] ;
+            TB_Serial6.Text = m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY  ] ;
+            TB_Serial7.Text = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM]; 
         }
 
         private void BT_OpenSavePath_Click(object sender, EventArgs e)
@@ -128,18 +223,6 @@ namespace Huinno_Downloader
                 Process.Start(TB_SavePath.Text);
             }
         } 
-
-        private void BT_SelSavePath_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
-                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
-
-                isCreateSaveDir = false;
-            }
-        }
 
         private void BT_ConnPort_Click(object sender, EventArgs e)
         {
@@ -178,112 +261,69 @@ namespace Huinno_Downloader
             ControlButtonText(BT_ConnPort, "Connect");
         }
 
-        const int UART_RX_CHAR_LEN_MAX = 16;
-        byte[] sendMsg = new byte[UART_RX_CHAR_LEN_MAX];
-
-        public enum UART_RX_CMD_T
-        {
-            URX_CMD_SET_PRODUCT_NAME = 0,        // 0
-            URX_CMD_INIT_NAND_PAGE,         // 1
-            URX_CMD_RD_NAND_ECG_DATA,        // 2
-            URX_CMD_RD_NAND_USER_MARK,        // 3
-            URX_CMD_SYSTEM_RESET,         // 4
-            URX_CMD_GET_SYS_INFO,           // 5
-            URX_CMD_RD_NAND_PAGE_ST_ED,     // 6
-            UART_RX_CMD_NUM_MAX
-        }
-
-        const int UART_TX_CMD_MEM = 0x17;
-        const int UART_TX_CMD_ECG = 0x38;
-        const int UART_TX_CMD_LOG = 0xE8;
-
-        bool isDevNameSet = false;
-
-        string resFileName;
-        FileStream fs;
-        BinaryWriter bw;
-        int wCnt = 0;
-
-        string a_huinno         ;
-        string b_category       ;
-        string c_assembleType   ;
-        string d_version        ;
-        string e_usageType      ;
-        string f_country        ;
-        string g_serialNum;
-        int nand0StIdx = 0;
-        int nand0EdIdx = 0;
-        int nand1StIdx = 0;
-        int nand1EdIdx = 0;
-
-        bool isCreateSaveDir = false;
-        private void CreateSaveDir()
-        {
-            if (!isCreateSaveDir)
-            {
-                isCreateSaveDir = true;
-                DirectoryInfo di = new DirectoryInfo(TB_SavePath.Text);
-                if (di.Exists == false)
-                {
-                    di.Create();
-                }
-            }
-        }
-
-        string str_0st_idx;
-        string str_0ed_idx;
-        string str_1st_idx;
-        string str_1ed_idx;
-
         private void ParseDeviceInfo(string str_tx)
         {
             int pos = str_tx.IndexOf("[INFO] ");
             pos += 7;
 
-            a_huinno = str_tx.Substring(pos, 1); pos += 2;
-            b_category = str_tx.Substring(pos, 2); pos += 3;
-            c_assembleType = str_tx.Substring(pos, 1); pos += 2;
-            d_version = str_tx.Substring(pos, 1); pos += 2;
-            e_usageType = str_tx.Substring(pos, 1); pos += 2;
-            f_country = str_tx.Substring(pos, 2); pos += 3;
-            g_serialNum = str_tx.Substring(pos, 5); pos += 6;
+            m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]    = str_tx.Substring(pos, 1); pos += 2;
+            m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY ] = str_tx.Substring(pos, 2); pos += 3;
+            m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE ] = str_tx.Substring(pos, 1); pos += 2;
+            m_productName[(int)PD_NAME_T.PD_NAME_VERSION  ] = str_tx.Substring(pos, 1); pos += 2;
+            m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE] = str_tx.Substring(pos, 1); pos += 2;
+            m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY  ] = str_tx.Substring(pos, 2); pos += 3;
+            m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM] = str_tx.Substring(pos, 5); pos += 6;
+
+            m_productNameByte = Encoding.ASCII.GetBytes(m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_VERSION]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY]
+                                                        + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM]);
 
             //
             string sub;
             sub = str_tx.Substring(pos, str_tx.Length - pos);
 
             pos = sub.IndexOf(".");
-            str_0st_idx = sub.Substring(0, pos);
+            m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
             pos = sub.IndexOf(".");
-            str_0ed_idx = sub.Substring(0, pos);
+            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
             pos = sub.IndexOf(".");
-            str_1st_idx = sub.Substring(0, pos);
+            m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
-            if (sub.Contains("?"))
+            string checkStr = sub;
+            while (checkStr.Length>0)
             {
-                int pos2 = sub.IndexOf("?");
-                sub = sub.Substring(0, pos2);
+                string lastStr = checkStr.Substring(checkStr.Length - 1);
+                byte [] byteVal = Encoding.UTF8.GetBytes(lastStr);
+                if (byteVal[0]>=48 && byteVal[0]<=57)
+                    break;
 
+                checkStr = checkStr.Substring(0, checkStr.Length - 1);
             }
-            str_1ed_idx = sub;
+            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = checkStr;
 
             //
-            nand0StIdx = Int32.Parse(str_0st_idx);
-            nand0EdIdx = Int32.Parse(str_0ed_idx);
-            nand1StIdx = Int32.Parse(str_1st_idx);
-            nand1EdIdx = Int32.Parse(str_1ed_idx);
+            m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
+            m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
+            m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
+            m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
         }
-        byte[] deviceName = new byte[13];
 
-        string serialNum;
-        int m_downMode = 0;
-        string m_resFilePath;
-        string m_resFilePathExp;
+        private void setButtonEnabledUI(bool bEnable)
+        {
+            ControlButton(BT_StartDown, bEnable);
+            ControlButton(BT_ConnPort, bEnable);
+            ControlButton(BT_SelSaveDir, bEnable);
+            ControlTextBox_Enable(TB_SavePath, bEnable);
+        }
 
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
@@ -291,142 +331,127 @@ namespace Huinno_Downloader
                 return;
 
             // set ui
-            ControlButton(BT_StartDown, false);
-            ControlButton(BT_ConnPort, false);
+            setButtonEnabledUI(false);
+
             ControlProgressBar(progressBar1, 0);
 
             // init value
-            LB_ProgVal.Text = "";
+            ControlLabel(LB_ProgVal, "0");
 
             //
-            CreateSaveDir();
+            m_curSavePath = TB_SavePath.Text;
+            CreateSaveDir(m_curSavePath);
 
             UART_RX_CMD_T RxCmd = (UART_RX_CMD_T )0;
-            if (m_downMode == 0)
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
                 // send command to get device info
                 RxCmd = UART_RX_CMD_T.URX_CMD_GET_SYS_INFO;
-                sendMsg[0] = (byte)RxCmd;
+                m_uartSendMsg[0] = (byte)RxCmd;
 
                 cSerialPort.Clear();
-                cSerialPort.Write(sendMsg, UART_RX_CHAR_LEN_MAX);
+                cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
 
                 Thread.Sleep(100);
 
-                if (!isDevNameSet)
+                if (!m_isProductNameSet)
                 {
                     string str_tx = cSerialPort.ReadExisting();
-
                     if (str_tx.Contains("[INFO] "))
                     {
                         ParseDeviceInfo(str_tx);
+                        TB_Serial_SetProductName();
 
-                        InitSerialTextBox(
-                            a_huinno
-                            , b_category
-                            , c_assembleType
-                            , d_version
-                            , e_usageType
-                            , f_country
-                            , g_serialNum
-                            );
-
-                        deviceName = Encoding.ASCII.GetBytes(a_huinno
-                            + b_category 
-                            + c_assembleType
-                            + d_version
-                            + e_usageType
-                            + f_country
-                            + g_serialNum );
-
-                        serialNum = g_serialNum;
-                        isDevNameSet = true;
+                        m_curSerialName = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
+                        m_isProductNameSet = true;
                     }
                 }
 
-                if (!isDevNameSet)
+                if (!m_isProductNameSet)
                 {
                     ControlTextBox(TB_LogMsg, m_str_failed_to_connect);
-                    ControlButton(BT_StartDown, true);
-                    ControlButton(BT_ConnPort, true);
+                    setButtonEnabledUI(true);
                     CloseSerial();
                     return;
                 }
-                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_"+ g_serialNum + " ["+ str_0st_idx + "." + str_0ed_idx + "." + str_1st_idx + "." + str_1ed_idx + "]");
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_" + m_curSerialName + " [" + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]
+                                                                                        + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]
+                                                                                        + "." + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]
+                                                                                        + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] + "]");
             }
-            ControlButton(BT_StartDown, false);
-            ControlButton(BT_ConnPort, false);
+
+            setButtonEnabledUI(false);
 
             // start thread
-            gThreadCheckThd = new Thread(new ThreadStart(checkfirstDataDone));
-            gThreadCheckThd.Start();
+            m_CheckRunningThd = new Thread(new ThreadStart(checkfirstDataDone));
+            m_CheckRunningThd.Start();
 
             readData();
 
         }
 
-        string m_file_exp = "";
         void readData()
         {
             UART_RX_CMD_T RxCmd = (UART_RX_CMD_T)0;
-            if (m_downMode == 0)
+            string strFileExp = "";
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
                 RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_USER_MARK;
-                total_len = (nand0EdIdx - nand0StIdx + 1);
+                m_RdPageTotalCnt = (m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]
+                            - m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] + 1);
 
-                m_file_exp = ".csv";
+                strFileExp = ".csv";
             }
-            else if (m_downMode == 1)
+            else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
             {
                 RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_ECG_DATA;
-                total_len = (nand1EdIdx - nand1StIdx + 1);
+                m_RdPageTotalCnt = (m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]
+                            - m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] + 1);
 
-                m_file_exp = ".bin";
+                strFileExp = ".bin";
             }
 
             // send command to get data
-            sendMsg[0] = (byte)RxCmd;
-
+            m_uartSendMsg[0] = (byte)RxCmd;
             cSerialPort.Clear();
-            cSerialPort.Write(sendMsg, UART_RX_CHAR_LEN_MAX);
+            cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
 
-            if (m_downMode == 0 || m_downMode == 99)
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
                 // generates output
                 string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                resFileName = genTime + "_" + serialNum;
+                m_resFileName = genTime + "_" + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
+                m_resFilePath = m_curSavePath + "\\" + m_resFileName;
             }
 
             // set file path
-            m_resFilePath = TB_SavePath.Text + "\\" + resFileName;
-            m_resFilePathExp = m_resFilePath + m_file_exp;
+            m_resFilePathExp = m_resFilePath + strFileExp;
 
-            fs = new FileStream(m_resFilePathExp, FileMode.CreateNew, FileAccess.Write);
-            bw = new BinaryWriter(fs);
+            // open file
+            m_fs = new FileStream(m_resFilePathExp, FileMode.CreateNew, FileAccess.Write);
+            m_bw = new BinaryWriter(m_fs);
 
-            ControlTextBox(TB_LogMsg, "Downloading.. " + resFileName + m_file_exp);
+            ControlTextBox(TB_LogMsg, "Downloading.. " + m_resFileName + strFileExp);
 
             // start thread
-            gReadSerialThd = new Thread(new ThreadStart(readRun));
-            gReadSerialThd.Start();
+            m_RdSerialDataThd = new Thread(new ThreadStart(procReadData));
+            m_RdSerialDataThd.Start();
         }
 
-        Thread gThreadCheckThd;
-        bool m_start2ndData = false;
         void checkfirstDataDone()
         {
             while(true)
             {
                 Thread.Sleep(500);
                 Console.WriteLine(String.Format("TEST"));
-                if (thread1_stop == 1)
+                if (m_stopThd_1st == 1)
                 {
-                    if (m_start2ndData == false)
+                    if (m_startThd_2nd == false)
                     {
-                        m_start2ndData = true;
+                        m_startThd_2nd = true;
                         readData();
                     }
-                    if (thread2_stop == 1)
+                    if (m_stopThd_2nd == 1)
                         break;
                 }
             }
@@ -437,46 +462,33 @@ namespace Huinno_Downloader
             
             if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                //MessageBox.Show("Yes");
-                if (config_uploadurl == "")
+                if (m_strCfg_uploadurl == "")
                 {
                     MessageBox.Show(m_str_not_setup_url);
                 }
                 else
                 {
-                    System.Diagnostics.Process.Start(config_uploadurl);
+                    System.Diagnostics.Process.Start(m_strCfg_uploadurl);
                 }
             }
-            //else
-            //{
-            //    MessageBox.Show("아니요");
-            //}
-            m_start2ndData = false;
-            isDevNameSet = false;
-            thread1_stop = 0;
-            thread2_stop = 0;
 
-            //CloseSerial();
-            ControlButton(BT_StartDown, true);
-            ControlButton(BT_ConnPort, true);
+            m_startThd_2nd = false;
+            m_isProductNameSet = false;
+            m_stopThd_1st = 0;
+            m_stopThd_2nd = 0;
 
-            //BT_ConnPort_Click();
-
+            setButtonEnabledUI(true);
             CloseSerial();
         }
 
-        int thread1_stop = 0;
-        int thread2_stop = 0;
-        int total_len;
-
-        static int rdBufSize = MEM_PAGE_SZ;
-
-        void readRun()
+        void procReadData()
         {
-            byte[] rBuf = new byte[rdBufSize];
+            cSerialPort.Clear();
+
+            byte[] rBuf = new byte[MEM_PAGE_SZ];
             while (true)
             {
-                int rCnt = cSerialPort.Read(rBuf, rdBufSize);
+                int rCnt = cSerialPort.Read(rBuf, MEM_PAGE_SZ);
                 if (rCnt < 0)
                 {
                     Thread.Sleep(10);
@@ -484,35 +496,35 @@ namespace Huinno_Downloader
                     continue;
                 }
 
-                Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, wCnt));
+                Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, m_wrCnt));
 
                 //
-                bw.Write(rBuf, 0, rdBufSize);
-                wCnt += 1;
+                m_bw.Write(rBuf, 0, MEM_PAGE_SZ);
+                m_wrCnt += 1;
                 Array.Clear(rBuf, 0, rCnt);
 
-                if (wCnt % 55 == 0)
+                if (m_wrCnt % 55 == 0)
                 {
-                    int val = 100 * wCnt / total_len;
+                    int val = 100 * m_wrCnt / m_RdPageTotalCnt;
                     ControlProgressBar(progressBar1, val);
                     ControlLabel(LB_ProgVal, val.ToString());
                 }
 
-                if (wCnt == total_len)
+                if (m_wrCnt == m_RdPageTotalCnt)
                 {
                     break;
                 }
             }
-            wCnt = 0;
-            bw.Close();
-            fs.Close();
-            if (m_downMode == 1)
+            m_wrCnt = 0;
+            m_bw.Close();
+            m_fs.Close();
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
             {
-                ConvertData(m_resFilePathExp);
-                m_downMode = 0;
+                ConvertEcgData(m_resFilePathExp);
+                m_downMode = DOWN_MODE_T.DOWN_MODE_USRMARK;
 
-                ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + g_serialNum+ Environment.NewLine);
-                thread2_stop = 1;
+                ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + m_curSerialName + Environment.NewLine);
+                m_stopThd_2nd = 1;
 
                 if (!m_dev)
                 {
@@ -529,11 +541,11 @@ namespace Huinno_Downloader
                     }
                 }
             }
-            else if (m_downMode == 0)
+            else if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
                 ExtractUserMarkFromFile(m_resFilePathExp);
-                m_downMode = 1;
-                thread1_stop = 1;
+                m_downMode = DOWN_MODE_T.DOWN_MODE_ECGDATA;
+                m_stopThd_1st = 1;
 
                 if (!m_dev)
                 {
@@ -551,7 +563,8 @@ namespace Huinno_Downloader
                 }                
             }
         }
-        delegate void ctrl_Invoke_Button_Text(System.Windows.Forms.Button ctrl, string text);
+
+        delegate void ctrl_Invoke_Button_Text(System.Windows.Forms.Button ctrl, string text); 
         public void ControlButtonText(System.Windows.Forms.Button ctr, string text)
         {
             if (ctr.InvokeRequired)
@@ -626,35 +639,27 @@ namespace Huinno_Downloader
 
         }
 
+        delegate void ctrl_Invoke_TextBox_Enable(System.Windows.Forms.TextBox ctrl, bool enable);
+        public void ControlTextBox_Enable(System.Windows.Forms.TextBox ctr, bool bEnable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_TextBox_Enable CI = new ctrl_Invoke_TextBox_Enable(ControlTextBox_Enable);
+                ctr.Invoke(CI, ctr, bEnable);
+            }
+            else
+            {
+                ctr.Enabled = bEnable;
+            }
+
+        }
+
         private void CB_ComPortNameList_Click(object sender, EventArgs e)
         {
             RefreshComPortList();
         }
 
-        private void BT_ConvUserMark_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog pFileDlg = new OpenFileDialog();
-            pFileDlg.Filter = "Text Files(*.bin)|*.bin|All Files(*.*)|*.*";
-            pFileDlg.Title = "Select ECG *.bin file";
-            if (pFileDlg.ShowDialog() == DialogResult.OK)
-            {
-                String strFullPathFile = pFileDlg.FileName;
-                //ConvertData_4095(strFullPathFile);
-                ConvertData(strFullPathFile);
-            }
-        }
-
-        const int MEM_4G_PAGE_FULL_SZ = 4096;
-        const int MEM_4G_PAGE_USE_SZ = 4095;
-        const int MEM_2G_PAGE_FULL_SZ = 2048;
-        const int MEM_2G_PAGE_USE_SZ = 2046;
-
-        //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
-        //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
-        const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
-        const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
-
-        private void ConvertData(string tempFile)
+        private void ConvertEcgData(string tempFile)
         {
             byte[] d = File.ReadAllBytes(tempFile);
             int d_sz = d.Length;
@@ -665,64 +670,64 @@ namespace Huinno_Downloader
             fs1 = new FileStream(tempFile + "_conv.bin", FileMode.Create, FileAccess.Write);
             bw1 = new BinaryWriter(fs1);
 
-            int offset = 0;
-            int remainCnt = d_sz - offset;
-            int loopCnt = remainCnt / MEM_PAGE_SZ;
             byte[] pageData = new byte[MEM_PAGE_USE_SZ];
-                bw1.Write(m_EcgHeader, 0, 32);
-            // loop until we can't read any more
-            for (int i = 0; i < loopCnt; ++i)
+            bw1.Write(m_EcgHeader, 0, 32);
+
+            // proc loop
+            int procLoopCnt = d_sz / MEM_PAGE_SZ;
+
+            // proc for pairing start page
+            int offset = m_pairStPos;
+            int discardPageCnt = offset / MEM_PAGE_SZ;
+            int discardDataCnt = offset % MEM_PAGE_SZ;
+            if (discardDataCnt != 0)
+            {
+                int rdDataCnt = MEM_PAGE_USE_SZ - discardDataCnt;
+                Array.Copy(d, offset, pageData, 0, rdDataCnt);
+                bw1.Write(pageData, 0, rdDataCnt);
+                offset += (rdDataCnt+ (MEM_PAGE_SZ-MEM_PAGE_USE_SZ));
+
+                //
+                procLoopCnt -= 1;
+            }
+            procLoopCnt -= discardPageCnt;
+
+            // proc pages
+            for (int i = 0; i < procLoopCnt; ++i)
             {
                 Array.Copy(d, offset, pageData, 0, MEM_PAGE_USE_SZ);
                 bw1.Write(pageData, 0, MEM_PAGE_USE_SZ);
-
                 offset += MEM_PAGE_SZ;
-            } // end while
+            } 
 
             bw1.Close();
             fs1.Close();
         }
-
-        const int PAGE_SIZE = 2048;
-        const int USER_MARK_SIZE = 32;
-        const int INIT_VAL = 0xFF;
-
-        public enum USER_MARK_T
-        {
-            USER_MARK_PAIRING_ST = 0,        // 0
-            USER_MARK_PAIRING_ED,         // 1
-            USER_MARK_EVENT_APP,        // 2
-            USER_MARK_EVENT_BTN,        // 3
-            USER_MARK_TYPE_NUM_MAX
-        }
-
-        byte[] m_EcgHeader = new byte[32];
 
         private void ExtractUserMarkFromFile(string filePath)
         {
             byte[] fileData  = File.ReadAllBytes(filePath);
 
             StreamWriter fs_um = new StreamWriter(filePath + "_parse.csv");
-            int pageCnt = fileData.Length / PAGE_SIZE;
+            int pageCnt = fileData.Length / MEM_PAGE_SZ;
             int rCnt = 0;
             int pCnt = 0;
-            int start_time = -1;
-            string msg_line = "";
 
-            if (isDevNameSet)
-            {
-                msg_line = System.Text.Encoding.UTF8.GetString(deviceName);
-            }
+            // init
+            string msg_line = "";
+            m_pairStTime = -1;
+
+
             while (pCnt < pageCnt)
             {
                 byte[] um = new byte[USER_MARK_SIZE];
                 Array.Copy(fileData, rCnt, um, 0, USER_MARK_SIZE);
 
-                if (um[0] == INIT_VAL && um[1] == INIT_VAL && um[2] == INIT_VAL && um[3] == INIT_VAL)
+                if (um[0] == MEM_INIT_VAL && um[1] == MEM_INIT_VAL && um[2] == MEM_INIT_VAL && um[3] == MEM_INIT_VAL)
                     break;
 
                 rCnt += USER_MARK_SIZE;
-                if (rCnt % PAGE_SIZE == 0)
+                if (rCnt % MEM_PAGE_SZ == 0)
                     pCnt++;
 
                 int time = 0;
@@ -751,42 +756,51 @@ namespace Huinno_Downloader
                     page_idx = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
                     page_pos = (um[28] + (um[29] << 8) + (um[30] << 16));
                 }
-                int pos = (page_idx - 64) * MEM_PAGE_USE_SZ + page_pos;
-                pos = (pos < 0) ? 0 : pos;
-                byte[] pos_byte = BitConverter.GetBytes(pos);
+                int pos = (page_idx - 64) * MEM_PAGE_SZ + page_pos;
 
                 // get info. (pairing start)
                 if (type== USER_MARK_T.USER_MARK_PAIRING_ST)
                 {
-                    if(start_time==-1)
+                    if(m_pairStTime == -1)
                     {
-                        start_time = time;
-                        msg_line += String.Format(",{0},{1}" + Environment.NewLine, start_time, pos);
+                        // set device name byte for header
+                        msg_line = System.Text.Encoding.UTF8.GetString(m_productNameByte);
+
+                        m_pairStTime = time;
+                        m_pairStPos = pos;
+
+                        int posAdj_header = pos - m_pairStPos;
+                        msg_line += String.Format(",{0},{1}, {2}" + Environment.NewLine, m_pairStTime, posAdj_header, pos );
                         fs_um.Write(msg_line);
                         msg_line = "";
-                                                
-                        Array.Copy(deviceName, 0, m_EcgHeader, 0, 13);
+
+                        Array.Copy(m_productNameByte, 0, m_EcgHeader, 0, 13);
                         Array.Copy(um, 0, m_EcgHeader, 0 + 16, 5);
+
+                        byte[] pos_byte = BitConverter.GetBytes(posAdj_header);
                         Array.Copy(pos_byte, 0, m_EcgHeader, 5 + 16, 4);
                     }
                 }
-
-                if (start_time == -1)
+                if (m_pairStTime == -1)
                     continue;
 
-                if (type != USER_MARK_T.USER_MARK_EVENT_BTN)
+                if (!m_dev)
                 {
-                    continue;
+                    if (type != USER_MARK_T.USER_MARK_EVENT_BTN)
+                    {
+                        continue;
+                    }
                 }
 
                 if (m_dev)
                 {
-                    msg_line += String.Format("{0},{1},{2},{3},{4},{5},{6}" + Environment.NewLine, id, (int)type, time, page_idx, page_pos, pos, update);
+                    int posAdj = pos - m_pairStPos;
+                    msg_line += String.Format("{0},{1},{2},{3},{4},{5},{6}" + Environment.NewLine, id, (int)type, time, page_idx, page_pos, posAdj, update);
                     //Console.WriteLine(msg_line);
                 }
                 else
                 {
-                    msg_line += String.Format("{0},{1},{2}" + Environment.NewLine, id, time, pos);
+                    msg_line += String.Format("{0},{1}" + Environment.NewLine, id, time);
                 }
                 fs_um.Write(msg_line);
                 msg_line = "";
@@ -795,178 +809,18 @@ namespace Huinno_Downloader
             Console.WriteLine(String.Format("total {0} ", rCnt / USER_MARK_SIZE));
         }
 
-
-        private void main_window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.D && (ModifierKeys & (Keys.Control| Keys.ShiftKey) )== Keys.Control)
-            {
-                // CTRL + UP was pressed
-                win_password frm2 = new win_password();
-                frm2.PassStr = config_uploadurl;
-                frm2.ShowDialog();
-
-                m_bDevMode = frm2.Passvalue;
-
-                if(m_bDevMode)
-                {
-
-                    //
-                    ShowDevMode(m_bDevMode);
-                    config_uploadurl = frm2.PassStr;
-                    AppConfiguration.SetAppConfig("UploadUrl", config_uploadurl);
-                }
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            isDevNameSet = true;
-            //deviceName = Encoding.UTF8.GetBytes("TEST_________");
-            deviceName = Encoding.UTF8.GetBytes("HPTT1AKR00039");
-
-            OpenFileDialog pFileDlg = new OpenFileDialog();
-            //pFileDlg.Filter = "Text Files(*.bin)|*.bin|All Files(*.*)|*.*";
-            //pFileDlg.Title = "Select ECG *.bin file";
-            if (pFileDlg.ShowDialog() == DialogResult.OK)
-            {
-                String strFullPathFile = pFileDlg.FileName;
-                ExtractUserMarkFromFile(strFullPathFile);
-            }
-
-        }
-
-        int m_drawDataCnt = 0;
-        const int DRAW_DATA_NUM = 3*2;
-        double[] m_drawData = new double[DRAW_DATA_NUM];
-
-
-        delegate void ctrl_Invoke3(System.Windows.Forms.DataVisualization.Charting.Chart ctrl, double[] val);
-        public void drawSeries(System.Windows.Forms.DataVisualization.Charting.Chart ctr, double [] val)
-        {
-            try
-            {
-                if (ctr.InvokeRequired)
-                {
-                    ctrl_Invoke3 CI = new ctrl_Invoke3(drawSeries);
-                    // if (readThreadActive == false) return;
-                    ctr.Invoke(CI, ctr, val);
-
-                }
-                else
-                {
-                    m_drawData[m_drawDataCnt+0] = val[0];
-                    m_drawData[m_drawDataCnt+1] = val[1];
-                    m_drawDataCnt += 2;
-
-                    if (m_drawDataCnt < DRAW_DATA_NUM)
-                        return;
-
-                    m_drawDataCnt = 0;
-
-
-                    //if (insPos % drawRate == 0)
-                    //{
-                    //    drawArray(ctr, insPos, 1);
-                    //    Thread.Sleep(drawInterval);
-                    //}
-                    //        insPos = (insPos + 1) % SIG_LEN;
-                }
-            }
-            catch (System.ComponentModel.InvalidAsynchronousStateException exception)
-            {
-            }
-            catch (Exception exception)
-            {
-            }
-        }
-        public void drawArray(System.Windows.Forms.DataVisualization.Charting.Chart ctr, UInt32 drawSPos, UInt32 updateSize)
-        {
-            //double ymin = 10000;
-            //double ymax = -10000;
-            ////if (drawSPos % 4 != 0) return;
-            //List<UInt32> index = new List<UInt32>();
-
-
-            //UInt32 tickPos = sigTickInitPos + drawSPos;
-
-            //if (sigTickInitPos == 0)
-            //{
-            //    gausianData[0] = adcDrawArray[0];
-            //    gausianData[1] = adcDrawArray[0];
-            //}
-
-            //for (UInt32 i = 0; i < drawSPos; i++)
-            //{
-            //    tickArray[i] = i + totoalTick;
-            //    shiftArray[i] = adcDrawArray[i];
-
-            //    if (ymin > shiftArray[i]) ymin = shiftArray[i];
-            //    if (ymax < shiftArray[i]) ymax = shiftArray[i];
-            //}
-
-
-            //double ymean = (ymin + ymax) / 2;
-            //for (UInt32 i = drawSPos; i < SIG_LEN; i++)
-            //{
-            //    tickArray[i] = i + totoalTick;
-            //    shiftArray[i] = ymean;
-
-            //    if (ymin > shiftArray[i]) ymin = shiftArray[i];
-            //}
-
-            //ctr.ChartAreas[0].AxisY.IsStartedFromZero = false;
-            ////      ctr.ChartAreas[0].AxisY.Maximum = ymax;
-            //ctr.ChartAreas[0].AxisY.Minimum = ymin - 1;
-
-            ////Array.Copy(adcDrawArray, 0, shiftArray, 0, SIG_LEN );
-            ////Array.Reverse(shiftArray);
-            //if (ctr.Series.Count == 0)
-            //{
-            //    adcCurve = ctr.Series.Add("adcCurve"); //새로운 series 생성
-
-            //    adcCurve.BorderWidth = 1;
-            //    adcCurve.ChartType = SeriesChartType.Line; //그래프 모양을 '선'으로 지정
-            //    adcCurve.Points.DataBindXY(tickArray, shiftArray);
-            //}
-            //else
-            //{
-            //    adcCurve.Points.DataBindXY(tickArray, shiftArray);
-            //    //      ctr.Series.Clear();
-            //    //      adcCurve = ctr.Series.Add("adcCurve"); //새로운 series 생성
-
-            //    //     adcCurve.BorderWidth = 1;
-            //    //      adcCurve.ChartType = SeriesChartType.Line; //그래프 모양을 '선'으로 지정
-            //    //     adcCurve.Points.DataBindXY(tickArray, shiftArray);
-            //}
-
-            //Invalidate();
-            //Update();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            OpenFileDialog pFileDlg = new OpenFileDialog();
-            pFileDlg.Filter = "Text Files(*.csv)|*.csv|All Files(*.*)|*.*";
-            pFileDlg.Title = "Select ECG *.csv file";
-            if (pFileDlg.ShowDialog() == DialogResult.OK)
-            {
-                String strFullPathFile = pFileDlg.FileName;
-                addHeader(strFullPathFile);
-            }
-        }
-        private void  addHeader(String filePath)
+        private void  addHeaderTest(String filePath)
         {
             byte[] fileData = File.ReadAllBytes(filePath);
 
             int rCnt = 0;
             byte[] header_um = new byte[USER_MARK_SIZE];
-            while (rCnt < PAGE_SIZE)
+            while (rCnt < MEM_PAGE_SZ)
             {
                 byte[] um = new byte[USER_MARK_SIZE];
                 Array.Copy(fileData, rCnt, um, 0, USER_MARK_SIZE);
 
-                if (um[0] == INIT_VAL && um[1] == INIT_VAL && um[2] == INIT_VAL && um[3] == INIT_VAL)
+                if (um[0] == MEM_INIT_VAL && um[1] == MEM_INIT_VAL && um[2] == MEM_INIT_VAL && um[3] == MEM_INIT_VAL)
                     break;
 
                 rCnt += USER_MARK_SIZE;
@@ -979,17 +833,10 @@ namespace Huinno_Downloader
                         header_um[i] = 255;
                     }
                     
-                    Array.Copy(deviceName, 0, header_um, 0 , 13);
+                    Array.Copy(m_productNameByte, 0, header_um, 0 , 13);
                     Array.Copy(um, 0, header_um, 0+16, 5);
                     Array.Copy(um, 24, header_um, 5+16, 4);
                     Array.Copy(um, 28, header_um, 9+16, 4);
-                    //int time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
-                    //int update = um[15];
-                    //int type = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
-                    //int id = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
-                    //int page_idx = um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24);
-                    //int page_pos = um[28] + (um[29] << 8) + (um[30] << 16);
-                    //Array.Copy(um, 0, header_um, 0, USER_MARK_SIZE);
                     break;
                 }
             }
@@ -1009,7 +856,8 @@ namespace Huinno_Downloader
             bw1.Write(header_um, 0, USER_MARK_SIZE);
             int offset = 0 ;
             int loopCnt = d_sz / 4095;
-            // loop until we can't read any more
+
+            // loop until we can't read anymore
             for (int i = 0; i < loopCnt; ++i)
             {
                 byte[] pageData4095 = new byte[4095];
@@ -1020,18 +868,84 @@ namespace Huinno_Downloader
                 offset += 4095;
             } // end while
 
-            //stream.Close();
-
             bw1.Close();
             fs1.Close();
         }
 
         private void main_window_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (MessageBox.Show("Are you sure you want to quit?" , "Quit", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                e.Cancel = true;
+                return;
+            }
 
             if (cSerialPort.isConnected)
             {
                 CloseSerial();
+            }
+        }
+
+        private void BT_SelSaveDir_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
+                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
+
+                m_isCreateSaveDir = false;
+            }
+
+        }
+
+        private void BT_ClearLog_Click(object sender, EventArgs e)
+        {
+            TB_LogMsg.Clear();
+        }
+
+        private void BT_makeHeaderTest_Click(object sender, EventArgs e)
+        {
+
+            OpenFileDialog pFileDlg = new OpenFileDialog();
+            pFileDlg.Filter = "Text Files(*.csv)|*.csv|All Files(*.*)|*.*";
+            pFileDlg.Title = "Select ECG *.csv file";
+            if (pFileDlg.ShowDialog() == DialogResult.OK)
+            {
+                String strFullPathFile = pFileDlg.FileName;
+                addHeaderTest(strFullPathFile);
+            }
+        }
+
+        private void BT_ExtractUmTest_Click(object sender, EventArgs e)
+        {
+            m_isProductNameSet = true;
+            m_productNameByte = Encoding.UTF8.GetBytes("HPTT1AKR00039");
+
+            OpenFileDialog pFileDlg = new OpenFileDialog();
+
+            if (pFileDlg.ShowDialog() == DialogResult.OK)
+            {
+                String strFullPathFile = pFileDlg.FileName;
+                ExtractUserMarkFromFile(strFullPathFile);
+            }
+
+        }
+
+        private void BT_ConvEcgTest_Click(object sender, EventArgs e)
+        {
+            m_isProductNameSet = true;
+            m_productNameByte = Encoding.UTF8.GetBytes("HPTT1AKR_12TT");
+            Array.Copy(m_productNameByte, 0, m_EcgHeader, 0, 13);
+
+            OpenFileDialog pFileDlg = new OpenFileDialog();
+            pFileDlg.Filter = "Text Files(*.bin)|*.bin|All Files(*.*)|*.*";
+            pFileDlg.Title = "Select ECG *.bin file";
+            if (pFileDlg.ShowDialog() == DialogResult.OK)
+            {
+                String strFullPathFile = pFileDlg.FileName;
+
+                ConvertEcgData(strFullPathFile);
             }
         }
     }
