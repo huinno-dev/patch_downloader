@@ -20,7 +20,7 @@ namespace Huinno_Downloader
 {
     public partial class main_window : Form
     {
-        bool m_dev = true;
+        bool m_dev = false;
         
         // string
         string m_str_failed_to_connect = "Connection Failed! Chem_config_comportck COM port or reconnect patch to PC.";
@@ -35,7 +35,6 @@ namespace Huinno_Downloader
         public string m_strCfg_uploadurl;   // public for check in main()
 
         //
-        bool m_isCreateSaveDir = false;
         string m_curSavePath;
 
         string m_resFileName;       // only file_name without exp
@@ -118,8 +117,8 @@ namespace Huinno_Downloader
 
         // flag to control thread
         bool m_startThd_2nd = false;
-        int m_stopThd_1st = 0;
-        int m_stopThd_2nd = 0;
+        bool m_stopThd_1st = false;
+        bool m_stopThd_2nd = false;
 
         /// <summary>
         /// Select memory size
@@ -159,31 +158,31 @@ namespace Huinno_Downloader
                 MessageBox.Show("Please set url.");
             }
             // set save path
-            if (m_strCfg_savepath == "")
-            {
-                TB_SavePath.Text = Application.StartupPath + "\\Downloads";
-                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
-                CreateSaveDir(TB_SavePath.Text);
-            }
-            else
-            {
-                TB_SavePath.Text = m_strCfg_savepath;
-            }
+            string strSavePath = (m_strCfg_savepath != "") ? m_strCfg_savepath : Application.StartupPath + "\\Downloads";
+            setSavePath(strSavePath);
 
             // get comport name list
             RefreshComPortList();
         }
 
+        void setSavePath( string newSavePath)
+        {
+            if (m_curSavePath == newSavePath)
+                return;
+
+            m_curSavePath = newSavePath;
+            CreateSaveDir(newSavePath);
+
+            TB_SavePath.Text = newSavePath;
+            AppConfiguration.SetAppConfig("SavePath", newSavePath);
+        }
+
         private void CreateSaveDir(string path)
         {
-            if (!m_isCreateSaveDir)
+            DirectoryInfo di = new DirectoryInfo(path);
+            if (di.Exists == false)
             {
-                m_isCreateSaveDir = true;
-                DirectoryInfo di = new DirectoryInfo(path);
-                if (di.Exists == false)
-                {
-                    di.Create();
-                }
+                di.Create();
             }
         }
 
@@ -332,65 +331,74 @@ namespace Huinno_Downloader
 
             // set ui
             setButtonEnabledUI(false);
-
             ControlProgressBar(progressBar1, 0);
-
-            // init value
             ControlLabel(LB_ProgVal, "0");
 
             //
-            m_curSavePath = TB_SavePath.Text;
-            CreateSaveDir(m_curSavePath);
-
-            UART_RX_CMD_T RxCmd = (UART_RX_CMD_T )0;
-            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
+            int iRetGetDeviceInfo = getDeviceInfo();
+            if (iRetGetDeviceInfo < 0)
             {
-                // send command to get device info
-                RxCmd = UART_RX_CMD_T.URX_CMD_GET_SYS_INFO;
-                m_uartSendMsg[0] = (byte)RxCmd;
-
-                cSerialPort.Clear();
-                cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
-
-                Thread.Sleep(100);
-
-                if (!m_isProductNameSet)
-                {
-                    string str_tx = cSerialPort.ReadExisting();
-                    if (str_tx.Contains("[INFO] "))
-                    {
-                        ParseDeviceInfo(str_tx);
-                        TB_Serial_SetProductName();
-
-                        m_curSerialName = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
-                        m_isProductNameSet = true;
-                    }
-                }
-
-                if (!m_isProductNameSet)
-                {
-                    ControlTextBox(TB_LogMsg, m_str_failed_to_connect);
-                    setButtonEnabledUI(true);
-                    CloseSerial();
-                    return;
-                }
-                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_" + m_curSerialName + " [" + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]
-                                                                                        + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]
-                                                                                        + "." + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]
-                                                                                        + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] + "]");
+                ControlTextBox(TB_LogMsg, m_str_failed_to_connect);
+                setButtonEnabledUI(true);
+                CloseSerial();
+                return;
             }
-
+            else if (iRetGetDeviceInfo == 0)
+            {
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_" 
+                    + m_curSerialName 
+                    + " [" + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]                 
+                    + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]    
+                    + "." + m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]   
+                    + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] 
+                    + "]");
+            }
             setButtonEnabledUI(false);
 
             // start thread
-            m_CheckRunningThd = new Thread(new ThreadStart(checkfirstDataDone));
+            m_CheckRunningThd = new Thread(new ThreadStart(thd_CheckReadThd));
             m_CheckRunningThd.Start();
 
-            readData();
-
+            readyToReadData();
         }
 
-        void readData()
+        /* 
+         * retrun 
+         * -1: failed to get info
+         * 0: user mark mode --> get info
+         * 1: ecg mode -> skip
+         * */
+        int getDeviceInfo()
+        {
+            // send command to get device info
+            UART_RX_CMD_T RxCmd = UART_RX_CMD_T.URX_CMD_GET_SYS_INFO;
+            m_uartSendMsg[0] = (byte)RxCmd;
+
+            cSerialPort.Clear();
+            cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
+
+            Thread.Sleep(100);
+
+            if (!m_isProductNameSet)
+            {
+                string str_tx = cSerialPort.ReadExisting();
+                if (str_tx.Contains("[INFO] "))
+                {
+                    ParseDeviceInfo(str_tx);
+                    TB_Serial_SetProductName();
+
+                    m_curSerialName = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
+                    m_isProductNameSet = true;
+                }
+            }
+
+            if (!m_isProductNameSet)
+                return -1;
+
+            return 0;
+        }
+
+        void readyToReadData()
         {
             UART_RX_CMD_T RxCmd = (UART_RX_CMD_T)0;
             string strFileExp = "";
@@ -401,6 +409,11 @@ namespace Huinno_Downloader
                             - m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] + 1);
 
                 strFileExp = ".csv";
+
+                // generates output file name
+                string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                m_resFileName = genTime + "_" + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
+                m_resFilePath = m_curSavePath + "\\" + m_resFileName;
             }
             else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
             {
@@ -416,50 +429,46 @@ namespace Huinno_Downloader
             cSerialPort.Clear();
             cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
 
-            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
-            {
-                // generates output
-                string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                m_resFileName = genTime + "_" + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
-                m_resFilePath = m_curSavePath + "\\" + m_resFileName;
-            }
-
             // set file path
             m_resFilePathExp = m_resFilePath + strFileExp;
 
-            // open file
+            // ready to write file
             m_fs = new FileStream(m_resFilePathExp, FileMode.CreateNew, FileAccess.Write);
             m_bw = new BinaryWriter(m_fs);
 
             ControlTextBox(TB_LogMsg, "Downloading.. " + m_resFileName + strFileExp);
 
             // start thread
-            m_RdSerialDataThd = new Thread(new ThreadStart(procReadData));
+            m_RdSerialDataThd = new Thread(new ThreadStart(thd_Read));
             m_RdSerialDataThd.Start();
         }
 
-        void checkfirstDataDone()
+        void thd_CheckReadThd()
         {
             while(true)
             {
                 Thread.Sleep(500);
                 Console.WriteLine(String.Format("TEST"));
-                if (m_stopThd_1st == 1)
-                {
-                    if (m_startThd_2nd == false)
-                    {
-                        m_startThd_2nd = true;
-                        readData();
-                    }
-                    if (m_stopThd_2nd == 1)
-                        break;
-                }
-            }
+                if (m_stopThd_1st != true)
+                    continue;
 
+                if (m_startThd_2nd == false)
+                {
+                    m_startThd_2nd = true;
+                    readyToReadData();
+                }
+                if (m_stopThd_2nd == true)
+                    break;
+            }
+            ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + m_curSerialName + Environment.NewLine);
+
+
+            // ui: progress bar
             int val = 100;
             ControlProgressBar(progressBar1, val);
             ControlLabel(LB_ProgVal, val.ToString());
             
+            // proc msg box for open web page
             if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 if (m_strCfg_uploadurl == "")
@@ -472,16 +481,20 @@ namespace Huinno_Downloader
                 }
             }
 
-            m_startThd_2nd = false;
+            // init flag
             m_isProductNameSet = false;
-            m_stopThd_1st = 0;
-            m_stopThd_2nd = 0;
+            m_stopThd_1st = false;
+            m_startThd_2nd = false;
+            m_stopThd_2nd = false;
 
+            // ui
             setButtonEnabledUI(true);
+
+            // close com port
             CloseSerial();
         }
 
-        void procReadData()
+        void thd_Read()
         {
             cSerialPort.Clear();
 
@@ -503,6 +516,7 @@ namespace Huinno_Downloader
                 m_wrCnt += 1;
                 Array.Clear(rBuf, 0, rCnt);
 
+                // ui: progress bar
                 if (m_wrCnt % 55 == 0)
                 {
                     int val = 100 * m_wrCnt / m_RdPageTotalCnt;
@@ -511,56 +525,50 @@ namespace Huinno_Downloader
                 }
 
                 if (m_wrCnt == m_RdPageTotalCnt)
-                {
                     break;
-                }
             }
             m_wrCnt = 0;
             m_bw.Close();
             m_fs.Close();
-            if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
-            {
-                ConvertEcgData(m_resFilePathExp);
-                m_downMode = DOWN_MODE_T.DOWN_MODE_USRMARK;
 
-                ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + m_curSerialName + Environment.NewLine);
-                m_stopThd_2nd = 1;
-
-                if (!m_dev)
-                {
-                    FileInfo fileDel = new FileInfo(m_resFilePathExp);
-                    if (fileDel.Exists) // 삭제할 파일이 있는지
-                    {
-                        fileDel.Delete(); // 없어도 에러안남
-                    }
-
-                    FileInfo fileRename = new FileInfo(m_resFilePathExp + "_conv.bin");
-                    if (fileRename.Exists)
-                    {
-                        fileRename.MoveTo(m_resFilePathExp); // 이미있으면 에러
-                    }
-                }
-            }
-            else if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
+            // convert result file
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
                 ExtractUserMarkFromFile(m_resFilePathExp);
-                m_downMode = DOWN_MODE_T.DOWN_MODE_ECGDATA;
-                m_stopThd_1st = 1;
-
                 if (!m_dev)
                 {
-                    FileInfo fileDel = new FileInfo(m_resFilePathExp);
-                    if (fileDel.Exists) // 삭제할 파일이 있는지
-                    {
-                        fileDel.Delete(); // 없어도 에러안남
-                    }
+                    deleteFile(m_resFilePathExp, "_parse.csv");
+                }
 
-                    FileInfo fileRename = new FileInfo(m_resFilePathExp + "_parse.csv");
-                    if (fileRename.Exists)
-                    {
-                        fileRename.MoveTo(m_resFilePathExp); // 이미있으면 에러
-                    }
-                }                
+                m_downMode = DOWN_MODE_T.DOWN_MODE_ECGDATA;
+
+                m_stopThd_1st = true;
+            }
+            else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
+            {
+                ConvertEcgData(m_resFilePathExp);
+                if (!m_dev)
+                {
+                    deleteFile(m_resFilePathExp, "_conv.bin");
+                }
+                m_downMode = DOWN_MODE_T.DOWN_MODE_USRMARK;
+
+                m_stopThd_2nd = true;
+            }
+        }
+
+        void deleteFile(string filePathExp, string tmpExp)
+        {
+            FileInfo fileDel = new FileInfo(filePathExp);
+            if (fileDel.Exists) // 삭제할 파일이 있는지
+            {
+                fileDel.Delete(); // 없어도 에러안남
+            }
+
+            FileInfo fileRename = new FileInfo(filePathExp + tmpExp);
+            if (fileRename.Exists)
+            {
+                fileRename.MoveTo(filePathExp); // 이미있으면 에러
             }
         }
 
@@ -726,36 +734,20 @@ namespace Huinno_Downloader
                 if (um[0] == MEM_INIT_VAL && um[1] == MEM_INIT_VAL && um[2] == MEM_INIT_VAL && um[3] == MEM_INIT_VAL)
                     break;
 
+
+                // parsing data
+                int time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
+                int update = um[15];
+                int id = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
+                int page_idx = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
+                int page_pos = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
+                USER_MARK_T type = (USER_MARK_T)(um[28]);
+
+                // increase count
                 rCnt += USER_MARK_SIZE;
                 if (rCnt % MEM_PAGE_SZ == 0)
                     pCnt++;
 
-                int time = 0;
-                int update = 0;
-                int id = 0;
-                int page_idx = 0;
-                int page_pos = 0;
-                USER_MARK_T type = USER_MARK_T.USER_MARK_TYPE_NUM_MAX;
-
-                // parsing data
-                if (MEM_PAGE_SZ == MEM_2G_PAGE_FULL_SZ)
-                {
-                    time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
-                    update = um[15];
-                    id = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
-                    page_idx = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
-                    page_pos = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
-                    type = (USER_MARK_T)(um[28]);
-                }
-                else
-                {
-                    time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
-                    update = um[15];
-                    type = (USER_MARK_T)(um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24));
-                    id = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
-                    page_idx = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
-                    page_pos = (um[28] + (um[29] << 8) + (um[30] << 16));
-                }
                 int pos = (page_idx - 64) * MEM_PAGE_SZ + page_pos;
 
                 // get info. (pairing start)
@@ -768,17 +760,23 @@ namespace Huinno_Downloader
 
                         m_pairStTime = time;
                         m_pairStPos = pos;
-
-                        int posAdj_header = pos - m_pairStPos;
-                        msg_line += String.Format(",{0},{1}, {2}" + Environment.NewLine, m_pairStTime, posAdj_header, pos );
+                        if (m_dev)
+                        {
+                            int posAdj_header = pos - m_pairStPos;
+                            msg_line += String.Format(",{0},{1}, {2}" + Environment.NewLine, m_pairStTime, posAdj_header, pos);
+                        }
+                        else
+                        {
+                            msg_line += String.Format(",{0}" + Environment.NewLine, m_pairStTime);
+                        }
                         fs_um.Write(msg_line);
                         msg_line = "";
 
                         Array.Copy(m_productNameByte, 0, m_EcgHeader, 0, 13);
                         Array.Copy(um, 0, m_EcgHeader, 0 + 16, 5);
 
-                        byte[] pos_byte = BitConverter.GetBytes(posAdj_header);
-                        Array.Copy(pos_byte, 0, m_EcgHeader, 5 + 16, 4);
+                        //byte[] pos_byte = BitConverter.GetBytes(posAdj_header);
+                        //Array.Copy(pos_byte, 0, m_EcgHeader, 5 + 16, 4);
                     }
                 }
                 if (m_pairStTime == -1)
@@ -891,10 +889,7 @@ namespace Huinno_Downloader
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                TB_SavePath.Text = dialog.SelectedPath + "\\Downloads";
-                AppConfiguration.SetAppConfig("SavePath", TB_SavePath.Text);
-
-                m_isCreateSaveDir = false;
+                setSavePath(dialog.SelectedPath);
             }
 
         }
