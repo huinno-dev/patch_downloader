@@ -52,11 +52,12 @@
             this.BT_makeHeaderTest = new System.Windows.Forms.Button();
             this.BT_SelSaveDir = new System.Windows.Forms.Button();
             this.BT_ClearLog = new System.Windows.Forms.Button();
+            this.BT_LogOut = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.Location = new System.Drawing.Point(492, 126);
+            this.BT_StartDown.Location = new System.Drawing.Point(492, 137);
             this.BT_StartDown.Name = "BT_StartDown";
             this.BT_StartDown.Size = new System.Drawing.Size(207, 105);
             this.BT_StartDown.TabIndex = 3;
@@ -66,7 +67,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(32, 246);
+            this.progressBar1.Location = new System.Drawing.Point(32, 257);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(667, 44);
             this.progressBar1.TabIndex = 1;
@@ -74,7 +75,7 @@
             // TB_Serial1
             // 
             this.TB_Serial1.Enabled = false;
-            this.TB_Serial1.Location = new System.Drawing.Point(34, 195);
+            this.TB_Serial1.Location = new System.Drawing.Point(34, 206);
             this.TB_Serial1.Name = "TB_Serial1";
             this.TB_Serial1.ReadOnly = true;
             this.TB_Serial1.Size = new System.Drawing.Size(39, 32);
@@ -83,7 +84,7 @@
             // TB_Serial2
             // 
             this.TB_Serial2.Enabled = false;
-            this.TB_Serial2.Location = new System.Drawing.Point(78, 195);
+            this.TB_Serial2.Location = new System.Drawing.Point(78, 206);
             this.TB_Serial2.Name = "TB_Serial2";
             this.TB_Serial2.ReadOnly = true;
             this.TB_Serial2.Size = new System.Drawing.Size(65, 32);
@@ -92,7 +93,7 @@
             // TB_Serial3
             // 
             this.TB_Serial3.Enabled = false;
-            this.TB_Serial3.Location = new System.Drawing.Point(160, 195);
+            this.TB_Serial3.Location = new System.Drawing.Point(160, 206);
             this.TB_Serial3.Name = "TB_Serial3";
             this.TB_Serial3.ReadOnly = true;
             this.TB_Serial3.Size = new System.Drawing.Size(39, 32);
@@ -101,7 +102,7 @@
             // TB_Serial4
             // 
             this.TB_Serial4.Enabled = false;
-            this.TB_Serial4.Location = new System.Drawing.Point(204, 195);
+            this.TB_Serial4.Location = new System.Drawing.Point(204, 206);
             this.TB_Serial4.Name = "TB_Serial4";
             this.TB_Serial4.ReadOnly = true;
             this.TB_Serial4.Size = new System.Drawing.Size(39, 32);
@@ -110,7 +111,7 @@
             // TB_Serial5
             // 
             this.TB_Serial5.Enabled = false;
-            this.TB_Serial5.Location = new System.Drawing.Point(248, 195);
+            this.TB_Serial5.Location = new System.Drawing.Point(248, 206);
             this.TB_Serial5.Name = "TB_Serial5";
             this.TB_Serial5.ReadOnly = true;
             this.TB_Serial5.Size = new System.Drawing.Size(39, 32);
@@ -119,7 +120,7 @@
             // TB_Serial6
             // 
             this.TB_Serial6.Enabled = false;
-            this.TB_Serial6.Location = new System.Drawing.Point(292, 195);
+            this.TB_Serial6.Location = new System.Drawing.Point(292, 206);
             this.TB_Serial6.Name = "TB_Serial6";
             this.TB_Serial6.ReadOnly = true;
             this.TB_Serial6.Size = new System.Drawing.Size(65, 32);
@@ -128,7 +129,7 @@
             // TB_Serial7
             // 
             this.TB_Serial7.Enabled = false;
-            this.TB_Serial7.Location = new System.Drawing.Point(362, 195);
+            this.TB_Serial7.Location = new System.Drawing.Point(362, 206);
             this.TB_Serial7.Name = "TB_Serial7";
             this.TB_Serial7.ReadOnly = true;
             this.TB_Serial7.Size = new System.Drawing.Size(122, 32);
@@ -137,7 +138,7 @@
             // CB_ComPortNameList
             // 
             this.CB_ComPortNameList.FormattingEnabled = true;
-            this.CB_ComPortNameList.Location = new System.Drawing.Point(32, 126);
+            this.CB_ComPortNameList.Location = new System.Drawing.Point(32, 137);
             this.CB_ComPortNameList.Name = "CB_ComPortNameList";
             this.CB_ComPortNameList.Size = new System.Drawing.Size(146, 29);
             this.CB_ComPortNameList.TabIndex = 1;
@@ -145,7 +146,7 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.Location = new System.Drawing.Point(184, 126);
+            this.BT_ConnPort.Location = new System.Drawing.Point(184, 137);
             this.BT_ConnPort.Name = "BT_ConnPort";
             this.BT_ConnPort.Size = new System.Drawing.Size(152, 37);
             this.BT_ConnPort.TabIndex = 2;
@@ -155,7 +156,7 @@
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.Location = new System.Drawing.Point(601, 42);
+            this.BT_OpenSavePath.Location = new System.Drawing.Point(601, 53);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
             this.BT_OpenSavePath.Size = new System.Drawing.Size(98, 58);
             this.BT_OpenSavePath.TabIndex = 11;
@@ -165,14 +166,14 @@
             // 
             // TB_SavePath
             // 
-            this.TB_SavePath.Location = new System.Drawing.Point(32, 48);
+            this.TB_SavePath.Location = new System.Drawing.Point(32, 59);
             this.TB_SavePath.Name = "TB_SavePath";
             this.TB_SavePath.Size = new System.Drawing.Size(452, 32);
             this.TB_SavePath.TabIndex = 0;
             // 
             // TB_LogMsg
             // 
-            this.TB_LogMsg.Location = new System.Drawing.Point(32, 310);
+            this.TB_LogMsg.Location = new System.Drawing.Point(32, 321);
             this.TB_LogMsg.Multiline = true;
             this.TB_LogMsg.Name = "TB_LogMsg";
             this.TB_LogMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -192,7 +193,7 @@
             // LB_ProgVal
             // 
             this.LB_ProgVal.AutoSize = true;
-            this.LB_ProgVal.Location = new System.Drawing.Point(653, 268);
+            this.LB_ProgVal.Location = new System.Drawing.Point(653, 279);
             this.LB_ProgVal.Name = "LB_ProgVal";
             this.LB_ProgVal.Size = new System.Drawing.Size(0, 21);
             this.LB_ProgVal.TabIndex = 16;
@@ -220,7 +221,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 101);
+            this.label1.Location = new System.Drawing.Point(30, 112);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 21);
             this.label1.TabIndex = 19;
@@ -229,7 +230,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 171);
+            this.label2.Location = new System.Drawing.Point(30, 182);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(103, 21);
             this.label2.TabIndex = 20;
@@ -238,7 +239,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 23);
+            this.label3.Location = new System.Drawing.Point(28, 34);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(160, 21);
             this.label3.TabIndex = 21;
@@ -256,7 +257,7 @@
             // 
             // BT_SelSaveDir
             // 
-            this.BT_SelSaveDir.Location = new System.Drawing.Point(492, 42);
+            this.BT_SelSaveDir.Location = new System.Drawing.Point(492, 53);
             this.BT_SelSaveDir.Name = "BT_SelSaveDir";
             this.BT_SelSaveDir.Size = new System.Drawing.Size(98, 58);
             this.BT_SelSaveDir.TabIndex = 24;
@@ -266,7 +267,7 @@
             // 
             // BT_ClearLog
             // 
-            this.BT_ClearLog.Location = new System.Drawing.Point(590, 524);
+            this.BT_ClearLog.Location = new System.Drawing.Point(590, 535);
             this.BT_ClearLog.Name = "BT_ClearLog";
             this.BT_ClearLog.Size = new System.Drawing.Size(77, 35);
             this.BT_ClearLog.TabIndex = 25;
@@ -274,11 +275,22 @@
             this.BT_ClearLog.UseVisualStyleBackColor = true;
             this.BT_ClearLog.Click += new System.EventHandler(this.BT_ClearLog_Click);
             // 
+            // BT_LogOut
+            // 
+            this.BT_LogOut.Location = new System.Drawing.Point(601, 0);
+            this.BT_LogOut.Name = "BT_LogOut";
+            this.BT_LogOut.Size = new System.Drawing.Size(98, 47);
+            this.BT_LogOut.TabIndex = 26;
+            this.BT_LogOut.Text = "Log out";
+            this.BT_LogOut.UseVisualStyleBackColor = true;
+            this.BT_LogOut.Click += new System.EventHandler(this.BT_LogOut_Click);
+            // 
             // main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 578);
+            this.ClientSize = new System.Drawing.Size(729, 599);
+            this.Controls.Add(this.BT_LogOut);
             this.Controls.Add(this.BT_ClearLog);
             this.Controls.Add(this.BT_SelSaveDir);
             this.Controls.Add(this.TB_Serial7);
@@ -303,6 +315,7 @@
             this.Controls.Add(this.CB_ComPortNameList);
             this.Controls.Add(this.BT_StartDown);
             this.Controls.Add(this.progressBar1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MinimumSize = new System.Drawing.Size(753, 642);
             this.Name = "main_window";
             this.Text = "[Huinno] Patch Downloader";
@@ -338,6 +351,7 @@
         private System.Windows.Forms.Button BT_makeHeaderTest;
         private System.Windows.Forms.Button BT_SelSaveDir;
         private System.Windows.Forms.Button BT_ClearLog;
+        private System.Windows.Forms.Button BT_LogOut;
     }
 }
 

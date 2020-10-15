@@ -18,6 +18,12 @@ namespace Huinno_Downloader
             Application.SetCompatibleTextRenderingDefault(false);
 
             main_window w = new main_window();
+            if( w.m_loginPass ==false)
+            {
+                w.Close();
+                return;
+
+            }
             if (w.m_strCfg_uploadurl == "")
             {
                 w.Close();
