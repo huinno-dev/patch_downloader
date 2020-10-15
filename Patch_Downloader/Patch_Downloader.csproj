@@ -115,6 +115,12 @@
   <ItemGroup>
     <Compile Include="cAppConfig.cs" />
     <Compile Include="cSerialPort.cs" />
+    <Compile Include="login_window.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="login_window.Designer.cs">
+      <DependentUpon>login_window.cs</DependentUpon>
+    </Compile>
     <Compile Include="main_window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +129,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="login_window.resx">
+      <DependentUpon>login_window.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="main_window.resx">
       <DependentUpon>main_window.cs</DependentUpon>
     </EmbeddedResource>

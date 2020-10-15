@@ -21,7 +21,14 @@ namespace Huinno_Downloader
     public partial class main_window : Form
     {
         bool m_dev = false;
-        
+        public bool m_loginPass;
+        string m_loginId;
+        string m_loginPw;
+        public bool m_progRunning = false;
+
+        //
+        //const double m_timer_logout_period = 5 * 1000;
+        const double m_timer_logout_period = 30 * 60 * 1000;
         // string
         string m_str_failed_to_connect = "Connection Failed! Chem_config_comportck COM port or reconnect patch to PC.";
         string m_str_download_completed = "Open web page to upload data.";
@@ -137,15 +144,71 @@ namespace Huinno_Downloader
         const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
         const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
         //////////////////////////////////////////////////
+        
+        //
+        System.Timers.Timer timer_logout = new System.Timers.Timer();
 
+        login_window m_form_login = new login_window();
 
         public main_window()
         {
+            m_form_login.ProgRunning = m_progRunning;
+            m_form_login.ShowDialog();
+
+            m_loginPass = m_form_login.LoginPass;
+            if (!m_loginPass)
+                return;
+
+            m_loginId = m_form_login.LoginId;
+            m_loginPw = m_form_login.LoginPw;
+            
+
+            //
             InitializeComponent();
 
-            // Init val
-            ControlLabel(LB_ProgVal, "0");
+            m_progRunning = true;
 
+            initUserParams();
+            initUserUi();
+            timer_logout.Interval = m_timer_logout_period;
+            timer_logout.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+
+
+            timer_logout.Start();
+        }
+
+        delegate void TimerEventFiredDelegate();
+        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            BeginInvoke(new TimerEventFiredDelegate(tmrLogoutProc));
+        }
+
+        private void tmrLogoutProc()
+        {
+            timer_logout.Stop();
+
+            //
+            m_form_login.LoginPass = false;
+            m_form_login.ProgRunning = m_progRunning;
+            this.Hide();
+            m_form_login.ShowDialog();
+
+            //
+            m_loginPass = m_form_login.LoginPass;
+            if (!m_loginPass)
+            {
+                Application.ExitThread();
+                Environment.Exit(0);
+                return;
+            }
+
+            //
+            this.Show();
+            timer_logout.Start();
+        }
+
+        void initUserParams()
+        {
             // config: comport
             m_strCfg_comport = AppConfiguration.GetAppConfig("ComPortName");
             m_strCfg_baudrate = "3000000";
@@ -153,7 +216,7 @@ namespace Huinno_Downloader
             m_strCfg_savepath = AppConfiguration.GetAppConfig("SavePath");
             m_strCfg_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
 
-            if(m_strCfg_uploadurl == "")
+            if (m_strCfg_uploadurl == "")
             {
                 MessageBox.Show("Please set url.");
             }
@@ -163,6 +226,17 @@ namespace Huinno_Downloader
 
             // get comport name list
             RefreshComPortList();
+        }
+
+        void initUserUi()
+        {
+            BT_LogOut.Visible = false;
+
+            // Init val
+            ControlLabel(LB_ProgVal, "0");
+
+            TB_Serial_Init();
+
         }
 
         void setSavePath( string newSavePath)
@@ -203,6 +277,17 @@ namespace Huinno_Downloader
             CB_ComPortBaudList.Text = m_strCfg_baudrate;
         }
 
+        private void TB_Serial_Init()
+        {
+            TB_Serial1.Text = "";
+            TB_Serial2.Text = "";
+            TB_Serial3.Text = "";
+            TB_Serial4.Text = "";
+            TB_Serial5.Text = "";
+            TB_Serial6.Text = "";
+            TB_Serial7.Text = "";
+        }
+
         private void TB_Serial_SetProductName()
         {
             TB_Serial1.Text = m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]    ;
@@ -225,6 +310,10 @@ namespace Huinno_Downloader
 
         private void BT_ConnPort_Click(object sender, EventArgs e)
         {
+            //
+            timer_logout.Stop();
+            timer_logout.Start();
+
             if (!cSerialPort.isConnected)
             {
                 int selPortIdx = CB_ComPortNameList.SelectedIndex;
@@ -244,7 +333,6 @@ namespace Huinno_Downloader
                 }
                 AppConfiguration.SetAppConfig("ComPortName", CB_ComPortNameList.Text);
                 AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
-
 
                 ControlButtonText(BT_ConnPort, "Disconnect");
             }
@@ -355,6 +443,7 @@ namespace Huinno_Downloader
             }
             setButtonEnabledUI(false);
 
+            timer_logout.Stop();
             // start thread
             m_CheckRunningThd = new Thread(new ThreadStart(thd_CheckReadThd));
             m_CheckRunningThd.Start();
@@ -492,6 +581,8 @@ namespace Huinno_Downloader
 
             // close com port
             CloseSerial();
+
+            timer_logout.Start();
         }
 
         void thd_Read()
@@ -942,6 +1033,28 @@ namespace Huinno_Downloader
 
                 ConvertEcgData(strFullPathFile);
             }
+        }
+
+        private void BT_LogOut_Click(object sender, EventArgs e)
+        {
+            login_window m_form_login = new login_window(); // Form2형 frm2 인스턴스화(객체 생성)
+            m_form_login.LoginPass = false;
+            m_form_login.ProgRunning = m_progRunning;
+            this.Hide();
+            m_form_login.ShowDialog();
+
+            m_loginPass = m_form_login.LoginPass;
+            if (!m_loginPass)
+            {
+                Application.ExitThread();
+                Environment.Exit(0);
+                return;
+            }
+
+            this.Show();
+
+            //m_loginId = m_form_login.LoginId;
+            //m_loginPw = m_form_login.LoginPw;
         }
     }
 }
