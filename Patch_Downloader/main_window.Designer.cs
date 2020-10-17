@@ -52,13 +52,14 @@
             this.BT_makeHeaderTest = new System.Windows.Forms.Button();
             this.BT_SelSaveDir = new System.Windows.Forms.Button();
             this.BT_ClearLog = new System.Windows.Forms.Button();
+            this.BT_LogOut = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.Location = new System.Drawing.Point(492, 126);
+            this.BT_StartDown.Location = new System.Drawing.Point(536, 140);
             this.BT_StartDown.Name = "BT_StartDown";
-            this.BT_StartDown.Size = new System.Drawing.Size(207, 105);
+            this.BT_StartDown.Size = new System.Drawing.Size(188, 90);
             this.BT_StartDown.TabIndex = 3;
             this.BT_StartDown.Text = "Download";
             this.BT_StartDown.UseVisualStyleBackColor = true;
@@ -66,88 +67,88 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(32, 246);
+            this.progressBar1.Location = new System.Drawing.Point(29, 220);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(667, 44);
+            this.progressBar1.Size = new System.Drawing.Size(606, 38);
             this.progressBar1.TabIndex = 1;
             // 
             // TB_Serial1
             // 
             this.TB_Serial1.Enabled = false;
-            this.TB_Serial1.Location = new System.Drawing.Point(34, 195);
+            this.TB_Serial1.Location = new System.Drawing.Point(31, 177);
             this.TB_Serial1.Name = "TB_Serial1";
             this.TB_Serial1.ReadOnly = true;
-            this.TB_Serial1.Size = new System.Drawing.Size(39, 32);
+            this.TB_Serial1.Size = new System.Drawing.Size(36, 28);
             this.TB_Serial1.TabIndex = 2;
             // 
             // TB_Serial2
             // 
             this.TB_Serial2.Enabled = false;
-            this.TB_Serial2.Location = new System.Drawing.Point(78, 195);
+            this.TB_Serial2.Location = new System.Drawing.Point(71, 177);
             this.TB_Serial2.Name = "TB_Serial2";
             this.TB_Serial2.ReadOnly = true;
-            this.TB_Serial2.Size = new System.Drawing.Size(65, 32);
+            this.TB_Serial2.Size = new System.Drawing.Size(59, 28);
             this.TB_Serial2.TabIndex = 2;
             // 
             // TB_Serial3
             // 
             this.TB_Serial3.Enabled = false;
-            this.TB_Serial3.Location = new System.Drawing.Point(160, 195);
+            this.TB_Serial3.Location = new System.Drawing.Point(145, 177);
             this.TB_Serial3.Name = "TB_Serial3";
             this.TB_Serial3.ReadOnly = true;
-            this.TB_Serial3.Size = new System.Drawing.Size(39, 32);
+            this.TB_Serial3.Size = new System.Drawing.Size(36, 28);
             this.TB_Serial3.TabIndex = 3;
             // 
             // TB_Serial4
             // 
             this.TB_Serial4.Enabled = false;
-            this.TB_Serial4.Location = new System.Drawing.Point(204, 195);
+            this.TB_Serial4.Location = new System.Drawing.Point(185, 177);
             this.TB_Serial4.Name = "TB_Serial4";
             this.TB_Serial4.ReadOnly = true;
-            this.TB_Serial4.Size = new System.Drawing.Size(39, 32);
+            this.TB_Serial4.Size = new System.Drawing.Size(36, 28);
             this.TB_Serial4.TabIndex = 4;
             // 
             // TB_Serial5
             // 
             this.TB_Serial5.Enabled = false;
-            this.TB_Serial5.Location = new System.Drawing.Point(248, 195);
+            this.TB_Serial5.Location = new System.Drawing.Point(225, 177);
             this.TB_Serial5.Name = "TB_Serial5";
             this.TB_Serial5.ReadOnly = true;
-            this.TB_Serial5.Size = new System.Drawing.Size(39, 32);
+            this.TB_Serial5.Size = new System.Drawing.Size(36, 28);
             this.TB_Serial5.TabIndex = 5;
             // 
             // TB_Serial6
             // 
             this.TB_Serial6.Enabled = false;
-            this.TB_Serial6.Location = new System.Drawing.Point(292, 195);
+            this.TB_Serial6.Location = new System.Drawing.Point(265, 177);
             this.TB_Serial6.Name = "TB_Serial6";
             this.TB_Serial6.ReadOnly = true;
-            this.TB_Serial6.Size = new System.Drawing.Size(65, 32);
+            this.TB_Serial6.Size = new System.Drawing.Size(59, 28);
             this.TB_Serial6.TabIndex = 6;
             // 
             // TB_Serial7
             // 
             this.TB_Serial7.Enabled = false;
-            this.TB_Serial7.Location = new System.Drawing.Point(362, 195);
+            this.TB_Serial7.Location = new System.Drawing.Point(329, 177);
             this.TB_Serial7.Name = "TB_Serial7";
             this.TB_Serial7.ReadOnly = true;
-            this.TB_Serial7.Size = new System.Drawing.Size(122, 32);
+            this.TB_Serial7.Size = new System.Drawing.Size(111, 28);
             this.TB_Serial7.TabIndex = 7;
             // 
             // CB_ComPortNameList
             // 
             this.CB_ComPortNameList.FormattingEnabled = true;
-            this.CB_ComPortNameList.Location = new System.Drawing.Point(32, 126);
+            this.CB_ComPortNameList.Location = new System.Drawing.Point(29, 117);
             this.CB_ComPortNameList.Name = "CB_ComPortNameList";
-            this.CB_ComPortNameList.Size = new System.Drawing.Size(146, 29);
+            this.CB_ComPortNameList.Size = new System.Drawing.Size(133, 26);
             this.CB_ComPortNameList.TabIndex = 1;
             this.CB_ComPortNameList.Click += new System.EventHandler(this.CB_ComPortNameList_Click);
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.Location = new System.Drawing.Point(184, 126);
+            this.BT_ConnPort.Location = new System.Drawing.Point(167, 117);
             this.BT_ConnPort.Name = "BT_ConnPort";
-            this.BT_ConnPort.Size = new System.Drawing.Size(152, 37);
+            this.BT_ConnPort.Size = new System.Drawing.Size(138, 32);
             this.BT_ConnPort.TabIndex = 2;
             this.BT_ConnPort.Text = "Connect";
             this.BT_ConnPort.UseVisualStyleBackColor = true;
@@ -155,9 +156,9 @@
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.Location = new System.Drawing.Point(601, 42);
+            this.BT_OpenSavePath.Location = new System.Drawing.Point(546, 45);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
-            this.BT_OpenSavePath.Size = new System.Drawing.Size(98, 58);
+            this.BT_OpenSavePath.Size = new System.Drawing.Size(89, 50);
             this.BT_OpenSavePath.TabIndex = 11;
             this.BT_OpenSavePath.Text = "Open Folder";
             this.BT_OpenSavePath.UseVisualStyleBackColor = true;
@@ -165,18 +166,18 @@
             // 
             // TB_SavePath
             // 
-            this.TB_SavePath.Location = new System.Drawing.Point(32, 48);
+            this.TB_SavePath.Location = new System.Drawing.Point(29, 51);
             this.TB_SavePath.Name = "TB_SavePath";
-            this.TB_SavePath.Size = new System.Drawing.Size(452, 32);
+            this.TB_SavePath.Size = new System.Drawing.Size(411, 28);
             this.TB_SavePath.TabIndex = 0;
             // 
             // TB_LogMsg
             // 
-            this.TB_LogMsg.Location = new System.Drawing.Point(32, 310);
+            this.TB_LogMsg.Location = new System.Drawing.Point(29, 275);
             this.TB_LogMsg.Multiline = true;
             this.TB_LogMsg.Name = "TB_LogMsg";
             this.TB_LogMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TB_LogMsg.Size = new System.Drawing.Size(667, 249);
+            this.TB_LogMsg.Size = new System.Drawing.Size(607, 214);
             this.TB_LogMsg.TabIndex = 13;
             // 
             // CB_ComPortBaudList
@@ -184,24 +185,24 @@
             this.CB_ComPortBaudList.FormattingEnabled = true;
             this.CB_ComPortBaudList.Items.AddRange(new object[] {
             "3000000"});
-            this.CB_ComPortBaudList.Location = new System.Drawing.Point(791, 65);
+            this.CB_ComPortBaudList.Location = new System.Drawing.Point(719, 56);
             this.CB_ComPortBaudList.Name = "CB_ComPortBaudList";
-            this.CB_ComPortBaudList.Size = new System.Drawing.Size(136, 29);
+            this.CB_ComPortBaudList.Size = new System.Drawing.Size(124, 26);
             this.CB_ComPortBaudList.TabIndex = 15;
             // 
             // LB_ProgVal
             // 
             this.LB_ProgVal.AutoSize = true;
-            this.LB_ProgVal.Location = new System.Drawing.Point(653, 268);
+            this.LB_ProgVal.Location = new System.Drawing.Point(594, 239);
             this.LB_ProgVal.Name = "LB_ProgVal";
-            this.LB_ProgVal.Size = new System.Drawing.Size(0, 21);
+            this.LB_ProgVal.Size = new System.Drawing.Size(0, 18);
             this.LB_ProgVal.TabIndex = 16;
             // 
             // BT_ConvEcgTest
             // 
-            this.BT_ConvEcgTest.Location = new System.Drawing.Point(791, 121);
+            this.BT_ConvEcgTest.Location = new System.Drawing.Point(719, 104);
             this.BT_ConvEcgTest.Name = "BT_ConvEcgTest";
-            this.BT_ConvEcgTest.Size = new System.Drawing.Size(125, 27);
+            this.BT_ConvEcgTest.Size = new System.Drawing.Size(114, 23);
             this.BT_ConvEcgTest.TabIndex = 17;
             this.BT_ConvEcgTest.Text = "conv ecg";
             this.BT_ConvEcgTest.UseVisualStyleBackColor = true;
@@ -209,9 +210,9 @@
             // 
             // BT_ExtractUmTest
             // 
-            this.BT_ExtractUmTest.Location = new System.Drawing.Point(791, 178);
+            this.BT_ExtractUmTest.Location = new System.Drawing.Point(719, 153);
             this.BT_ExtractUmTest.Name = "BT_ExtractUmTest";
-            this.BT_ExtractUmTest.Size = new System.Drawing.Size(214, 27);
+            this.BT_ExtractUmTest.Size = new System.Drawing.Size(195, 23);
             this.BT_ExtractUmTest.TabIndex = 18;
             this.BT_ExtractUmTest.Text = "Extract user mark test";
             this.BT_ExtractUmTest.UseVisualStyleBackColor = true;
@@ -220,35 +221,35 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 101);
+            this.label1.Location = new System.Drawing.Point(27, 96);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 21);
+            this.label1.Size = new System.Drawing.Size(87, 18);
             this.label1.TabIndex = 19;
             this.label1.Text = "COM Port";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 171);
+            this.label2.Location = new System.Drawing.Point(27, 156);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 21);
+            this.label2.Size = new System.Drawing.Size(95, 18);
             this.label2.TabIndex = 20;
             this.label2.Text = "Patch Info.";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 23);
+            this.label3.Location = new System.Drawing.Point(25, 29);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(160, 21);
+            this.label3.Size = new System.Drawing.Size(149, 18);
             this.label3.TabIndex = 21;
             this.label3.Text = "Path to save files";
             // 
             // BT_makeHeaderTest
             // 
-            this.BT_makeHeaderTest.Location = new System.Drawing.Point(960, 121);
+            this.BT_makeHeaderTest.Location = new System.Drawing.Point(873, 104);
             this.BT_makeHeaderTest.Name = "BT_makeHeaderTest";
-            this.BT_makeHeaderTest.Size = new System.Drawing.Size(271, 27);
+            this.BT_makeHeaderTest.Size = new System.Drawing.Size(246, 23);
             this.BT_makeHeaderTest.TabIndex = 23;
             this.BT_makeHeaderTest.Text = "usermark header test";
             this.BT_makeHeaderTest.UseVisualStyleBackColor = true;
@@ -256,9 +257,9 @@
             // 
             // BT_SelSaveDir
             // 
-            this.BT_SelSaveDir.Location = new System.Drawing.Point(492, 42);
+            this.BT_SelSaveDir.Location = new System.Drawing.Point(447, 45);
             this.BT_SelSaveDir.Name = "BT_SelSaveDir";
-            this.BT_SelSaveDir.Size = new System.Drawing.Size(98, 58);
+            this.BT_SelSaveDir.Size = new System.Drawing.Size(89, 50);
             this.BT_SelSaveDir.TabIndex = 24;
             this.BT_SelSaveDir.Text = "Select Folder";
             this.BT_SelSaveDir.UseVisualStyleBackColor = true;
@@ -266,19 +267,30 @@
             // 
             // BT_ClearLog
             // 
-            this.BT_ClearLog.Location = new System.Drawing.Point(590, 524);
+            this.BT_ClearLog.Location = new System.Drawing.Point(536, 459);
             this.BT_ClearLog.Name = "BT_ClearLog";
-            this.BT_ClearLog.Size = new System.Drawing.Size(77, 35);
+            this.BT_ClearLog.Size = new System.Drawing.Size(70, 30);
             this.BT_ClearLog.TabIndex = 25;
             this.BT_ClearLog.Text = "Clear";
             this.BT_ClearLog.UseVisualStyleBackColor = true;
             this.BT_ClearLog.Click += new System.EventHandler(this.BT_ClearLog_Click);
             // 
+            // BT_LogOut
+            // 
+            this.BT_LogOut.Location = new System.Drawing.Point(546, 0);
+            this.BT_LogOut.Name = "BT_LogOut";
+            this.BT_LogOut.Size = new System.Drawing.Size(89, 40);
+            this.BT_LogOut.TabIndex = 26;
+            this.BT_LogOut.Text = "Log out";
+            this.BT_LogOut.UseVisualStyleBackColor = true;
+            this.BT_LogOut.Click += new System.EventHandler(this.BT_LogOut_Click);
+            // 
             // main_window
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 578);
+            this.ClientSize = new System.Drawing.Size(554, 427);
+            this.Controls.Add(this.BT_LogOut);
             this.Controls.Add(this.BT_ClearLog);
             this.Controls.Add(this.BT_SelSaveDir);
             this.Controls.Add(this.TB_Serial7);
@@ -303,7 +315,8 @@
             this.Controls.Add(this.CB_ComPortNameList);
             this.Controls.Add(this.BT_StartDown);
             this.Controls.Add(this.progressBar1);
-            this.MinimumSize = new System.Drawing.Size(753, 642);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MinimumSize = new System.Drawing.Size(687, 558);
             this.Name = "main_window";
             this.Text = "[Huinno] Patch Downloader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.main_window_FormClosing);
@@ -338,6 +351,7 @@
         private System.Windows.Forms.Button BT_makeHeaderTest;
         private System.Windows.Forms.Button BT_SelSaveDir;
         private System.Windows.Forms.Button BT_ClearLog;
+        private System.Windows.Forms.Button BT_LogOut;
     }
 }
 
