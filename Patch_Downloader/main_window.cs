@@ -152,18 +152,17 @@ namespace Huinno_Downloader
 
         public main_window()
         {
-           
-            m_form_login.ProgRunning = m_progRunning;
-            //m_form_login.ShowDialog();
 
-            m_form_login.LoginPass = true;
+            m_form_login.ProgRunning = m_progRunning;
+            m_form_login.ShowDialog();
+
             m_loginPass = m_form_login.LoginPass;
             if (!m_loginPass)
                 return;
 
             m_loginId = m_form_login.LoginId;
             m_loginPw = m_form_login.LoginPw;
-         
+
 
             //
             InitializeComponent();
@@ -208,6 +207,7 @@ namespace Huinno_Downloader
             this.Show();
             timer_logout.Start();
         }
+
 
         void initUserParams()
         {
