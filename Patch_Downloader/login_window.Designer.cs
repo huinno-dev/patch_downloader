@@ -34,8 +34,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.BT_login = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.BT_Exit = new System.Windows.Forms.Button();
             this.CB_ShowPw = new System.Windows.Forms.CheckBox();
+            this.BT_Exit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,17 +103,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log In";
             // 
-            // BT_Exit
-            // 
-            this.BT_Exit.Location = new System.Drawing.Point(491, 223);
-            this.BT_Exit.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.BT_Exit.Name = "BT_Exit";
-            this.BT_Exit.Size = new System.Drawing.Size(95, 44);
-            this.BT_Exit.TabIndex = 5;
-            this.BT_Exit.Text = "Exit";
-            this.BT_Exit.UseVisualStyleBackColor = true;
-            this.BT_Exit.Click += new System.EventHandler(this.BT_Exit_Click);
-            // 
             // CB_ShowPw
             // 
             this.CB_ShowPw.AutoSize = true;
@@ -124,6 +113,17 @@
             this.CB_ShowPw.Text = "Show password";
             this.CB_ShowPw.UseVisualStyleBackColor = true;
             this.CB_ShowPw.CheckedChanged += new System.EventHandler(this.CB_ShowPw_CheckedChanged);
+            // 
+            // BT_Exit
+            // 
+            this.BT_Exit.Location = new System.Drawing.Point(491, 223);
+            this.BT_Exit.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.BT_Exit.Name = "BT_Exit";
+            this.BT_Exit.Size = new System.Drawing.Size(95, 44);
+            this.BT_Exit.TabIndex = 5;
+            this.BT_Exit.Text = "Exit";
+            this.BT_Exit.UseVisualStyleBackColor = true;
+            this.BT_Exit.Click += new System.EventHandler(this.BT_Exit_Click);
             // 
             // login_window
             // 
@@ -136,7 +136,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "login_window";
-            this.Text = "[Huinno] Patch Downloader";
+            this.Text = "[Huinno] Patch Dataloader";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

@@ -139,10 +139,10 @@ namespace Huinno_Downloader
         const int MEM_2G_PAGE_FULL_SZ = 2048;
         const int MEM_2G_PAGE_USE_SZ = 2046;
 
-        //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
-        //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
-        const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
-        const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+        const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
+        const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
+       // const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+       // const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
         //////////////////////////////////////////////////
         
         //
@@ -152,21 +152,22 @@ namespace Huinno_Downloader
 
         public main_window()
         {
-
+           
             m_form_login.ProgRunning = m_progRunning;
-            m_form_login.ShowDialog();
+            //m_form_login.ShowDialog();
 
+            m_form_login.LoginPass = true;
             m_loginPass = m_form_login.LoginPass;
             if (!m_loginPass)
                 return;
 
             m_loginId = m_form_login.LoginId;
             m_loginPw = m_form_login.LoginPw;
-
+         
 
             //
             InitializeComponent();
-
+            CB_ComPortBaudList.SelectedIndex = 0;
             m_progRunning = true;
 
             initUserParams();
@@ -176,6 +177,13 @@ namespace Huinno_Downloader
 
 
             timer_logout.Start();
+            string strVersionText = Assembly.GetExecutingAssembly().FullName
+           .Split(',')[1]
+           .Trim()
+           .Split('=')[1];
+
+            this.Text = this.Text +" ver " +  strVersionText.Substring(2,5);
+
         }
 
         delegate void TimerEventFiredDelegate();
@@ -208,12 +216,11 @@ namespace Huinno_Downloader
             timer_logout.Start();
         }
 
-
         void initUserParams()
         {
             // config: comport
             m_strCfg_comport = AppConfiguration.GetAppConfig("ComPortName");
-            m_strCfg_baudrate = "3000000";
+            m_strCfg_baudrate = CB_ComPortBaudList.SelectedItem.ToString();
             //m_config_baudrate = AppConfiguration.GetAppConfig("ComPortBaud");
             m_strCfg_savepath = AppConfiguration.GetAppConfig("SavePath");
             m_strCfg_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
@@ -318,6 +325,7 @@ namespace Huinno_Downloader
 
             if (!cSerialPort.isConnected)
             {
+                CB_ComPortBaudList.SelectedIndex = 0;
                 int selPortIdx = CB_ComPortNameList.SelectedIndex;
                 if (selPortIdx < 0)
                     return;
@@ -397,15 +405,12 @@ namespace Huinno_Downloader
 
                 checkStr = checkStr.Substring(0, checkStr.Length - 1);
             }
-            //m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = checkStr;
-            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = "128000";
+            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = checkStr;
 
-            //
             m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
             m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
             m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
             m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
-            //m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = 128000;
         }
 
         private void setButtonEnabledUI(bool bEnable)
@@ -448,6 +453,24 @@ namespace Huinno_Downloader
             setButtonEnabledUI(false);
 
             timer_logout.Stop();
+
+            // Re connect with maximum baudrate 3M
+            CloseSerial();
+            Thread.Sleep(2000);
+            
+            CB_ComPortBaudList.SelectedIndex = 1;
+            int baudrate = Int32.Parse(CB_ComPortBaudList.Text);
+            string err = cSerialPort.Open(CB_ComPortNameList.Text, baudrate);
+            if (err != "OK")
+            {
+                CloseSerial();
+                return;
+            }
+            AppConfiguration.SetAppConfig("ComPortName", CB_ComPortNameList.Text);
+            AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
+
+            ControlButtonText(BT_ConnPort, "Disconnect");
+            Thread.Sleep(2000);
             // start thread
             m_CheckRunningThd = new Thread(new ThreadStart(thd_CheckReadThd));
             m_CheckRunningThd.Start();
@@ -585,7 +608,8 @@ namespace Huinno_Downloader
 
             // close com port
             CloseSerial();
-
+            // restore baudrate 115200
+           
             timer_logout.Start();
         }
 
@@ -644,7 +668,7 @@ namespace Huinno_Downloader
                 ConvertEcgData(m_resFilePathExp);
                 if (!m_dev)
                 {
-                    deleteFile(m_resFilePathExp, "_conv.bin");
+                //    deleteFile(m_resFilePathExp, "_conv.bin");
                 }
                 m_downMode = DOWN_MODE_T.DOWN_MODE_USRMARK;
 
@@ -780,20 +804,35 @@ namespace Huinno_Downloader
             int procLoopCnt = d_sz / MEM_PAGE_SZ;
 
             // proc for pairing start page
-            int offset = m_pairStPos;
-            int discardPageCnt = offset / MEM_PAGE_SZ;
-            int discardDataCnt = offset % MEM_PAGE_SZ;
-            if (discardDataCnt != 0)
-            {
-                int rdDataCnt = MEM_PAGE_USE_SZ - discardDataCnt;
-                Array.Copy(d, offset, pageData, 0, rdDataCnt);
-                bw1.Write(pageData, 0, rdDataCnt);
-                offset += (rdDataCnt+ (MEM_PAGE_SZ-MEM_PAGE_USE_SZ));
+            // 120 bytes packing 
 
-                //
-                procLoopCnt -= 1;
+            int readNandStartPage = m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA];
+            int offset = 0;
+            if (m_RdPageTotalCnt == 1)
+                offset = 0;
+            else
+            {
+
             }
-            procLoopCnt -= discardPageCnt;
+
+
+
+            /*
+                      
+                        int discardPageCnt = offset / MEM_PAGE_SZ;
+                        int discardDataCnt = offset % MEM_PAGE_SZ;
+                        if (discardDataCnt != 0)
+                        {
+                            int rdDataCnt = MEM_PAGE_USE_SZ - discardDataCnt;
+                            Array.Copy(d, offset, pageData, 0, rdDataCnt);
+                            bw1.Write(pageData, 0, rdDataCnt);
+                            offset += (rdDataCnt+ (MEM_PAGE_SZ-MEM_PAGE_USE_SZ));
+
+                            //
+                            procLoopCnt -= 1;
+                        }
+                        procLoopCnt -= discardPageCnt;
+            */
 
             // proc pages
             for (int i = 0; i < procLoopCnt; ++i)

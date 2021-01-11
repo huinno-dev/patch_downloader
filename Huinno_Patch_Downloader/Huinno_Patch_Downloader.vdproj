@@ -3,10 +3,10 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Huinno_Patch_Downloader"
-"LanguageId" = "3:1042"
-"CodePage" = "3:949"
-"UILanguageId" = "3:1042"
+"ProjectName" = "8:Huinno_Patch_Dataloader"
+"LanguageId" = "3:1033"
+"CodePage" = "3:1252"
+"UILanguageId" = "3:1033"
 "SccProjectName" = "8:"
 "SccLocalPath" = "8:"
 "SccAuxPath" = "8:"
@@ -21,7 +21,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_522C1960FF134D5FA2F05597E463D2DB"
+        "MsmKey" = "8:_4FCBBCE8EC9F431494F905D41353CAB2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -33,14 +33,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B66F1CBD6D894164B205916561A3708A"
+        "MsmKey" = "8:_E98B2D510A5048098DF7BBF7B5592651"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B66F1CBD6D894164B205916561A3708A"
+        "OwnerKey" = "8:_4FCBBCE8EC9F431494F905D41353CAB2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -158,10 +158,21 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_522C1960FF134D5FA2F05597E463D2DB"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4FCBBCE8EC9F431494F905D41353CAB2"
             {
-            "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Downloader.exe.config"
-            "TargetName" = "8:Huinno_Downloader.exe.config"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Huinno_Dataloader, Version=0.0.0.5, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_4FCBBCE8EC9F431494F905D41353CAB2"
+                    {
+                    "Name" = "8:Huinno_Dataloader.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Dataloader.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
             "Condition" = "8:"
@@ -198,21 +209,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B66F1CBD6D894164B205916561A3708A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E98B2D510A5048098DF7BBF7B5592651"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Huinno_Downloader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_B66F1CBD6D894164B205916561A3708A"
-                    {
-                    "Name" = "8:Huinno_Downloader.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Downloader.exe"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Dataloader.exe.config"
+            "TargetName" = "8:Huinno_Dataloader.exe.config"
             "Tag" = "8:"
             "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
             "Condition" = "8:"
@@ -300,28 +300,28 @@
         }
         "MsiBootstrapper"
         {
-        "LangId" = "3:1042"
+        "LangId" = "3:1033"
         "RequiresElevation" = "11:FALSE"
         }
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Huinno_Downloader"
-        "ProductCode" = "8:{EE12369C-FBED-4FDB-8201-CEB2B0ED7023}"
-        "PackageCode" = "8:{90B643EC-158D-492F-931E-056C4C243D13}"
+        "ProductName" = "8:Huinno_Dataloader"
+        "ProductCode" = "8:{5FCF9D3C-4221-4631-9F9E-6C140C65E8E7}"
+        "PackageCode" = "8:{43E74A41-9128-4FCF-8C99-C651824725EC}"
         "UpgradeCode" = "8:{7F2605F6-48C0-4321-B4C0-2D008E6CF755}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.0"
+        "ProductVersion" = "8:0.0.5"
         "Manufacturer" = "8:Huinno"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Huinno_Downloader"
+        "Title" = "8:Huinno_Dataloader"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:annibuy@gmail.com"
+        "ARPCONTACT" = "8:bingry56@huinno.com"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
@@ -444,16 +444,30 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E0338F1946B14CB989FD8DEB4F5DDE6C"
             {
-            "Name" = "8:Huinno_Downloader.exe"
+            "Name" = "8:Huinno_Dataloader.exe"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_B66F1CBD6D894164B205916561A3708A"
+            "Target" = "8:_E98B2D510A5048098DF7BBF7B5592651"
             "Folder" = "8:_75046B74C1F643EF92AF80B6D929C598"
             "WorkingFolder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
             "Icon" = "8:_A5E4634FB8FF42328E1939345465B7A2"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E8752F0B00C141DB8F55F525D0592395"
+            {
+            "Name" = "8:Huinno Dataloader"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_4FCBBCE8EC9F431494F905D41353CAB2"
+            "Folder" = "8:_913645DE055649B18C821B2655B02333"
+            "WorkingFolder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Icon" = "8:_0E1A358D785A426594DC17C7EEDC6B38"
             "Feature" = "8:"
             }
         }
@@ -475,7 +489,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_2F496A06F5AD444894E0EE7A1A475069"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:설치 폴더"
+                    "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFolderDlg.wid"
@@ -497,7 +511,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_539E8E25919C4F459B1CE819470C2666"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:환영"
+                    "DisplayName" = "8:Welcome"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminWelcomeDlg.wid"
@@ -545,7 +559,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F8C885641C0344F4AE0316298615FCAA"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:설치 확인"
+                    "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
@@ -576,7 +590,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_0D1E5EE8E00F4FE2BD0BC78B8EE726A5"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:마침"
+                    "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
@@ -620,7 +634,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_08B1DF09EDB94B65B2A8AE8CC9EA8267"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:마침"
+                    "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
@@ -651,7 +665,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_AC12FE7561214C29BD020EE98A68BEA8"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:진행률"
+                    "DisplayName" = "8:Progress"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
@@ -695,7 +709,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_32B8896C55874D8BB5453396E532095C"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:설치 폴더"
+                    "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
@@ -730,7 +744,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9A7E3C37280B4E6D9C98B362D9FC486C"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:설치 확인"
+                    "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
@@ -752,7 +766,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E369F80DA2974E3588FC019DA700AD1F"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:환영"
+                    "DisplayName" = "8:Welcome"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdWelcomeDlg.wid"
@@ -809,7 +823,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_685712054EE84AF3BB06FC73C30DB727"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:진행률"
+                    "DisplayName" = "8:Progress"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
