@@ -66,6 +66,7 @@ namespace Huinno_Downloader
         FileStream m_fs;
         BinaryWriter m_bw;
         int m_wrCnt = 0;
+        UInt32 uintqBSymKey;
 
         public enum UART_RX_CMD_T
         {
@@ -113,6 +114,7 @@ namespace Huinno_Downloader
         string[] m_productName = new string[(int)PD_NAME_T.PD_NAME_NUM_MAX];
         string m_curSerialName;
         byte[] m_productNameByte = new byte[13];
+        byte[] m_qSymBKeyByte = new byte[12];
 
         // nand index
         string[] m_strNandIdx_St = new string[(int)DOWN_MODE_T.DOWN_MODE_NUM_MAX];
@@ -139,12 +141,15 @@ namespace Huinno_Downloader
         const int MEM_2G_PAGE_FULL_SZ = 2048;
         const int MEM_2G_PAGE_USE_SZ = 2046;
 
-        const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
-        const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
-       // const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
-       // const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+        //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
+        //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
+        // const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+        // const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+
+        int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+        int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
         //////////////////////////////////////////////////
-        
+
         //
         System.Timers.Timer timer_logout = new System.Timers.Timer();
 
@@ -371,6 +376,18 @@ namespace Huinno_Downloader
             m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY  ] = str_tx.Substring(pos, 2); pos += 3;
             m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM] = str_tx.Substring(pos, 5); pos += 6;
 
+            //patch prime is 0, patch2 is 1
+            if (m_productName[(int)PD_NAME_T.PD_NAME_VERSION].Equals("0"))
+            {
+                MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+                MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+            }
+            else
+            {
+                MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
+                MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
+            }
+
             m_productNameByte = Encoding.ASCII.GetBytes(m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]
                                                         + m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY]
                                                         + m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE]
@@ -395,17 +412,28 @@ namespace Huinno_Downloader
             m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = sub.Substring(0, pos);
 
             sub = sub.Substring(pos + 1, sub.Length - pos - 1);
-            string checkStr = sub;
-            while (checkStr.Length>0)
-            {
-                string lastStr = checkStr.Substring(checkStr.Length - 1);
-                byte [] byteVal = Encoding.UTF8.GetBytes(lastStr);
-                if (byteVal[0]>=48 && byteVal[0]<=57)
-                    break;
+            pos = sub.IndexOf(".");
+            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = sub.Substring(0, pos);
 
-                checkStr = checkStr.Substring(0, checkStr.Length - 1);
-            }
-            m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = checkStr;
+            sub = sub.Substring(pos + 1, sub.Length - pos - 1);
+            pos = sub.IndexOf(".");
+            string qsymBkey = sub.Substring(0, pos);
+            uintqBSymKey = UInt32.Parse(qsymBkey);
+            m_qSymBKeyByte = Encoding.ASCII.GetBytes(qsymBkey);
+
+            /*
+                        string checkStr = sub;
+                        while (checkStr.Length>0)
+                        {
+                            string lastStr = checkStr.Substring(checkStr.Length - 1);
+                            byte [] byteVal = Encoding.UTF8.GetBytes(lastStr);
+                            if (byteVal[0]>=48 && byteVal[0]<=57)
+                                break;
+
+                            checkStr = checkStr.Substring(0, checkStr.Length - 1);
+                        }
+                        m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = checkStr;
+            */
 
             m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
             m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
@@ -493,25 +521,32 @@ namespace Huinno_Downloader
             cSerialPort.Clear();
             cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
 
-            Thread.Sleep(100);
+            int retryCnt = 20;
 
-            if (!m_isProductNameSet)
+            while (retryCnt > 0)
             {
-                string str_tx = cSerialPort.ReadExisting();
-                if (str_tx.Contains("[INFO] "))
-                {
-                    ParseDeviceInfo(str_tx);
-                    TB_Serial_SetProductName();
 
-                    m_curSerialName = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
-                    m_isProductNameSet = true;
+                if (!m_isProductNameSet)
+                {
+                    string str_tx = cSerialPort.ReadExisting();
+                    if (str_tx.Contains("[INFO] "))
+                    {
+                        ParseDeviceInfo(str_tx);
+                        TB_Serial_SetProductName();
+
+                        m_curSerialName = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
+                        m_isProductNameSet = true;
+                        return 0;
+                    }
+                }
+
+                if (!m_isProductNameSet)
+                {
+                    Thread.Sleep(100);
+                    retryCnt--;
                 }
             }
-
-            if (!m_isProductNameSet)
-                return -1;
-
-            return 0;
+            return -1;
         }
 
         void readyToReadData()
