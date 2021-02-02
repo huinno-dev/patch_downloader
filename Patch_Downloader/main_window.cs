@@ -62,7 +62,9 @@ namespace Huinno_Downloader
         // uart 
         const int UART_RX_CHAR_LEN_MAX = 16;
         byte[] m_uartSendMsg = new byte[UART_RX_CHAR_LEN_MAX];
-
+        byte[] pageTimeSyncArray = new byte[64*2048*4];
+        byte[] UMArray = new byte[16 * 2048 ];
+        int UMWriteOffset = 0;
         FileStream m_fs;
         BinaryWriter m_bw;
         int m_wrCnt = 0;
@@ -137,9 +139,9 @@ namespace Huinno_Downloader
         const int MEM_INIT_VAL = 0xFF;
 
         const int MEM_4G_PAGE_FULL_SZ = 4096;
-        const int MEM_4G_PAGE_USE_SZ = 4095;
+        const int MEM_4G_PAGE_USE_SZ = 4080;
         const int MEM_2G_PAGE_FULL_SZ = 2048;
-        const int MEM_2G_PAGE_USE_SZ = 2046;
+        const int MEM_2G_PAGE_USE_SZ = 2040;
 
         //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
         //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
@@ -650,7 +652,7 @@ namespace Huinno_Downloader
 
         void thd_Read()
         {
-            cSerialPort.Clear();
+            //cSerialPort.Clear();
 
             byte[] rBuf = new byte[MEM_PAGE_SZ];
             while (true)
@@ -658,7 +660,7 @@ namespace Huinno_Downloader
                 int rCnt = cSerialPort.Read(rBuf, MEM_PAGE_SZ);
                 if (rCnt < 0)
                 {
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
                     Console.WriteLine(String.Format("err: {0}", rCnt));
                     continue;
                 }
@@ -833,49 +835,91 @@ namespace Huinno_Downloader
             bw1 = new BinaryWriter(fs1);
 
             byte[] pageData = new byte[MEM_PAGE_USE_SZ];
-            bw1.Write(m_EcgHeader, 0, 32);
 
             // proc loop
             int procLoopCnt = d_sz / MEM_PAGE_SZ;
 
-            // proc for pairing start page
-            // 120 bytes packing 
+            // Time Stamp Num
+            m_EcgHeader[21] = (byte)((procLoopCnt >> 16) & 0xFF);
+            m_EcgHeader[22] = (byte)((procLoopCnt >> 8) & 0xFF);
+            m_EcgHeader[23] = (byte)((procLoopCnt) & 0xFF);
+            //TS i-size 
+            m_EcgHeader[24] = 4;
 
-            int readNandStartPage = m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA];
-            int offset = 0;
-            if (m_RdPageTotalCnt == 1)
-                offset = 0;
+            if(MEM_PAGE_SZ == MEM_4G_PAGE_FULL_SZ)
+                m_EcgHeader[25] = 1;
             else
-            {
+                m_EcgHeader[25] = 0;
+/*
+            bw1.Write(m_EcgHeader, 0, 32);
 
-            }
+            //write UserMark
+            bw1.Write(UMArray, 0, UMWriteOffset);
 
+            // sym key G^B1 mod P
+            byte[] GB1modP = new byte[4];
 
+            GB1modP[0] = m_EcgHeader[26];
+            GB1modP[1] = m_EcgHeader[27];
+            GB1modP[2] = m_EcgHeader[28];
+            GB1modP[3] = m_EcgHeader[29];
+            bw1.Write(GB1modP, 0, 4);
 
+            // total Page Num
+            byte[] totalNandPage = new byte[4];
+
+            totalNandPage[0] = (byte)(procLoopCnt >> 24);
+            totalNandPage[1] = (byte)(procLoopCnt >> 16);
+            totalNandPage[2] = (byte)(procLoopCnt >> 8);
+            totalNandPage[3] = (byte)(procLoopCnt);
+            bw1.Write(totalNandPage, 0, 4);
+
+            byte[] qGBSymKey = new byte[4];
+
+            qGBSymKey[0] = (byte)(uintqBSymKey >> 24);
+            qGBSymKey[1] = (byte)(uintqBSymKey >> 16);
+            qGBSymKey[2] = (byte)(uintqBSymKey >> 8);
+            qGBSymKey[3] = (byte)(uintqBSymKey);
+            bw1.Write(qGBSymKey, 0, 4);
+*/
+            // proc for pairing start page
+            // 60 bytes packing 
             /*
-                      
-                        int discardPageCnt = offset / MEM_PAGE_SZ;
-                        int discardDataCnt = offset % MEM_PAGE_SZ;
-                        if (discardDataCnt != 0)
-                        {
-                            int rdDataCnt = MEM_PAGE_USE_SZ - discardDataCnt;
-                            Array.Copy(d, offset, pageData, 0, rdDataCnt);
-                            bw1.Write(pageData, 0, rdDataCnt);
-                            offset += (rdDataCnt+ (MEM_PAGE_SZ-MEM_PAGE_USE_SZ));
+   int readNandStartPage = m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA];
+   int offset = 0;
+   if (m_RdPageTotalCnt == 1)
+       offset = 0;
+   else
+   {
 
-                            //
-                            procLoopCnt -= 1;
-                        }
-                        procLoopCnt -= discardPageCnt;
-            */
+   }
+               int discardPageCnt = offset / MEM_PAGE_SZ;
+               int discardDataCnt = offset % MEM_PAGE_SZ;
+               if (discardDataCnt != 0)
+               {
+                   int rdDataCnt = MEM_PAGE_USE_SZ - discardDataCnt;
+                   Array.Copy(d, offset, pageData, 0, rdDataCnt);
+                   bw1.Write(pageData, 0, rdDataCnt);
+                   offset += (rdDataCnt+ (MEM_PAGE_SZ-MEM_PAGE_USE_SZ));
+
+                   //
+                   procLoopCnt -= 1;
+               }
+               procLoopCnt -= discardPageCnt;
+   */
 
             // proc pages
+            int offset = 0;
             for (int i = 0; i < procLoopCnt; ++i)
             {
                 Array.Copy(d, offset, pageData, 0, MEM_PAGE_USE_SZ);
+                Array.Copy(d, offset + MEM_PAGE_USE_SZ, pageTimeSyncArray, i * 4, 4);
                 bw1.Write(pageData, 0, MEM_PAGE_USE_SZ);
                 offset += MEM_PAGE_SZ;
-            } 
+            }
+
+            //write Time Sync Array
+            bw1.Write(pageTimeSyncArray, 0, procLoopCnt*4);
 
             bw1.Close();
             fs1.Close();
@@ -893,7 +937,7 @@ namespace Huinno_Downloader
             // init
             string msg_line = "";
             m_pairStTime = -1;
-
+            int typeVal = 0;
 
             while (pCnt < pageCnt)
             {
@@ -922,13 +966,15 @@ namespace Huinno_Downloader
                 // get info. (pairing start)
                 if (type== USER_MARK_T.USER_MARK_PAIRING_ST)
                 {
-                    if(m_pairStTime == -1)
+                    //if(m_pairStTime == -1)
                     {
                         // set device name byte for header
+                        /*
                         msg_line = System.Text.Encoding.UTF8.GetString(m_productNameByte);
 
                         m_pairStTime = time;
                         m_pairStPos = pos;
+                        typeVal = (int)type;
                         if (m_dev)
                         {
                             int posAdj_header = pos - m_pairStPos;
@@ -936,39 +982,70 @@ namespace Huinno_Downloader
                         }
                         else
                         {
-                            msg_line += String.Format(",{0}" + Environment.NewLine, m_pairStTime);
+                            //msg_line += String.Format(",{0}" + Environment.NewLine, m_pairStTime);
+                            msg_line += String.Format("{0},{1},{2},{3},{4}" + Environment.NewLine, id, time, typeVal, page_idx, page_pos);
                         }
                         fs_um.Write(msg_line);
                         msg_line = "";
-
+                        */
                         Array.Copy(m_productNameByte, 0, m_EcgHeader, 0, 13);
-                        Array.Copy(um, 0, m_EcgHeader, 0 + 16, 5);
+                        Array.Copy(um, 0, m_EcgHeader, 0 + 13, 5);
+
+                        // User Mark Num
+                        m_EcgHeader[18] = (byte)((rCnt>>8) & 0xFF);
+                        m_EcgHeader[19] = (byte)(rCnt  & 0xFF);
+                       
+                        // User Mark Size
+                        m_EcgHeader[20] = 16;
+
+                        // symKey
+                        m_EcgHeader[26] = um[6];
+                        m_EcgHeader[27] = um[7];
+                        m_EcgHeader[28] = um[8];
+                        m_EcgHeader[29] = um[9];
 
                         //byte[] pos_byte = BitConverter.GetBytes(posAdj_header);
                         //Array.Copy(pos_byte, 0, m_EcgHeader, 5 + 16, 4);
                     }
                 }
-                if (m_pairStTime == -1)
-                    continue;
 
-                if (!m_dev)
-                {
-                    if (type != USER_MARK_T.USER_MARK_EVENT_BTN)
-                    {
-                        continue;
-                    }
-                }
 
+                typeVal = (int)type;
                 if (m_dev)
                 {
                     int posAdj = pos - m_pairStPos;
+                   
                     msg_line += String.Format("{0},{1},{2},{3},{4},{5},{6}" + Environment.NewLine, id, (int)type, time, page_idx, page_pos, posAdj, update);
                     //Console.WriteLine(msg_line);
                 }
                 else
                 {
-                    msg_line += String.Format("{0},{1}" + Environment.NewLine, id, time);
+                    msg_line += String.Format("{0},{1},{2},{3},{4}" + Environment.NewLine, id, time, typeVal, page_idx, page_pos);
                 }
+                
+                //Unix Time
+                UMArray[UMWriteOffset + 0] = um[4];
+                UMArray[UMWriteOffset + 1] = um[3];
+                UMArray[UMWriteOffset + 2] = um[2];
+                UMArray[UMWriteOffset + 3] = um[1];
+                UMArray[UMWriteOffset + 4] = um[0];
+
+                //Type
+                UMArray[UMWriteOffset + 5] = (byte)typeVal;
+
+                //NandPage
+                UMArray[UMWriteOffset + 8] = um[23];
+                UMArray[UMWriteOffset + 9] = um[22];
+                UMArray[UMWriteOffset + 10] = um[21];
+                UMArray[UMWriteOffset + 11] = um[20];
+
+                //NandPos
+                UMArray[UMWriteOffset + 12] = um[27];
+                UMArray[UMWriteOffset + 13] = um[26];
+                UMArray[UMWriteOffset + 14] = um[25];
+                UMArray[UMWriteOffset + 15] = um[24];
+
+                UMWriteOffset += 16;
                 fs_um.Write(msg_line);
                 msg_line = "";
             }
