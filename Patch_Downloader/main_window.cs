@@ -161,7 +161,7 @@ namespace Huinno_Downloader
         {
            
             m_form_login.ProgRunning = m_progRunning;
-            //m_form_login.ShowDialog();
+            m_form_login.ShowDialog();
 
             m_form_login.LoginPass = true;
             m_loginPass = m_form_login.LoginPass;

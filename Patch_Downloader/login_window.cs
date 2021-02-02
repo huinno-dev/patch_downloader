@@ -52,6 +52,8 @@ namespace Huinno_Downloader
         {
             LoginPass = false;
             this.Hide();
+            Application.ExitThread();
+            Environment.Exit(0);
         }
 
         private void BT_login_Click(object sender, EventArgs e)
