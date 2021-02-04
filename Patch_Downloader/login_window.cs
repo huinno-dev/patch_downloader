@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
 
 namespace Huinno_Downloader
 {
@@ -48,6 +49,24 @@ namespace Huinno_Downloader
             set { this.m_loginPw = value; }
         }
 
+        private void showDiagText(string result)
+        {
+            // Get reference to the dialog type.
+            var dialogTypeName = "System.Windows.Forms.PropertyGridInternal.GridErrorDlg";
+            var dialogType = typeof(Form).Assembly.GetType(dialogTypeName);
+
+            // Create dialog instance.
+            var dialog = (Form)Activator.CreateInstance(dialogType, new PropertyGrid());
+
+            // Populate relevant properties on the dialog instance.
+            dialog.Text = "Sample Title";
+            dialogType.GetProperty("Details").SetValue(dialog, result, null);
+            dialogType.GetProperty("Message").SetValue(dialog, "Sample Message", null);
+
+            // Display dialog.
+            dialog.ShowDialog();
+        }
+
         private void BT_Exit_Click(object sender, EventArgs e)
         {
             LoginPass = false;
@@ -58,6 +77,52 @@ namespace Huinno_Downloader
 
         private void BT_login_Click(object sender, EventArgs e)
         {
+#if true
+            string clientID = TB_ID.Text;
+            string clientSecret = TB_PW.Text;
+
+            string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
+
+            HttpMessageHandler handler = new HttpClientHandler()
+            {
+            };
+
+            var httpClient = new HttpClient(handler)
+            {
+                BaseAddress = new Uri(url),
+                Timeout = new TimeSpan(0, 2, 0)
+            };
+
+            //var val = System.Text.Encoding.UTF8.GetBytes("doctor@test.com:password");
+            var val = System.Text.Encoding.UTF8.GetBytes(clientID + ":" + clientSecret);
+            string credential = System.Convert.ToBase64String(val);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + credential);
+
+            var jsonObject = new object();
+            var content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json"); ;
+            HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+
+            string returnValue = response.Content.ReadAsStringAsync().Result;
+            //showDiagText(returnValue);
+
+            if (returnValue.Contains("access_token"))
+                MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
+            else {
+                // failed to login 
+                MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+            // if success to login --> pass parameters to main_windows
+            LoginPass = true;
+            LoginId = clientID;
+            LoginPw = clientSecret;
+
+            // close login window
+            this.Close();
+
+#else
+
             string strId = TB_ID.Text;
             string strPw = TB_PW.Text;
 
@@ -83,6 +148,7 @@ namespace Huinno_Downloader
 
             // close login window
             this.Close();
+#endif
         }
 
         private void CB_ShowPw_CheckedChanged(object sender, EventArgs e)

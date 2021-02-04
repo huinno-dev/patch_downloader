@@ -634,6 +634,12 @@ namespace Huinno_Downloader
                 }
             }
 
+#if true
+            //Exit program
+            Application.ExitThread();
+            Environment.Exit(0);
+#else
+            
             // init flag
             m_isProductNameSet = false;
             m_stopThd_1st = false;
@@ -648,6 +654,7 @@ namespace Huinno_Downloader
             // restore baudrate 115200
            
             timer_logout.Start();
+#endif
         }
 
         void thd_Read()
