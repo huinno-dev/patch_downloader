@@ -598,7 +598,7 @@ namespace Huinno_Downloader
 
         void thd_CheckReadThd()
         {
-            while(true)
+            while (true)
             {
                 Thread.Sleep(500);
                 Console.WriteLine(String.Format("TEST"));
@@ -620,7 +620,7 @@ namespace Huinno_Downloader
             int val = 100;
             ControlProgressBar(progressBar1, val);
             ControlLabel(LB_ProgVal, val.ToString());
-            
+
             // proc msg box for open web page
             if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -632,29 +632,28 @@ namespace Huinno_Downloader
                 {
                     System.Diagnostics.Process.Start(m_strCfg_uploadurl);
                 }
+
+                //Exit program
+                Application.ExitThread();
+                Environment.Exit(0);
             }
+            else 
+            { 
+                // init flag
+                m_isProductNameSet = false;
+                m_stopThd_1st = false;
+                m_startThd_2nd = false;
+                m_stopThd_2nd = false;
 
-#if true
-            //Exit program
-            Application.ExitThread();
-            Environment.Exit(0);
-#else
-            
-            // init flag
-            m_isProductNameSet = false;
-            m_stopThd_1st = false;
-            m_startThd_2nd = false;
-            m_stopThd_2nd = false;
+                // ui
+                setButtonEnabledUI(true);
 
-            // ui
-            setButtonEnabledUI(true);
+                // close com port
+                CloseSerial();
+                // restore baudrate 115200
 
-            // close com port
-            CloseSerial();
-            // restore baudrate 115200
-           
-            timer_logout.Start();
-#endif
+                timer_logout.Start();
+            }
         }
 
         void thd_Read()

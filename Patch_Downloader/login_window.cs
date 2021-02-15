@@ -81,7 +81,7 @@ namespace Huinno_Downloader
             string clientID = TB_ID.Text;
             string clientSecret = TB_PW.Text;
 
-            if (!(clientID == "huinno" && clientSecret == "1234"))
+            if (!(clientID == "huinno" && clientSecret == "1234")) //Admin account
             {
                 string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
                 //string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com");  //For timeout test
