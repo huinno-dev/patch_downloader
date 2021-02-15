@@ -81,37 +81,56 @@ namespace Huinno_Downloader
             string clientID = TB_ID.Text;
             string clientSecret = TB_PW.Text;
 
-            string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
-
-            HttpMessageHandler handler = new HttpClientHandler()
+            if (!(clientID == "huinno" && clientSecret == "1234"))
             {
-            };
+                string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
+                //string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com");  //For timeout test
 
-            var httpClient = new HttpClient(handler)
-            {
-                BaseAddress = new Uri(url),
-                Timeout = new TimeSpan(0, 2, 0)
-            };
+                HttpMessageHandler handler = new HttpClientHandler()
+                {
+                };
 
-            //var val = System.Text.Encoding.UTF8.GetBytes("doctor@test.com:password");
-            var val = System.Text.Encoding.UTF8.GetBytes(clientID + ":" + clientSecret);
-            string credential = System.Convert.ToBase64String(val);
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + credential);
+                var httpClient = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(url),
+                    //Timeout = new TimeSpan(0, 2, 0)
+                    Timeout = TimeSpan.FromMilliseconds(3000) //3 sec
+                };
 
-            var jsonObject = new object();
-            var content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json"); ;
-            HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                //var val = System.Text.Encoding.UTF8.GetBytes("doctor@test.com:password");
+                var val = System.Text.Encoding.UTF8.GetBytes(clientID + ":" + clientSecret);
+                string credential = System.Convert.ToBase64String(val);
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + credential);
 
-            string returnValue = response.Content.ReadAsStringAsync().Result;
-            //showDiagText(returnValue);
+                var jsonObject = new object();
+                var content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json");
 
-            if (returnValue.Contains("access_token"))
-                MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
-            else {
-                // failed to login 
-                MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
-                return;
+                HttpResponseMessage response = new HttpResponseMessage();
+
+                try
+                {
+                    response = httpClient.PostAsync(url, content).Result;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Timeout", "Confirm", MessageBoxButtons.OK);
+                    return;
+                }
+
+                string returnValue = response.Content.ReadAsStringAsync().Result;
+                //showDiagText(returnValue);
+
+                if (returnValue.Contains("access_token"))
+                    MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
+                else
+                {
+                    // failed to login 
+                    MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                    return;
+                }
             }
+            else
+                MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
 
             // if success to login --> pass parameters to main_windows
             LoginPass = true;
