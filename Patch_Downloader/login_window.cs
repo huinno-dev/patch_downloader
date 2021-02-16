@@ -11,6 +11,12 @@ using System.Net.Http;
 
 namespace Huinno_Downloader
 {
+    static class Constants
+    {
+        public const bool USE_ECG_ENCRYPTION = true;
+        public const bool USE_ADMIN_ACCOUNT = true;
+    }
+
     public partial class login_window : Form
     {
         const char m_PrintPwChar = '*';
@@ -81,7 +87,7 @@ namespace Huinno_Downloader
             string clientID = TB_ID.Text;
             string clientSecret = TB_PW.Text;
 
-            if (!(clientID == "huinno" && clientSecret == "1234")) //Admin account
+            if (!(clientID == "huinno" && clientSecret == "huinno1234")) //Admin account
             {
                 string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
                 //string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com");  //For timeout test
@@ -129,8 +135,16 @@ namespace Huinno_Downloader
                     return;
                 }
             }
-            else
-                MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
+            else {
+                if (Constants.USE_ADMIN_ACCOUNT)
+                    MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
+                else
+                {
+                    // failed to login 
+                    MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                    return;
+                }
+            }
 
             // if success to login --> pass parameters to main_windows
             LoginPass = true;
