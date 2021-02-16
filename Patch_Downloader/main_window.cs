@@ -110,6 +110,21 @@ namespace Huinno_Downloader
             USER_MARK_TYPE_NUM_MAX
         }
 
+        public enum USER_MARK_SAVE_T
+        {
+            eUM_SAVE_ST = 0,
+            eUM_SAVE_ED,                    // 1
+            eUM_SAVE_EVT_APP,               // 2
+            eUM_SAVE_EVT_BTN,               // 3
+            eUM_RESET_DATA_CUT,             // 4    
+            eUM_NORMAL_POWER_ON_DATA,       // 5
+            eUM_NORMAL_POWER_OFF_DATA,      // 6
+            eUM_DEVICE_SERIAL_NUM_DATA,     // 7
+            eUM_DEVICE_PRIVATE_KEY_DATA,    // 8
+            eUM_DEVICE_PUBLIC_KEY_DATA,     // 9
+            USER_MARK_SAVE_NUM_MAX,
+        }
+
         // product name
         bool m_isProductNameSet = false;
 

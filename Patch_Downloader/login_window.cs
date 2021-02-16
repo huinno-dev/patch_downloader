@@ -11,15 +11,11 @@ using System.Net.Http;
 
 namespace Huinno_Downloader
 {
-    static class Constants
-    {
-        public const bool USE_ECG_ENCRYPTION = true;
-        public const bool USE_ADMIN_ACCOUNT = true;
-    }
-
     public partial class login_window : Form
     {
         const char m_PrintPwChar = '*';
+
+        const bool m_useAdminAccount = true;
 
         public login_window()
         {
@@ -87,7 +83,11 @@ namespace Huinno_Downloader
             string clientID = TB_ID.Text;
             string clientSecret = TB_PW.Text;
 
-            if (!(clientID == "huinno" && clientSecret == "huinno1234")) //Admin account
+            if((clientID == "huinno" && clientSecret == "huinno1234") && m_useAdminAccount) //Admin account
+            {
+                MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
+            }
+            else 
             {
                 string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com:443/auth/login");
                 //string url = String.Format("http://huinnoapi.koreacentral.cloudapp.azure.com");  //For timeout test
@@ -117,9 +117,11 @@ namespace Huinno_Downloader
                 {
                     response = httpClient.PostAsync(url, content).Result;
                 }
+#pragma warning disable 0168
                 catch (Exception exception)
+#pragma warning restore 0168
                 {
-                    MessageBox.Show("Timeout", "Confirm", MessageBoxButtons.OK);
+                    MessageBox.Show("There was a problem commnunicating with the server. Please try again later.", "Couldn't connect", MessageBoxButtons.OK);
                     return;
                 }
 
@@ -127,17 +129,9 @@ namespace Huinno_Downloader
                 //showDiagText(returnValue);
 
                 if (returnValue.Contains("access_token"))
-                    MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
-                else
                 {
-                    // failed to login 
-                    MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
-                    return;
+                    MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
                 }
-            }
-            else {
-                if (Constants.USE_ADMIN_ACCOUNT)
-                    MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
                 else
                 {
                     // failed to login 
