@@ -15,7 +15,7 @@ namespace Huinno_Downloader
     {
         const char m_PrintPwChar = '*';
 
-        const bool m_useAdminAccount = true;
+        private const bool m_useAdminAccount = true;
 
         public login_window()
         {

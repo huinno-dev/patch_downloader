@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define USE_DEBUG
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +18,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 
 using System.Windows.Forms.DataVisualization.Charting;
+
 namespace Huinno_Downloader
 {
     public partial class main_window : Form
@@ -47,6 +50,8 @@ namespace Huinno_Downloader
         string m_resFileName;       // only file_name without exp
         string m_resFilePath;       // dir + file_name
         string m_resFilePathExp;    // dir + file_name + exp
+        string m_resFilePathUserMarkExp;    // dir + file_name + exp (user mark)
+        string m_resFilePathECGExp;    // dir + file_name + exp (ecg)
 
         //
         Thread m_RdSerialDataThd;
@@ -101,27 +106,19 @@ namespace Huinno_Downloader
             DOWN_MODE_NUM_MAX
         }
 
-        public enum USER_MARK_T
-        {
-            USER_MARK_PAIRING_ST = 0,        // 0
-            USER_MARK_PAIRING_ED,         // 1
-            USER_MARK_EVENT_APP,        // 2
-            USER_MARK_EVENT_BTN,        // 3
-            USER_MARK_TYPE_NUM_MAX
-        }
-
         public enum USER_MARK_SAVE_T
         {
             eUM_SAVE_ST = 0,
-            eUM_SAVE_ED,                    // 1
-            eUM_SAVE_EVT_APP,               // 2
-            eUM_SAVE_EVT_BTN,               // 3
-            eUM_RESET_DATA_CUT,             // 4    
-            eUM_NORMAL_POWER_ON_DATA,       // 5
-            eUM_NORMAL_POWER_OFF_DATA,      // 6
-            eUM_DEVICE_SERIAL_NUM_DATA,     // 7
-            eUM_DEVICE_PRIVATE_KEY_DATA,    // 8
-            eUM_DEVICE_PUBLIC_KEY_DATA,     // 9
+            eUM_SAVE_ED,                                    // 1
+            eUM_SAVE_EVT_APP,                               // 2
+            eUM_SAVE_EVT_BTN,                               // 3
+            eUM_RESET_DATA_CUT,                             // 4    
+            eUM_NORMAL_POWER_ON_DATA,                       // 5
+            eUM_NORMAL_POWER_OFF_DATA,                      // 6
+            eUM_DEVICE_SERIAL_NUM_DATA,                     // 7
+            eUM_DEVICE_PRIVATE_KEY_DATA,                    // 8
+            eUM_DEVICE_PUBLIC_KEY_DATA,                     // 9
+            eUM_DEVICE_BLOCK_ERASE_PAGE_INDEX_DATA,         // 10
             USER_MARK_SAVE_NUM_MAX,
         }
 
@@ -151,6 +148,8 @@ namespace Huinno_Downloader
         /// </summary>
         //////////////////////////////////////////////////
         const int USER_MARK_SIZE = 32;
+        const int USER_HEADER_SIZE = 32;
+        const int ECG_BLOCK_SIZE = 60;
         const int MEM_INIT_VAL = 0xFF;
 
         const int MEM_4G_PAGE_FULL_SZ = 4096;
@@ -185,7 +184,6 @@ namespace Huinno_Downloader
 
             m_loginId = m_form_login.LoginId;
             m_loginPw = m_form_login.LoginPw;
-         
 
             //
             InitializeComponent();
@@ -476,7 +474,6 @@ namespace Huinno_Downloader
             ControlProgressBar(progressBar1, 0);
             ControlLabel(LB_ProgVal, "0");
 
-            //
             int iRetGetDeviceInfo = getDeviceInfo();
             if (iRetGetDeviceInfo < 0)
             {
@@ -495,6 +492,7 @@ namespace Huinno_Downloader
                     + "." + m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] 
                     + "]");
             }
+
             setButtonEnabledUI(false);
 
             timer_logout.Stop();
@@ -582,6 +580,7 @@ namespace Huinno_Downloader
                 string genTime = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
                 m_resFileName = genTime + "_" + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
                 m_resFilePath = m_curSavePath + "\\" + m_resFileName;
+                m_resFilePathUserMarkExp = m_resFilePath + strFileExp;
             }
             else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
             {
@@ -590,6 +589,7 @@ namespace Huinno_Downloader
                             - m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] + 1);
 
                 strFileExp = ".bin";
+                m_resFilePathECGExp = m_resFilePath + strFileExp;
             }
 
             // send command to get data
@@ -628,6 +628,9 @@ namespace Huinno_Downloader
                 if (m_stopThd_2nd == true)
                     break;
             }
+
+            ExtractOutputFromFile(m_resFilePath);
+
             ControlTextBox(TB_LogMsg, "Succeed to download.: HEMP_" + m_curSerialName + Environment.NewLine);
 
 
@@ -711,11 +714,14 @@ namespace Huinno_Downloader
             // convert result file
             if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
             {
+#if false
                 ExtractUserMarkFromFile(m_resFilePathExp);
+
                 if (!m_dev)
                 {
                     deleteFile(m_resFilePathExp, "_parse.csv");
                 }
+#endif
 
                 m_downMode = DOWN_MODE_T.DOWN_MODE_ECGDATA;
 
@@ -723,11 +729,13 @@ namespace Huinno_Downloader
             }
             else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
             {
+#if false
                 ConvertEcgData(m_resFilePathExp);
                 if (!m_dev)
                 {
                 //    deleteFile(m_resFilePathExp, "_conv.bin");
                 }
+#endif
                 m_downMode = DOWN_MODE_T.DOWN_MODE_USRMARK;
 
                 m_stopThd_2nd = true;
@@ -975,7 +983,7 @@ namespace Huinno_Downloader
                 int id = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
                 int page_idx = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
                 int page_pos = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
-                USER_MARK_T type = (USER_MARK_T)(um[28]);
+                USER_MARK_SAVE_T type = (USER_MARK_SAVE_T)(um[28]);
 
                 // increase count
                 rCnt += USER_MARK_SIZE;
@@ -985,7 +993,7 @@ namespace Huinno_Downloader
                 int pos = (page_idx - 64) * MEM_PAGE_SZ + page_pos;
 
                 // get info. (pairing start)
-                if (type== USER_MARK_T.USER_MARK_PAIRING_ST)
+                if (type== USER_MARK_SAVE_T.eUM_SAVE_ST)
                 {
                     //if(m_pairStTime == -1)
                     {
@@ -1072,6 +1080,279 @@ namespace Huinno_Downloader
             }
             fs_um.Close();
             Console.WriteLine(String.Format("total {0} ", rCnt / USER_MARK_SIZE));
+        }
+
+        private void ExtractOutputFromFile(string filePath)
+        {
+            /**********************************************************************
+              *  Exract User Mark
+              **********************************************************************/
+
+            byte[] fileData = File.ReadAllBytes(m_resFilePathUserMarkExp);
+
+#if USE_DEBUG
+            StreamWriter fs_um = new StreamWriter(filePath + "_usermark_debug.csv");
+#endif
+
+            // ready to write file
+            m_fs = new FileStream(filePath + "_usermark_conv.bin", FileMode.CreateNew, FileAccess.Write);
+            m_bw = new BinaryWriter(m_fs);
+
+            int pageCnt = fileData.Length / MEM_PAGE_SZ;
+            int rCnt = 0;
+            int pCnt = 0;
+            int usermarkNum = 0;
+            int timestampNum = 0;
+
+            // init
+            string msg_line = "";
+            m_pairStTime = -1;
+
+            int time, update, id, page_idx, page_pos, pos, posAdj;
+
+            byte[] patch_publicKey = new byte[16];
+            byte[] activationTime = new byte[5];
+            byte[] symKey = new byte[4];
+
+            //Parse user mark data
+            while (pCnt < pageCnt)
+            {
+                byte[] um = new byte[USER_MARK_SIZE];
+                Array.Copy(fileData, rCnt, um, 0, USER_MARK_SIZE);
+
+                if (um[0] == MEM_INIT_VAL && um[1] == MEM_INIT_VAL && um[2] == MEM_INIT_VAL && um[3] == MEM_INIT_VAL)
+                    break;
+
+                //mask type
+                USER_MARK_SAVE_T type = (USER_MARK_SAVE_T)(um[28]);  
+                
+                if(type == USER_MARK_SAVE_T.eUM_DEVICE_SERIAL_NUM_DATA || type == USER_MARK_SAVE_T.eUM_DEVICE_PRIVATE_KEY_DATA 
+                    || type == USER_MARK_SAVE_T.eUM_DEVICE_PUBLIC_KEY_DATA || type == USER_MARK_SAVE_T.eUM_DEVICE_BLOCK_ERASE_PAGE_INDEX_DATA)
+                {
+                    if (type == USER_MARK_SAVE_T.eUM_DEVICE_PUBLIC_KEY_DATA)
+                    {
+                        Array.Copy(fileData, rCnt, patch_publicKey, 0, 16);
+                        //MessageBox.Show("Receive public key", "Confirm", MessageBoxButtons.OK);
+                    }
+
+                    if (type == USER_MARK_SAVE_T.eUM_DEVICE_SERIAL_NUM_DATA)
+                    {
+                        Array.Copy(fileData, rCnt, m_productNameByte, 0, 13);
+                    }
+                }
+                else
+                {
+                    time = um[0] + (um[1] << 8) + (um[2] << 16) + (um[3] << 24) + (um[4] << 32);
+                    update = um[15];
+                    id = um[16] + (um[17] << 8) + (um[18] << 16) + (um[19] << 24);
+                    page_idx = um[20] + (um[21] << 8) + (um[22] << 16) + (um[23] << 24);
+                    page_pos = (um[24] + (um[25] << 8) + (um[26] << 16) + (um[27] << 24));
+
+                    pos = (page_idx - 64) * MEM_PAGE_SZ + page_pos;
+
+                    if (type == USER_MARK_SAVE_T.eUM_SAVE_ST) 
+                    {
+                        //copy activation time
+                        //Array.Copy(um, 0, activationTime, 0, 5);
+                        activationTime[0] = um[4];
+                        activationTime[1] = um[3];
+                        activationTime[2] = um[2];
+                        activationTime[3] = um[1];
+                        activationTime[4] = um[0];
+
+                        //copy symKey
+                        Array.Copy(um, 6, symKey, 0, 4);
+                    }
+
+                    if (m_dev)
+                    {
+                        posAdj = pos - m_pairStPos;
+
+                        msg_line += String.Format("{0},{1},{2},{3},{4},{5},{6}" + Environment.NewLine, id, (int)type, time, page_idx, page_pos, posAdj, update);
+                        //Console.WriteLine(msg_line);
+                    }
+                    else
+                    {
+                        msg_line += String.Format("{0},{1},{2},{3},{4}" + Environment.NewLine, id, time, (int)type, page_idx, page_pos);
+                    }
+
+#if USE_DEBUG
+                    //write user mark to test file
+                    fs_um.Write(msg_line);
+#endif
+
+                    // write user mark to output file
+                    m_bw.Write(um, 0, USER_MARK_SIZE); 
+
+                    msg_line = "";
+
+                    usermarkNum++;
+                }
+
+                // increase count
+                rCnt += USER_MARK_SIZE;
+                if (rCnt % MEM_PAGE_SZ == 0)
+                    pCnt++;
+            }
+
+            // write public key to output file
+            m_bw.Write(patch_publicKey, 0, 16);
+
+#if USE_DEBUG
+            //close user mark csv file
+            fs_um.Close();
+#endif
+
+            //close usermark binary output file
+            m_bw.Close();
+
+            /**********************************************************************
+              *  Exract ECG
+              **********************************************************************/
+
+            // ready to write file
+            m_fs = new FileStream(filePath + "_ecg_conv.bin", FileMode.CreateNew, FileAccess.Write);
+            m_bw = new BinaryWriter(m_fs);
+
+            //m_fs = new FileStream(filePath + "_output.bin", FileMode.CreateNew, FileAccess.Write);
+            //m_bw = new BinaryWriter(m_fs);
+
+            byte[] fileData2 = File.ReadAllBytes(m_resFilePathECGExp);
+
+#if USE_DEBUG
+            StreamWriter fs_um2 = new StreamWriter(filePath + "_ecg_debug.csv");
+#endif
+
+            pageCnt = fileData2.Length / MEM_PAGE_SZ;
+            rCnt = 0;
+            pCnt = 0;
+
+            byte[] timeSyncArray = new byte[64*2048];
+
+            //Parse ECG data
+            while (pCnt < pageCnt)
+            {
+                byte[] ecg = new byte[ECG_BLOCK_SIZE];
+                Array.Copy(fileData2, (pCnt * MEM_PAGE_SZ) + rCnt, ecg, 0, ECG_BLOCK_SIZE);
+
+                if (ecg[0] == MEM_INIT_VAL && ecg[1] == MEM_INIT_VAL && ecg[2] == MEM_INIT_VAL && ecg[3] == MEM_INIT_VAL)
+                    break;
+
+                //write ecg data to output file
+                m_bw.Write(ecg, 0, ECG_BLOCK_SIZE); 
+
+                // increase count
+                rCnt += ECG_BLOCK_SIZE;
+                if (rCnt % MEM_PAGE_USE_SZ == 0)
+                {
+                    //save time to array
+                    Array.Copy(fileData2, (pCnt * MEM_PAGE_SZ) + rCnt, timeSyncArray, pCnt * 4, 4);
+                   
+                    msg_line += String.Format("{0}" + Environment.NewLine, (timeSyncArray[pCnt * 4] << 24) + (timeSyncArray[pCnt * 4 + 1] << 16) + (timeSyncArray[pCnt * 4 + 2] << 8) + (timeSyncArray[pCnt * 4 + 3]));
+
+#if USE_DEBUG
+                    //write ecg data to csv file for time sync test 
+                    fs_um2.Write(msg_line);
+#endif
+
+                    rCnt = 0;
+                    pCnt++;
+                    timestampNum++;
+         
+                    msg_line = "";
+                }
+            }
+
+            Console.WriteLine(String.Format("total {0} ", rCnt / USER_MARK_SIZE));
+
+            // write ecg time sync to output file
+            m_bw.Write(timeSyncArray, 0, pCnt * 4);
+
+#if USE_DEBUG
+            //close ecg csv file for test
+            fs_um2.Close();
+#endif
+
+            //close ecg binary output file
+            m_bw.Close();
+
+            /**********************************************************************
+             *  Make Header
+             **********************************************************************/
+
+            // Product Name [0:12], 13 bytes
+            Array.Copy(m_productNameByte, 0, m_EcgHeader, 0, 13);
+
+            //Unix time [13:18], 5 bytes
+            Array.Copy(activationTime, 0, m_EcgHeader, 13, 5);
+
+            // User Mark Num [18:19], 2 bytes
+            m_EcgHeader[18] = (byte)((usermarkNum >> 8) & 0xFF);
+            m_EcgHeader[19] = (byte)(usermarkNum & 0xFF);
+
+            // User Mark Size [20], 1 byte
+            m_EcgHeader[20] = (byte)USER_MARK_SIZE;
+
+            //Timestamp num [21:23], 3 bytes
+            m_EcgHeader[21] = (byte)((timestampNum >> 16) & 0xFF);
+            m_EcgHeader[22] = (byte)((timestampNum >> 8) & 0xFF);
+            m_EcgHeader[23] = (byte)(timestampNum & 0xFF);
+
+            //Nand Page Size [24:25], 2 bytes
+            m_EcgHeader[24] = (byte)((MEM_PAGE_SZ >> 8) & 0xFF);
+            m_EcgHeader[25] = (byte)(MEM_PAGE_SZ & 0xFF);
+
+            //symKey [26:29], 4 bytes
+            Array.Copy(symKey, 0, m_EcgHeader, 26, 4);
+
+            //Reserved [30:31], 2 bytes
+
+            /**********************************************************************
+             *  Make output file
+             **********************************************************************/
+
+            m_fs = new FileStream(filePath + "_output.bin", FileMode.CreateNew, FileAccess.Write);
+            m_bw = new BinaryWriter(m_fs);
+
+            //write ECG header to output file
+            m_bw.Write(m_EcgHeader, 0, 32);
+
+            // read user mark binary file 
+            byte[] usermark_temp = File.ReadAllBytes(filePath + "_usermark_conv.bin");
+
+            //write user mark binary to output file
+            m_bw.Write(usermark_temp, 0, usermark_temp.Length);
+
+            // read ecg binary file 
+            byte[] ecg_temp = File.ReadAllBytes(filePath + "_ecg_conv.bin");
+
+            //write ecg binary to output file
+            m_bw.Write(ecg_temp, 0, ecg_temp.Length);
+
+            //close output binary file
+            m_bw.Close();
+
+#if USE_DEBUG
+            //To do
+#else
+            FileInfo fileDel;
+
+            fileDel = new FileInfo(filePath + ".csv");
+            if (fileDel.Exists)
+                fileDel.Delete();
+
+            fileDel = new FileInfo(filePath + ".bin");
+            if (fileDel.Exists)
+                fileDel.Delete();
+
+            fileDel = new FileInfo(filePath + "_usermark_conv.bin");
+            if (fileDel.Exists)
+                fileDel.Delete();
+
+            fileDel = new FileInfo(filePath + "_ecg_conv.bin");
+            if (fileDel.Exists)
+                fileDel.Delete();
+#endif
         }
 
         private void  addHeaderTest(String filePath)
