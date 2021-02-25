@@ -28,130 +28,150 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.TB_ID = new System.Windows.Forms.TextBox();
-            this.TB_PW = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.BT_login = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.CB_ShowPw = new System.Windows.Forms.CheckBox();
-            this.BT_Exit = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(login_window));
+            this.pb_logo = new System.Windows.Forms.PictureBox();
+            this.tb_id = new System.Windows.Forms.TextBox();
+            this.tb_pw = new System.Windows.Forms.TextBox();
+            this.lb_pw = new RoundBorderLabel.RoundLabel();
+            this.btn_login = new ePOSOne.btnProduct.Button_WOC();
+            this.lb_id = new RoundBorderLabel.RoundLabel();
+            this.btn_minimize = new CustomButton.Border.CustomButton();
+            this.btn_exit = new CustomButton.Border.CustomButton();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_logo)).BeginInit();
             this.SuspendLayout();
             // 
-            // TB_ID
+            // pb_logo
             // 
-            this.TB_ID.Location = new System.Drawing.Point(166, 56);
-            this.TB_ID.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.TB_ID.Name = "TB_ID";
-            this.TB_ID.Size = new System.Drawing.Size(219, 32);
-            this.TB_ID.TabIndex = 0;
+            this.pb_logo.Image = ((System.Drawing.Image)(resources.GetObject("pb_logo.Image")));
+            this.pb_logo.Location = new System.Drawing.Point(225, 140);
+            this.pb_logo.Name = "pb_logo";
+            this.pb_logo.Size = new System.Drawing.Size(150, 67);
+            this.pb_logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pb_logo.TabIndex = 7;
+            this.pb_logo.TabStop = false;
             // 
-            // TB_PW
+            // tb_id
             // 
-            this.TB_PW.Location = new System.Drawing.Point(166, 101);
-            this.TB_PW.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.TB_PW.Name = "TB_PW";
-            this.TB_PW.Size = new System.Drawing.Size(219, 32);
-            this.TB_PW.TabIndex = 1;
+            this.tb_id.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tb_id.ForeColor = System.Drawing.Color.DarkGray;
+            this.tb_id.Location = new System.Drawing.Point(180, 254);
+            this.tb_id.Name = "tb_id";
+            this.tb_id.Size = new System.Drawing.Size(240, 18);
+            this.tb_id.TabIndex = 10;
+            this.tb_id.Text = "Email";
+            this.tb_id.Enter += new System.EventHandler(this.tb_id_Enter);
+            this.tb_id.Leave += new System.EventHandler(this.tb_id_Leave);
             // 
-            // label1
+            // tb_pw
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(48, 65);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 21);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "User name";
+            this.tb_pw.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tb_pw.ForeColor = System.Drawing.Color.DarkGray;
+            this.tb_pw.Location = new System.Drawing.Point(180, 306);
+            this.tb_pw.Name = "tb_pw";
+            this.tb_pw.Size = new System.Drawing.Size(240, 18);
+            this.tb_pw.TabIndex = 12;
+            this.tb_pw.Text = "Password";
+            this.tb_pw.Enter += new System.EventHandler(this.tb_pw_Enter);
+            this.tb_pw.Leave += new System.EventHandler(this.tb_pw_Leave);
             // 
-            // label2
+            // lb_pw
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(48, 110);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(92, 21);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Password";
+            this.lb_pw.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.lb_pw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lb_pw.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.lb_pw.Location = new System.Drawing.Point(160, 296);
+            this.lb_pw.Name = "lb_pw";
+            this.lb_pw.Size = new System.Drawing.Size(280, 40);
+            this.lb_pw.TabIndex = 11;
             // 
-            // BT_login
+            // btn_login
             // 
-            this.BT_login.Location = new System.Drawing.Point(402, 56);
-            this.BT_login.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.BT_login.Name = "BT_login";
-            this.BT_login.Size = new System.Drawing.Size(95, 77);
-            this.BT_login.TabIndex = 2;
-            this.BT_login.Text = "Login";
-            this.BT_login.UseVisualStyleBackColor = true;
-            this.BT_login.Click += new System.EventHandler(this.BT_login_Click);
+            this.btn_login.BorderColor = System.Drawing.Color.LightGray;
+            this.btn_login.ButtonColor = System.Drawing.Color.Blue;
+            this.btn_login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_login.Font = new System.Drawing.Font("휴먼둥근헤드라인", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_login.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.btn_login.Location = new System.Drawing.Point(225, 360);
+            this.btn_login.Name = "btn_login";
+            this.btn_login.OnHoverBorderColor = System.Drawing.Color.LightGray;
+            this.btn_login.OnHoverButtonColor = System.Drawing.Color.Blue;
+            this.btn_login.OnHoverTextColor = System.Drawing.Color.White;
+            this.btn_login.Size = new System.Drawing.Size(150, 40);
+            this.btn_login.TabIndex = 9;
+            this.btn_login.Text = "Log In";
+            this.btn_login.TextColor = System.Drawing.Color.White;
+            this.btn_login.UseVisualStyleBackColor = false;
+            this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
             // 
-            // groupBox1
+            // lb_id
             // 
-            this.groupBox1.Controls.Add(this.CB_ShowPw);
-            this.groupBox1.Controls.Add(this.TB_ID);
-            this.groupBox1.Controls.Add(this.TB_PW);
-            this.groupBox1.Controls.Add(this.BT_login);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(29, 34);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox1.Size = new System.Drawing.Size(556, 183);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Log In";
+            this.lb_id.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.lb_id.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lb_id.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.lb_id.Location = new System.Drawing.Point(160, 244);
+            this.lb_id.Name = "lb_id";
+            this.lb_id.Size = new System.Drawing.Size(280, 40);
+            this.lb_id.TabIndex = 8;
             // 
-            // CB_ShowPw
+            // btn_minimize
             // 
-            this.CB_ShowPw.AutoSize = true;
-            this.CB_ShowPw.Location = new System.Drawing.Point(148, 152);
-            this.CB_ShowPw.Name = "CB_ShowPw";
-            this.CB_ShowPw.Size = new System.Drawing.Size(172, 25);
-            this.CB_ShowPw.TabIndex = 4;
-            this.CB_ShowPw.Text = "Show password";
-            this.CB_ShowPw.UseVisualStyleBackColor = true;
-            this.CB_ShowPw.CheckedChanged += new System.EventHandler(this.CB_ShowPw_CheckedChanged);
+            this.btn_minimize.FlatAppearance.BorderSize = 0;
+            this.btn_minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_minimize.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_minimize.Location = new System.Drawing.Point(520, 0);
+            this.btn_minimize.Name = "btn_minimize";
+            this.btn_minimize.Size = new System.Drawing.Size(40, 32);
+            this.btn_minimize.TabIndex = 13;
+            this.btn_minimize.Text = "-";
+            this.btn_minimize.UseVisualStyleBackColor = true;
+            this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
             // 
-            // BT_Exit
+            // btn_exit
             // 
-            this.BT_Exit.Location = new System.Drawing.Point(491, 223);
-            this.BT_Exit.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.BT_Exit.Name = "BT_Exit";
-            this.BT_Exit.Size = new System.Drawing.Size(95, 44);
-            this.BT_Exit.TabIndex = 5;
-            this.BT_Exit.Text = "Exit";
-            this.BT_Exit.UseVisualStyleBackColor = true;
-            this.BT_Exit.Click += new System.EventHandler(this.BT_Exit_Click);
+            this.btn_exit.FlatAppearance.BorderSize = 0;
+            this.btn_exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_exit.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_exit.Location = new System.Drawing.Point(560, 0);
+            this.btn_exit.Name = "btn_exit";
+            this.btn_exit.Size = new System.Drawing.Size(40, 32);
+            this.btn_exit.TabIndex = 14;
+            this.btn_exit.Text = "x";
+            this.btn_exit.UseVisualStyleBackColor = true;
+            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
             // 
             // login_window
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(627, 327);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.ClientSize = new System.Drawing.Size(600, 540);
             this.ControlBox = false;
-            this.Controls.Add(this.BT_Exit);
-            this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.Controls.Add(this.btn_exit);
+            this.Controls.Add(this.btn_minimize);
+            this.Controls.Add(this.tb_pw);
+            this.Controls.Add(this.tb_id);
+            this.Controls.Add(this.lb_pw);
+            this.Controls.Add(this.btn_login);
+            this.Controls.Add(this.lb_id);
+            this.Controls.Add(this.pb_logo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.Name = "login_window";
-            this.Text = "[Huinno] Patch Dataloader";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            ((System.ComponentModel.ISupportInitialize)(this.pb_logo)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox TB_ID;
-        private System.Windows.Forms.TextBox TB_PW;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button BT_login;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button BT_Exit;
-        private System.Windows.Forms.CheckBox CB_ShowPw;
+        private System.Windows.Forms.PictureBox pb_logo;
+        private RoundBorderLabel.RoundLabel lb_id;
+        private ePOSOne.btnProduct.Button_WOC btn_login;
+        private System.Windows.Forms.TextBox tb_id;
+        private RoundBorderLabel.RoundLabel lb_pw;
+        private System.Windows.Forms.TextBox tb_pw;
+        private CustomButton.Border.CustomButton btn_minimize;
+        private CustomButton.Border.CustomButton btn_exit;
     }
 }

@@ -20,14 +20,17 @@ namespace Huinno_Downloader
         public login_window()
         {
             InitializeComponent();
-            
-            // check box for selecting to show password or not 
-            CB_ShowPw.Visible = false;
-            TB_PW.PasswordChar = m_PrintPwChar;
 
-            // test id & pw
-            //TB_ID.Text = "huinno";
-            //TB_PW.Text = "1234";
+            // admin id & pw
+            //tb_id.Text = "huinno";
+            //tb_pw.Text = "huinno1234";
+        }
+
+        private bool m_isAuthVer = false;
+        public bool AuthVer
+        {
+            get { return this.m_isAuthVer; }
+            set { this.m_isAuthVer = value; }
         }
 
         private bool m_loginPass = false;
@@ -77,15 +80,23 @@ namespace Huinno_Downloader
             Environment.Exit(0);
         }
 
-        private void BT_login_Click(object sender, EventArgs e)
+        private void btn_login_Click(object sender, EventArgs e)
         {
 #if true
-            string clientID = TB_ID.Text;
-            string clientSecret = TB_PW.Text;
+            string clientID = tb_id.Text;
+            string clientSecret = tb_pw.Text;
 
-            if((clientID == "huinno" && clientSecret == "huinno1234") && m_useAdminAccount) //Admin account
+            if(clientID == "Email" && clientSecret == "Password")
             {
-                MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
+                // failed to login 
+                MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+            if ((clientID == "huinno" && clientSecret == "huinno1234") && m_useAdminAccount) //Admin account
+            {
+                if (m_isAuthVer)
+                    MessageBox.Show("Succeed to login(Admin)", "Confirm", MessageBoxButtons.OK);
             }
             else 
             {
@@ -130,7 +141,8 @@ namespace Huinno_Downloader
 
                 if (returnValue.Contains("access_token"))
                 {
-                    MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
+                    if(m_isAuthVer)
+                        MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
                 }
                 else
                 {
@@ -150,8 +162,8 @@ namespace Huinno_Downloader
 
 #else
 
-            string strId = TB_ID.Text;
-            string strPw = TB_PW.Text;
+            string strId = tb_id.Text;
+            string strPw = tb_pw.Text;
 
             // process for login through web page
             if (!(strId == "huinno" && strPw == "1234"))
@@ -178,18 +190,6 @@ namespace Huinno_Downloader
 #endif
         }
 
-        private void CB_ShowPw_CheckedChanged(object sender, EventArgs e)
-        {
-            if( CB_ShowPw.Checked == true)
-            {
-                TB_PW.PasswordChar = default(char);
-            }
-            else
-            {
-                TB_PW.PasswordChar = m_PrintPwChar;
-            }
-        }
-
         private bool m_progRunning;
         public bool ProgRunning
         {
@@ -199,6 +199,55 @@ namespace Huinno_Downloader
         private void Form2_Load(object sender, EventArgs e)
         {
             m_progRunning = ProgRunning;
+        }
+
+        private void tb_id_Enter(object sender, EventArgs e)
+        {
+            if (tb_id.Text == "Email")
+                tb_id.Text = null;
+
+            tb_id.ForeColor = Color.Black;
+        }
+
+        private void tb_id_Leave(object sender, EventArgs e)
+        {
+            if (tb_id.Text == "")
+            {
+                tb_id.Text = "Email";
+                tb_id.ForeColor = Color.DarkGray;
+            }
+
+        }
+
+        private void tb_pw_Enter(object sender, EventArgs e)
+        {
+            if (tb_pw.Text == "Password")
+                tb_pw.Text = null;
+
+            tb_pw.ForeColor = Color.Black;
+            tb_pw.UseSystemPasswordChar = true;
+        }
+
+        private void tb_pw_Leave(object sender, EventArgs e)
+        {
+            if (tb_pw.Text == "")
+            {
+                tb_pw.Text = "Password";
+                tb_pw.ForeColor = Color.DarkGray;
+                tb_pw.UseSystemPasswordChar = false;
+            }
+        }
+
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+            //Exit program
+            Application.ExitThread();
+            Environment.Exit(0);
         }
     }
 }
