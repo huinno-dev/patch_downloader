@@ -78,30 +78,6 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FlatButton">
-      <HintPath>JControls\FlatButton.dll</HintPath>
-    </Reference>
-    <Reference Include="JDragControl">
-      <HintPath>JControls\JDragControl.dll</HintPath>
-    </Reference>
-    <Reference Include="JImageButton">
-      <HintPath>JControls\JImageButton.dll</HintPath>
-    </Reference>
-    <Reference Include="JMaterialTextbox">
-      <HintPath>JControls\JMaterialTextbox.dll</HintPath>
-    </Reference>
-    <Reference Include="JMetroTextBox">
-      <HintPath>JControls\JMetroTextBox.dll</HintPath>
-    </Reference>
-    <Reference Include="JTextBox">
-      <HintPath>JControls\JTextBox.dll</HintPath>
-    </Reference>
-    <Reference Include="JTextBox2">
-      <HintPath>JControls\JTextBox2.dll</HintPath>
-    </Reference>
-    <Reference Include="JThinButton">
-      <HintPath>JControls\JThinButton.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -215,5 +191,6 @@
   <ItemGroup>
     <Content Include="huinno-icon02.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
