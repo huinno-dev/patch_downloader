@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
+using Huinno_Dataloader.AlertWindow;
 
 namespace Huinno_Downloader
 {
@@ -82,14 +83,17 @@ namespace Huinno_Downloader
 
         private void btn_login_Click(object sender, EventArgs e)
         {
-#if true
             string clientID = tb_id.Text;
             string clientSecret = tb_pw.Text;
 
             if(clientID == "Email" && clientSecret == "Password")
             {
                 // failed to login 
-                MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                //MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                this.Opacity = 0.7;
+                login_fail_alert login_fail = new login_fail_alert();
+                login_fail.ShowDialog();
+                this.Opacity = 1;
                 return;
             }
 
@@ -132,7 +136,11 @@ namespace Huinno_Downloader
                 catch (Exception exception)
 #pragma warning restore 0168
                 {
-                    MessageBox.Show("There was a problem commnunicating with the server. Please try again later.", "Couldn't connect", MessageBoxButtons.OK);
+                    //MessageBox.Show("There was a problem commnunicating with the server. Please try again later.", "Couldn't connect", MessageBoxButtons.OK);
+                    this.Opacity = 0.7;
+                    connect_fail_alert connect_fail = new connect_fail_alert();
+                    connect_fail.ShowDialog();
+                    this.Opacity = 1;
                     return;
                 }
 
@@ -147,7 +155,9 @@ namespace Huinno_Downloader
                 else
                 {
                     // failed to login 
-                    MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                    //MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                    login_fail_alert login_fail = new login_fail_alert();
+                    login_fail.ShowDialog();
                     return;
                 }
             }
@@ -159,35 +169,6 @@ namespace Huinno_Downloader
 
             // close login window
             this.Close();
-
-#else
-
-            string strId = tb_id.Text;
-            string strPw = tb_pw.Text;
-
-            // process for login through web page
-            if (!(strId == "huinno" && strPw == "1234"))
-            {
-                // test case for already logged in
-                if ((strId == "huinno" && strPw == "12345"))
-                {
-                    MessageBox.Show("Already logged in another computer. Would you like to log out previous connection?", "Login Issue", MessageBoxButtons.YesNo);
-                    return;
-                }
-                // failed to login 
-                MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
-                return;
-            }
-            MessageBox.Show("Succeed to login", "Confirm", MessageBoxButtons.OK);
-
-            // if success to login --> pass parameters to main_windows
-            LoginPass = true;
-            LoginId = strId;
-            LoginPw = strPw;
-
-            // close login window
-            this.Close();
-#endif
         }
 
         private bool m_progRunning;

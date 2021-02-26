@@ -6,16 +6,16 @@ namespace ePOSOne.btnProduct
 {
     public class Button_WOC : Button
     {
-        private Color _borderColor = Color.LightGray;
-        private Color _onHoverBorderColor = Color.LightGray;
+        private Color _borderColor = Color.DarkGray;
+        private Color _onHoverBorderColor = Color.DarkGray;
         private Color _buttonColor = Color.Blue;
         private Color _onHoverButtonColor = Color.Blue;
         private Color _textColor = Color.White;
         private Color _onHoverTextColor = Color.White;
 
         private bool _isHovering;
-        private int _borderThickness = 0;
-        private int _borderThicknessByTwo = 0;
+        private int _borderThickness = 3;
+        private int _borderThicknessByTwo = 1;
 
 
         public Button_WOC()
@@ -40,8 +40,8 @@ namespace ePOSOne.btnProduct
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            Brush brush;
-#if false
+
+#if true
             Brush brush = new SolidBrush(_isHovering ? _onHoverBorderColor : _borderColor);
 
             //Border
@@ -50,8 +50,9 @@ namespace ePOSOne.btnProduct
             g.FillRectangle(brush, Height / 2, 0, Width - Height, Height);
 
             brush.Dispose();
+#else
+            Brush brush;
 #endif
-
 
             brush = new SolidBrush(_isHovering ? _onHoverButtonColor : _buttonColor);
 

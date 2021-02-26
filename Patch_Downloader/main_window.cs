@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 
 using System.Windows.Forms.DataVisualization.Charting;
+using Huinno_Dataloader.AlertWindow;
 
 namespace Huinno_Downloader
 {
@@ -171,6 +172,8 @@ namespace Huinno_Downloader
 
         login_window m_form_login = new login_window();
 
+        import_complete_alert m_import_complete = new import_complete_alert();
+
         public main_window()
         {
            
@@ -204,6 +207,7 @@ namespace Huinno_Downloader
 
             this.Text = this.Text +" ver " +  strVersionText.Substring(2,5);
 
+            m_import_complete.main_window = this;
         }
 
         delegate void TimerEventFiredDelegate();
@@ -611,6 +615,44 @@ namespace Huinno_Downloader
             m_RdSerialDataThd.Start();
         }
 
+        public void isUploadData(bool isUpload)
+        {
+            ChangeOpacity(1);
+
+            if (isUpload)
+            {
+                if (m_strCfg_uploadurl == "")
+                {
+                    MessageBox.Show(m_str_not_setup_url);
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(m_strCfg_uploadurl);
+                }
+
+                //Exit program
+                Application.ExitThread();
+                Environment.Exit(0);
+            }
+            else
+            {
+                // init flag
+                m_isProductNameSet = false;
+                m_stopThd_1st = false;
+                m_startThd_2nd = false;
+                m_stopThd_2nd = false;
+
+                // ui
+                setButtonEnabledUI(true);
+
+                // close com port
+                CloseSerial();
+                // restore baudrate 115200
+
+                timer_logout.Start();
+            }
+        }
+
         void thd_CheckReadThd()
         {
             while (true)
@@ -639,39 +681,8 @@ namespace Huinno_Downloader
             ControlProgressBar(progressBar1, val);
             ControlLabel(LB_ProgVal, val.ToString());
 
-            // proc msg box for open web page
-            if (MessageBox.Show(m_str_download_completed, m_str_download_completed_title, MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                if (m_strCfg_uploadurl == "")
-                {
-                    MessageBox.Show(m_str_not_setup_url);
-                }
-                else
-                {
-                    System.Diagnostics.Process.Start(m_strCfg_uploadurl);
-                }
-
-                //Exit program
-                Application.ExitThread();
-                Environment.Exit(0);
-            }
-            else 
-            { 
-                // init flag
-                m_isProductNameSet = false;
-                m_stopThd_1st = false;
-                m_startThd_2nd = false;
-                m_stopThd_2nd = false;
-
-                // ui
-                setButtonEnabledUI(true);
-
-                // close com port
-                CloseSerial();
-                // restore baudrate 115200
-
-                timer_logout.Start();
-            }
+            ChangeOpacity(0.7);
+            m_import_complete.ShowDialog();
         }
 
         void thd_Read()
@@ -754,6 +765,20 @@ namespace Huinno_Downloader
             if (fileRename.Exists)
             {
                 fileRename.MoveTo(filePathExp); // 이미있으면 에러
+            }
+        }
+
+        delegate void ChangeOpacityDelegate(double value);
+        public void ChangeOpacity(double value)
+        {
+            if (InvokeRequired)
+            {
+                ChangeOpacityDelegate changeOpacityDelegate = new ChangeOpacityDelegate(ChangeOpacity);
+                this.Invoke(changeOpacityDelegate, value);
+            }
+            else
+            {
+                Opacity = value;
             }
         }
 
