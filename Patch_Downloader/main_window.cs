@@ -658,7 +658,6 @@ namespace Huinno_Downloader
             while (true)
             {
                 Thread.Sleep(500);
-                Console.WriteLine(String.Format("TEST"));
                 if (m_stopThd_1st != true)
                     continue;
 
@@ -699,8 +698,9 @@ namespace Huinno_Downloader
                     Console.WriteLine(String.Format("err: {0}", rCnt));
                     continue;
                 }
-
+#if USE_DEBUG
                 Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, m_wrCnt));
+#endif
 
                 //
                 m_bw.Write(rBuf, 0, MEM_PAGE_SZ);
