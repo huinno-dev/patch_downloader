@@ -190,7 +190,7 @@ namespace Huinno_Downloader
 
             //
             InitializeComponent();
-            CB_ComPortBaudList.SelectedIndex = 0;
+            m_strCfg_baudrate = "115200";
             m_progRunning = true;
 
             initUserParams();
@@ -244,8 +244,7 @@ namespace Huinno_Downloader
         {
             // config: comport
             m_strCfg_comport = AppConfiguration.GetAppConfig("ComPortName");
-            m_strCfg_baudrate = CB_ComPortBaudList.SelectedItem.ToString();
-            //m_config_baudrate = AppConfiguration.GetAppConfig("ComPortBaud");
+            m_strCfg_baudrate = "115200";
             m_strCfg_savepath = AppConfiguration.GetAppConfig("SavePath");
             m_strCfg_uploadurl = AppConfiguration.GetAppConfig("UploadUrl");
 
@@ -263,11 +262,6 @@ namespace Huinno_Downloader
 
         void initUserUi()
         {
-            BT_LogOut.Visible = false;
-
-            // Init val
-            ControlLabel(LB_ProgVal, "0");
-
             TB_Serial_Init();
 
         }
@@ -307,29 +301,20 @@ namespace Huinno_Downloader
                     break;
                 }
             }
-            CB_ComPortBaudList.Text = m_strCfg_baudrate;
         }
 
         private void TB_Serial_Init()
         {
-            TB_Serial1.Text = "";
-            TB_Serial2.Text = "";
-            TB_Serial3.Text = "";
-            TB_Serial4.Text = "";
-            TB_Serial5.Text = "";
-            TB_Serial6.Text = "";
-            TB_Serial7.Text = "";
+            TB_DeviceSerial.Text = "";
         }
 
         private void TB_Serial_SetProductName()
         {
-            TB_Serial1.Text = m_productName[(int)PD_NAME_T.PD_NAME_HUINNO]    ;
-            TB_Serial2.Text = m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY ] ;
-            TB_Serial3.Text = m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE ] ;
-            TB_Serial4.Text = m_productName[(int)PD_NAME_T.PD_NAME_VERSION  ] ;
-            TB_Serial5.Text = m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE] ;
-            TB_Serial6.Text = m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY  ] ;
-            TB_Serial7.Text = m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM]; 
+
+            TB_DeviceSerial.Text = "   " + m_productName[(int)PD_NAME_T.PD_NAME_HUINNO] + "  " + m_productName[(int)PD_NAME_T.PD_NAME_CATEGORY] 
+                                + "  " + m_productName[(int)PD_NAME_T.PD_NAME_ASSMTYPE] + "  " + m_productName[(int)PD_NAME_T.PD_NAME_VERSION] 
+                                + "  " + m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE] + "  " + m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY] 
+                                + "  " + m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM];
         }
 
         private void BT_OpenSavePath_Click(object sender, EventArgs e)
@@ -349,16 +334,8 @@ namespace Huinno_Downloader
 
             if (!cSerialPort.isConnected)
             {
-                CB_ComPortBaudList.SelectedIndex = 0;
-                int selPortIdx = CB_ComPortNameList.SelectedIndex;
-                if (selPortIdx < 0)
-                    return;
-
-                int selBaudIdx = CB_ComPortBaudList.SelectedIndex;
-                if (selBaudIdx < 0)
-                    return;
-                 
-                int baudrate = Int32.Parse(CB_ComPortBaudList.Text);
+                m_strCfg_baudrate = "115200";
+                int baudrate = Int32.Parse(m_strCfg_baudrate);
                 string err = cSerialPort.Open(CB_ComPortNameList.Text, baudrate);
                 if( err!="OK")
                 {
@@ -366,7 +343,7 @@ namespace Huinno_Downloader
                     return;
                 }
                 AppConfiguration.SetAppConfig("ComPortName", CB_ComPortNameList.Text);
-                AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
+                AppConfiguration.SetAppConfig("ComPortBaud", m_strCfg_baudrate);
 
                 ControlButtonText(BT_ConnPort, "Disconnect");
             }
@@ -470,13 +447,22 @@ namespace Huinno_Downloader
 
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
+            //bckim test
+            /*for(int i=0; i<101; i++)
+            {
+                ControlProgressBar(PB_Progress, i);
+                Thread.Sleep(50);
+                ControlTextBox(TB_LogMsg, "Patch info.: HEMP_");
+                    
+            }*/
+            //~bckim
+
             if (!cSerialPort.isConnected)
                 return;
 
             // set ui
             setButtonEnabledUI(false);
-            ControlProgressBar(progressBar1, 0);
-            ControlLabel(LB_ProgVal, "0");
+            ControlProgressBar(PB_Progress, 0);
 
             int iRetGetDeviceInfo = getDeviceInfo();
             if (iRetGetDeviceInfo < 0)
@@ -504,9 +490,9 @@ namespace Huinno_Downloader
             // Re connect with maximum baudrate 3M
             CloseSerial();
             Thread.Sleep(2000);
-            
-            CB_ComPortBaudList.SelectedIndex = 1;
-            int baudrate = Int32.Parse(CB_ComPortBaudList.Text);
+
+            m_strCfg_baudrate = "3000000";
+            int baudrate = Int32.Parse(m_strCfg_baudrate);
             string err = cSerialPort.Open(CB_ComPortNameList.Text, baudrate);
             if (err != "OK")
             {
@@ -514,7 +500,7 @@ namespace Huinno_Downloader
                 return;
             }
             AppConfiguration.SetAppConfig("ComPortName", CB_ComPortNameList.Text);
-            AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
+            AppConfiguration.SetAppConfig("ComPortBaud", m_strCfg_baudrate);
 
             ControlButtonText(BT_ConnPort, "Disconnect");
             Thread.Sleep(2000);
@@ -617,7 +603,7 @@ namespace Huinno_Downloader
 
         public void isUploadData(bool isUpload)
         {
-            ChangeOpacity(1);
+            ControlOpacity(1);
 
             if (isUpload)
             {
@@ -677,10 +663,9 @@ namespace Huinno_Downloader
 
             // ui: progress bar
             int val = 100;
-            ControlProgressBar(progressBar1, val);
-            ControlLabel(LB_ProgVal, val.ToString());
+            ControlProgressBar(PB_Progress, val);
 
-            ChangeOpacity(0.7);
+            ControlOpacity(0.7);
             m_import_complete.ShowDialog();
         }
 
@@ -711,8 +696,7 @@ namespace Huinno_Downloader
                 if (m_wrCnt % 55 == 0)
                 {
                     int val = 100 * m_wrCnt / m_RdPageTotalCnt;
-                    ControlProgressBar(progressBar1, val);
-                    ControlLabel(LB_ProgVal, val.ToString());
+                    ControlProgressBar(PB_Progress, val);
                 }
 
                 if (m_wrCnt == m_RdPageTotalCnt)
@@ -768,12 +752,12 @@ namespace Huinno_Downloader
             }
         }
 
-        delegate void ChangeOpacityDelegate(double value);
-        public void ChangeOpacity(double value)
+        delegate void ControlOpacityDelegate(double value);
+        public void ControlOpacity(double value)
         {
             if (InvokeRequired)
             {
-                ChangeOpacityDelegate changeOpacityDelegate = new ChangeOpacityDelegate(ChangeOpacity);
+                ControlOpacityDelegate changeOpacityDelegate = new ControlOpacityDelegate(ControlOpacity);
                 this.Invoke(changeOpacityDelegate, value);
             }
             else
@@ -810,8 +794,8 @@ namespace Huinno_Downloader
             }
         }
 
-        delegate void ctrl_Invoke_progressBar(System.Windows.Forms.ProgressBar ctrl, int val);
-        public void ControlProgressBar(System.Windows.Forms.ProgressBar ctr, int val)
+        delegate void ctrl_Invoke_progressBar(CustomProgressBar.RoundProgressBar ctrl, int val);
+        public void ControlProgressBar(CustomProgressBar.RoundProgressBar ctr, int val)
         {
             if (ctr.InvokeRequired)
             {
@@ -820,7 +804,7 @@ namespace Huinno_Downloader
             }
             else
             {
-                ctr.Value = val;
+                ctr.DrawProgress(val); 
             }
         }
 
@@ -849,7 +833,7 @@ namespace Huinno_Downloader
             }
             else
             {
-                string timeHeader = DateTime.Now.ToString("[yyyy-MM-dd.HH:mm:ss] ");
+                string timeHeader = DateTime.Now.ToString("  [yyyy-MM-dd.HH:mm:ss] ");
                 ctr.Text = ctr.Text + timeHeader + textValue + Environment.NewLine;
                 ctr.SelectionStart = ctr.Text.Length;
                 ctr.ScrollToCaret();
@@ -1537,6 +1521,28 @@ namespace Huinno_Downloader
 
             //m_loginId = m_form_login.LoginId;
             //m_loginPw = m_form_login.LoginPw;
+        }
+
+        private void main_window_Load(object sender, EventArgs e)
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+            LB_Title.Text = "MEMO Patch Dataloader v"+ fileVersion.FileVersion;
+            ControlProgressBar(PB_Progress, 0);
+            TB_LogMsg.Text += Environment.NewLine;
+
+        }
+
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+            //Exit program
+            Application.ExitThread();
+            Environment.Exit(0);
         }
     }
 }

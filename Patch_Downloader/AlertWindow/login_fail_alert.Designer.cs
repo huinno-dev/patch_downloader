@@ -31,7 +31,7 @@ namespace Huinno_Dataloader.AlertWindow
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button_WOC1 = new ePOSOne.btnProduct.Button_WOC();
+            this.button_WOC1 = new CustomButton.RoundButton();
             this.SuspendLayout();
             // 
             // label1
@@ -92,6 +92,6 @@ namespace Huinno_Dataloader.AlertWindow
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private ePOSOne.btnProduct.Button_WOC button_WOC1;
+        private CustomButton.RoundButton button_WOC1;
     }
 }

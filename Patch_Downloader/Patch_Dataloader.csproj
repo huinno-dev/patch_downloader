@@ -84,6 +84,8 @@
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -106,6 +108,7 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -115,7 +118,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertWindow\import_complete_alert.cs">
@@ -136,12 +141,18 @@
     <Compile Include="AlertWindow\login_fail_alert.Designer.cs">
       <DependentUpon>login_fail_alert.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomToolbox\Button_WOC.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="cAppConfig.cs" />
     <Compile Include="cSerialPort.cs" />
     <Compile Include="CustomToolbox\CustomButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomToolbox\CustomComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomToolbox\CustomTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomToolbox\CustomProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="login_window.cs">
@@ -158,14 +169,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CustomToolbox\RoundLabel.cs">
+    <Compile Include="CustomToolbox\CustomLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="AlertWindow\import_complete_alert.resx">
       <DependentUpon>import_complete_alert.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AlertWindow\connet_fail_alert.resx">
       <DependentUpon>connet_fail_alert.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AlertWindow\login_fail_alert.resx">
       <DependentUpon>login_fail_alert.cs</DependentUpon>
@@ -176,6 +189,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="main_window.resx">
       <DependentUpon>main_window.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -218,6 +232,5 @@
   <ItemGroup>
     <Content Include="huinno-icon02.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

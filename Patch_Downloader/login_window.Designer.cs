@@ -32,11 +32,11 @@
             this.pb_logo = new System.Windows.Forms.PictureBox();
             this.tb_id = new System.Windows.Forms.TextBox();
             this.tb_pw = new System.Windows.Forms.TextBox();
-            this.lb_pw = new RoundBorderLabel.RoundLabel();
-            this.btn_login = new ePOSOne.btnProduct.Button_WOC();
-            this.lb_id = new RoundBorderLabel.RoundLabel();
-            this.btn_minimize = new CustomButton.Border.CustomButton();
-            this.btn_exit = new CustomButton.Border.CustomButton();
+            this.lb_pw = new CustomLabel.RoundLabel();
+            this.btn_login = new CustomButton.RoundButton();
+            this.lb_id = new CustomLabel.RoundLabel();
+            this.btn_minimize = new CustomButton.BorderButton();
+            this.btn_exit = new CustomButton.BorderButton();
             ((System.ComponentModel.ISupportInitialize)(this.pb_logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,12 +166,12 @@
 
         #endregion
         private System.Windows.Forms.PictureBox pb_logo;
-        private RoundBorderLabel.RoundLabel lb_id;
-        private ePOSOne.btnProduct.Button_WOC btn_login;
+        private CustomLabel.RoundLabel lb_id;
+        private CustomButton.RoundButton btn_login;
         private System.Windows.Forms.TextBox tb_id;
-        private RoundBorderLabel.RoundLabel lb_pw;
+        private CustomLabel.RoundLabel lb_pw;
         private System.Windows.Forms.TextBox tb_pw;
-        private CustomButton.Border.CustomButton btn_minimize;
-        private CustomButton.Border.CustomButton btn_exit;
+        private CustomButton.BorderButton btn_minimize;
+        private CustomButton.BorderButton btn_exit;
     }
 }

@@ -31,8 +31,8 @@ namespace Huinno_Dataloader.AlertWindow
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button_WOC2 = new ePOSOne.btnProduct.Button_WOC();
-            this.button_WOC1 = new ePOSOne.btnProduct.Button_WOC();
+            this.button_WOC2 = new CustomButton.RoundButton();
+            this.button_WOC1 = new CustomButton.RoundButton();
             this.SuspendLayout();
             // 
             // label1
@@ -56,14 +56,14 @@ namespace Huinno_Dataloader.AlertWindow
             // button_WOC2
             // 
             this.button_WOC2.BackColor = System.Drawing.Color.White;
-            this.button_WOC2.BorderColor = System.Drawing.Color.DarkGray;
+            this.button_WOC2.BorderColor = System.Drawing.Color.LightGray;
             this.button_WOC2.ButtonColor = System.Drawing.Color.White;
             this.button_WOC2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_WOC2.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button_WOC2.ForeColor = System.Drawing.Color.White;
             this.button_WOC2.Location = new System.Drawing.Point(173, 147);
             this.button_WOC2.Name = "button_WOC2";
-            this.button_WOC2.OnHoverBorderColor = System.Drawing.Color.DarkGray;
+            this.button_WOC2.OnHoverBorderColor = System.Drawing.Color.LightGray;
             this.button_WOC2.OnHoverButtonColor = System.Drawing.Color.White;
             this.button_WOC2.OnHoverTextColor = System.Drawing.Color.Black;
             this.button_WOC2.Size = new System.Drawing.Size(147, 34);
@@ -76,14 +76,14 @@ namespace Huinno_Dataloader.AlertWindow
             // button_WOC1
             // 
             this.button_WOC1.BackColor = System.Drawing.Color.White;
-            this.button_WOC1.BorderColor = System.Drawing.Color.DarkGray;
+            this.button_WOC1.BorderColor = System.Drawing.Color.LightGray;
             this.button_WOC1.ButtonColor = System.Drawing.Color.Blue;
             this.button_WOC1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_WOC1.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button_WOC1.ForeColor = System.Drawing.Color.White;
             this.button_WOC1.Location = new System.Drawing.Point(20, 147);
             this.button_WOC1.Name = "button_WOC1";
-            this.button_WOC1.OnHoverBorderColor = System.Drawing.Color.DarkGray;
+            this.button_WOC1.OnHoverBorderColor = System.Drawing.Color.LightGray;
             this.button_WOC1.OnHoverButtonColor = System.Drawing.Color.Blue;
             this.button_WOC1.OnHoverTextColor = System.Drawing.Color.White;
             this.button_WOC1.Size = new System.Drawing.Size(147, 34);
@@ -115,7 +115,7 @@ namespace Huinno_Dataloader.AlertWindow
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private ePOSOne.btnProduct.Button_WOC button_WOC1;
-        private ePOSOne.btnProduct.Button_WOC button_WOC2;
+        private CustomButton.RoundButton button_WOC1;
+        private CustomButton.RoundButton button_WOC2;
     }
 }
