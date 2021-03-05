@@ -98,10 +98,12 @@
             // 
             // TB_DeviceSerial
             // 
+            this.TB_DeviceSerial.BackColor = System.Drawing.Color.White;
             this.TB_DeviceSerial.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TB_DeviceSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_DeviceSerial.Location = new System.Drawing.Point(273, 184);
             this.TB_DeviceSerial.Name = "TB_DeviceSerial";
+            this.TB_DeviceSerial.ReadOnly = true;
             this.TB_DeviceSerial.Size = new System.Drawing.Size(349, 20);
             this.TB_DeviceSerial.TabIndex = 31;
             // 
@@ -178,7 +180,7 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_ConnPort.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_ConnPort.ButtonColor = System.Drawing.Color.Blue;
             this.BT_ConnPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_ConnPort.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -195,7 +197,7 @@
             // BT_SelSaveDir
             // 
             this.BT_SelSaveDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_SelSaveDir.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_SelSaveDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_SelSaveDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -211,7 +213,7 @@
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_OpenSavePath.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_OpenSavePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -228,7 +230,7 @@
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_StartDown.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_StartDown.ButtonColor = System.Drawing.Color.Blue;
             this.BT_StartDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_StartDown.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -276,12 +278,13 @@
             // 
             // TB_LogMsg
             // 
-            this.TB_LogMsg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.TB_LogMsg.BackColor = System.Drawing.Color.White;
             this.TB_LogMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TB_LogMsg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_LogMsg.Location = new System.Drawing.Point(27, 319);
             this.TB_LogMsg.Multiline = true;
             this.TB_LogMsg.Name = "TB_LogMsg";
+            this.TB_LogMsg.ReadOnly = true;
             this.TB_LogMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.TB_LogMsg.Size = new System.Drawing.Size(616, 273);
             this.TB_LogMsg.TabIndex = 41;
