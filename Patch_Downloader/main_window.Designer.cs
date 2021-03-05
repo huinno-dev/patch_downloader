@@ -47,10 +47,10 @@
             this.LB_SavePath = new CustomLabel.RoundLabel();
             this.LB_DeviceSerial = new CustomLabel.RoundLabel();
             this.LB_ComPortNameList = new CustomLabel.RoundLabel();
-            this.TB_LogMsg = new CustomTextBox.RoundTextBox();
-            this.LB_Progress = new CustomLabel.RoundLabel();
             this.LB_LogMsg = new CustomLabel.RoundLabel();
             this.BT_Clear = new CustomButton.RoundButton();
+            this.LB_Progress = new CustomLabel.RoundLabel();
+            this.TB_LogMsg = new CustomTextBox.RoundTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Progress)).BeginInit();
             this.SuspendLayout();
             // 
@@ -277,6 +277,38 @@
             this.LB_ComPortNameList.Size = new System.Drawing.Size(118, 33);
             this.LB_ComPortNameList.TabIndex = 37;
             // 
+            // LB_LogMsg
+            // 
+            this.LB_LogMsg.Location = new System.Drawing.Point(27, 319);
+            this.LB_LogMsg.Name = "LB_LogMsg";
+            this.LB_LogMsg.Size = new System.Drawing.Size(617, 274);
+            this.LB_LogMsg.TabIndex = 42;
+            // 
+            // BT_Clear
+            // 
+            this.BT_Clear.BackColor = System.Drawing.Color.White;
+            this.BT_Clear.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+            this.BT_Clear.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.BT_Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BT_Clear.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_Clear.ForeColor = System.Drawing.Color.White;
+            this.BT_Clear.Location = new System.Drawing.Point(513, 550);
+            this.BT_Clear.Margin = new System.Windows.Forms.Padding(2);
+            this.BT_Clear.Name = "BT_Clear";
+            this.BT_Clear.Size = new System.Drawing.Size(103, 34);
+            this.BT_Clear.TabIndex = 43;
+            this.BT_Clear.Text = "Clear";
+            this.BT_Clear.TextColor = System.Drawing.Color.Black;
+            this.BT_Clear.UseVisualStyleBackColor = false;
+            this.BT_Clear.Click += new System.EventHandler(this.BT_Clear_Click);
+            // 
+            // LB_Progress
+            // 
+            this.LB_Progress.Location = new System.Drawing.Point(29, 255);
+            this.LB_Progress.Name = "LB_Progress";
+            this.LB_Progress.Size = new System.Drawing.Size(511, 36);
+            this.LB_Progress.TabIndex = 40;
+            // 
             // TB_LogMsg
             // 
             this.TB_LogMsg.BackColor = System.Drawing.Color.White;
@@ -289,37 +321,6 @@
             this.TB_LogMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.TB_LogMsg.Size = new System.Drawing.Size(616, 273);
             this.TB_LogMsg.TabIndex = 41;
-            // 
-            // LB_Progress
-            // 
-            this.LB_Progress.Location = new System.Drawing.Point(29, 255);
-            this.LB_Progress.Name = "LB_Progress";
-            this.LB_Progress.Size = new System.Drawing.Size(511, 36);
-            this.LB_Progress.TabIndex = 40;
-            // 
-            // LB_LogMsg
-            // 
-            this.LB_LogMsg.Location = new System.Drawing.Point(27, 319);
-            this.LB_LogMsg.Name = "LB_LogMsg";
-            this.LB_LogMsg.Size = new System.Drawing.Size(617, 274);
-            this.LB_LogMsg.TabIndex = 42;
-            // 
-            // BT_Clear
-            // 
-            this.BT_Clear.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
-            this.BT_Clear.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_Clear.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BT_Clear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_Clear.Location = new System.Drawing.Point(513, 550);
-            this.BT_Clear.Margin = new System.Windows.Forms.Padding(2);
-            this.BT_Clear.Name = "BT_Clear";
-            this.BT_Clear.Size = new System.Drawing.Size(103, 34);
-            this.BT_Clear.TabIndex = 43;
-            this.BT_Clear.Text = "Clear";
-            this.BT_Clear.TextColor = System.Drawing.Color.Black;
-            this.BT_Clear.UseVisualStyleBackColor = false;
-            this.BT_Clear.Click += new System.EventHandler(this.BT_Clear_Click);
             // 
             // main_window
             // 
@@ -382,11 +383,11 @@
         private CustomButton.BorderButton btn_minimize;
         private CustomLabel.RoundLabel LB_ComPortNameList;
         private CustomComboBox.BorderCombobox CB_ComPortNameList;
-        private CustomLabel.RoundLabel LB_Progress;
-        private CustomTextBox.RoundTextBox TB_LogMsg;
         private CustomLabel.RoundLabel LB_LogMsg;
         private CustomProgressBar.RoundProgressBar PB_Progress;
         private CustomButton.RoundButton BT_Clear;
+        private CustomLabel.RoundLabel LB_Progress;
+        private CustomTextBox.RoundTextBox TB_LogMsg;
     }
 }
 
