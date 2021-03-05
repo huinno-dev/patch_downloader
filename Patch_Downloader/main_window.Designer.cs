@@ -279,7 +279,7 @@
             // 
             // TB_LogMsg
             // 
-            this.TB_LogMsg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.TB_LogMsg.BackColor = System.Drawing.Color.White;
             this.TB_LogMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TB_LogMsg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_LogMsg.Location = new System.Drawing.Point(27, 319);
