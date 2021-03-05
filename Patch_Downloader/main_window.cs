@@ -76,6 +76,26 @@ namespace Huinno_Downloader
         int m_wrCnt = 0;
         UInt32 uintqBSymKey;
 
+        public enum CONTROL_LAYOUT_TYPE_T
+        {
+            //Button
+            BTN_BROWSE = 0,   // 0
+            BTN_OPEN,         // 1
+            BTN_CONNECT,       // 2
+            BTN_IMPORT,      // 3
+
+            //TextBox
+            TB_SERIAL = 20,      // 20
+
+            //Label
+            LB_COM_PORT = 30,    //30
+
+            //ComboBox
+            CB_COM_PORT = 50,   //50
+
+            UART_RX_CMD_NUM_MAX
+        }
+
         public enum UART_RX_CMD_T
         {
             URX_CMD_SET_PRODUCT_NAME = 0,   // 0
@@ -439,22 +459,30 @@ namespace Huinno_Downloader
 
         private void setButtonEnabledUI(bool bEnable)
         {
-            ControlButton(BT_StartDown, bEnable);
-            ControlButton(BT_ConnPort, bEnable);
-            ControlButton(BT_SelSaveDir, bEnable);
-            ControlTextBox_Enable(TB_SavePath, bEnable);
+            //button
+            CustomRoundButton(BT_StartDown, CONTROL_LAYOUT_TYPE_T.BTN_IMPORT, bEnable);
+            CustomRoundButton(BT_ConnPort, CONTROL_LAYOUT_TYPE_T.BTN_CONNECT, bEnable);
+            CustomRoundButton(BT_SelSaveDir, CONTROL_LAYOUT_TYPE_T.BTN_BROWSE, bEnable);
+
+            //serial port
+            CustomComboBox(CB_ComPortNameList, CONTROL_LAYOUT_TYPE_T.CB_COM_PORT, bEnable);
+            CustomLabel(LB_ComPortNameList, CONTROL_LAYOUT_TYPE_T.LB_COM_PORT, bEnable);
         }
 
         private void BT_StartDown_Click(object sender, EventArgs e)
         {
             //bckim test
-            /*for(int i=0; i<101; i++)
+            Console.WriteLine(String.Format("(1) isEnabled: {0}", BT_StartDown.Enabled));
+            setButtonEnabledUI(false);
+            for (int i=0; i<101; i++)
             {
                 ControlProgressBar(PB_Progress, i);
                 Thread.Sleep(50);
                 ControlTextBox(TB_LogMsg, "Patch info.: HEMP_");
                     
-            }*/
+            }
+            Console.WriteLine(String.Format("(2) isEnabled: {0}", BT_StartDown.Enabled));
+            setButtonEnabledUI(true);
             //~bckim
 
             if (!cSerialPort.isConnected)
@@ -794,6 +822,64 @@ namespace Huinno_Downloader
             }
         }
 
+        delegate void ctrl_Invoke_RoundButton(CustomButton.RoundButton ctrl, CONTROL_LAYOUT_TYPE_T type, bool enable);
+        public void CustomRoundButton(CustomButton.RoundButton ctr, CONTROL_LAYOUT_TYPE_T type, bool enable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_RoundButton CI = new ctrl_Invoke_RoundButton(CustomRoundButton);
+                ctr.Invoke(CI, ctr, enable);
+            }
+            else
+            {
+                ctr.Enabled = enable;
+
+                if (type == CONTROL_LAYOUT_TYPE_T.BTN_BROWSE)
+                {
+                    if (enable)
+                    {
+                        ctr.BorderColor = System.Drawing.Color.LightGray;
+                        ctr.TextColor = System.Drawing.Color.Black;
+                    }
+                    else
+                    { 
+                        ctr.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                        ctr.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                    }
+                }
+                else if(type == CONTROL_LAYOUT_TYPE_T.BTN_IMPORT)
+                {
+                    if (enable)
+                    {
+                        ctr.ButtonColor = System.Drawing.Color.Blue;
+                    }
+                    else
+                    {
+                        ctr.ButtonColor = System.Drawing.Color.FromArgb(46, ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+                    }
+                }
+                else if(type == CONTROL_LAYOUT_TYPE_T.BTN_CONNECT)
+                {
+                    if (enable)
+                    {
+                        ctr.BorderColor = System.Drawing.Color.LightGray;
+                        ctr.ButtonColor = System.Drawing.Color.Blue;
+                        ctr.TextColor = System.Drawing.Color.White;
+                        ctr.Text = "Connect";
+                    }
+                    else
+                    {
+                        ctr.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                        ctr.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+                        ctr.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                        ctr.Text = "Disconnect";
+                    }
+                }
+            }
+
+            ctr.Refresh();
+        }
+
         delegate void ctrl_Invoke_progressBar(CustomProgressBar.RoundProgressBar ctrl, int val);
         public void ControlProgressBar(CustomProgressBar.RoundProgressBar ctr, int val)
         {
@@ -806,6 +892,34 @@ namespace Huinno_Downloader
             {
                 ctr.DrawProgress(val); 
             }
+        }
+
+        delegate void ctrl_Invoke_CustomComboBox(CustomComboBox.BorderCombobox ctrl, CONTROL_LAYOUT_TYPE_T type, bool enable);
+        public void CustomComboBox(CustomComboBox.BorderCombobox ctr, CONTROL_LAYOUT_TYPE_T type, bool enable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_CustomComboBox CI = new ctrl_Invoke_CustomComboBox(CustomComboBox);
+                ctr.Invoke(CI, ctr, enable);
+            }
+            else
+            {
+                ctr.Enabled = enable;
+
+                if (type == CONTROL_LAYOUT_TYPE_T.CB_COM_PORT)
+                {
+                    if (enable)
+                    {
+                        ctr.ForeColor = System.Drawing.Color.Black;
+                    }
+                    else
+                    {
+                        ctr.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                    }
+                }
+            }
+
+            ctr.Refresh();
         }
 
         delegate void ctrl_Invoke_Label(System.Windows.Forms.Label ctrl, string str);
@@ -821,6 +935,34 @@ namespace Huinno_Downloader
                 string strVal = str + "%";
                 ctr.Text = strVal;
             }
+        }
+
+        delegate void ctrl_Invoke_CustomLabel(CustomLabel.RoundLabel ctrl, CONTROL_LAYOUT_TYPE_T type, bool enable);
+        public void CustomLabel(CustomLabel.RoundLabel ctr, CONTROL_LAYOUT_TYPE_T type, bool enable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_CustomLabel CI = new ctrl_Invoke_CustomLabel(CustomLabel);
+                ctr.Invoke(CI, ctr, enable);
+            }
+            else
+            {
+                ctr.Enabled = enable;
+
+                if (type == CONTROL_LAYOUT_TYPE_T.LB_COM_PORT)
+                {
+                    if (enable)
+                    {
+                        ctr.borderColor = Color.LightGray;
+                    }
+                    else
+                    {
+                        ctr.borderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+                    }
+                }
+            }
+
+            ctr.Refresh();
         }
 
         delegate void ctrl_Invoke(System.Windows.Forms.TextBox ctrl, string text);

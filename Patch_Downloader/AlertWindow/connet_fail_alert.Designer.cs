@@ -54,20 +54,14 @@ namespace Huinno_Dataloader.AlertWindow
             // button_WOC1
             // 
             this.button_WOC1.BackColor = System.Drawing.Color.White;
-            this.button_WOC1.BorderColor = System.Drawing.Color.LightGray;
-            this.button_WOC1.ButtonColor = System.Drawing.Color.Blue;
             this.button_WOC1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_WOC1.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button_WOC1.ForeColor = System.Drawing.Color.White;
             this.button_WOC1.Location = new System.Drawing.Point(167, 147);
-            this.button_WOC1.Name = "button_WOC1";
-            this.button_WOC1.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.button_WOC1.OnHoverButtonColor = System.Drawing.Color.Blue;
-            this.button_WOC1.OnHoverTextColor = System.Drawing.Color.White;
+            this.button_WOC1.Name = "button_WOC1";        
             this.button_WOC1.Size = new System.Drawing.Size(147, 34);
             this.button_WOC1.TabIndex = 2;
             this.button_WOC1.Text = "OK";
-            this.button_WOC1.TextColor = System.Drawing.Color.White;
             this.button_WOC1.UseVisualStyleBackColor = false;
             this.button_WOC1.Click += new System.EventHandler(this.button_WOC1_Click);
             // 

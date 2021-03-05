@@ -85,21 +85,15 @@
             this.lb_pw.TabIndex = 11;
             // 
             // btn_login
-            // 
-            this.btn_login.BorderColor = System.Drawing.Color.LightGray;
-            this.btn_login.ButtonColor = System.Drawing.Color.Blue;
+            //             
             this.btn_login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_login.Font = new System.Drawing.Font("휴먼둥근헤드라인", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btn_login.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.btn_login.Location = new System.Drawing.Point(225, 360);
-            this.btn_login.Name = "btn_login";
-            this.btn_login.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.btn_login.OnHoverButtonColor = System.Drawing.Color.Blue;
-            this.btn_login.OnHoverTextColor = System.Drawing.Color.White;
+            this.btn_login.Name = "btn_login";           
             this.btn_login.Size = new System.Drawing.Size(150, 40);
             this.btn_login.TabIndex = 9;
-            this.btn_login.Text = "Log In";
-            this.btn_login.TextColor = System.Drawing.Color.White;
+            this.btn_login.Text = "Log In";           
             this.btn_login.UseVisualStyleBackColor = false;
             this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
             // 

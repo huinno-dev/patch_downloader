@@ -137,12 +137,15 @@
             // 
             // CB_ComPortNameList
             // 
+            this.CB_ComPortNameList.BackColor = System.Drawing.Color.White;
             this.CB_ComPortNameList.BorderColor = System.Drawing.Color.White;
+            this.CB_ComPortNameList.ForeColor = System.Drawing.Color.Black;
             this.CB_ComPortNameList.FormattingEnabled = true;
             this.CB_ComPortNameList.Location = new System.Drawing.Point(40, 174);
             this.CB_ComPortNameList.Name = "CB_ComPortNameList";
-            this.CB_ComPortNameList.Size = new System.Drawing.Size(94, 23);
+            this.CB_ComPortNameList.Size = new System.Drawing.Size(86, 23);
             this.CB_ComPortNameList.TabIndex = 38;
+            this.CB_ComPortNameList.Text = "test";
             // 
             // btn_exit
             // 
@@ -172,7 +175,6 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_ConnPort.BorderColor = System.Drawing.Color.LightGray;
             this.BT_ConnPort.ButtonColor = System.Drawing.Color.Blue;
             this.BT_ConnPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -180,9 +182,6 @@
             this.BT_ConnPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_ConnPort.Location = new System.Drawing.Point(148, 169);
             this.BT_ConnPort.Name = "BT_ConnPort";
-            this.BT_ConnPort.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.BT_ConnPort.OnHoverButtonColor = System.Drawing.Color.Blue;
-            this.BT_ConnPort.OnHoverTextColor = System.Drawing.Color.White;
             this.BT_ConnPort.Size = new System.Drawing.Size(89, 36);
             this.BT_ConnPort.TabIndex = 30;
             this.BT_ConnPort.Text = "Connect";
@@ -198,42 +197,34 @@
             this.BT_SelSaveDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_SelSaveDir.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.BT_SelSaveDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_SelSaveDir.Location = new System.Drawing.Point(554, 96);
-            this.BT_SelSaveDir.Margin = new System.Windows.Forms.Padding(2);
+            this.BT_SelSaveDir.Location = new System.Drawing.Point(460, 96);
             this.BT_SelSaveDir.Name = "BT_SelSaveDir";
-            this.BT_SelSaveDir.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.BT_SelSaveDir.OnHoverButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_SelSaveDir.OnHoverTextColor = System.Drawing.Color.Black;
             this.BT_SelSaveDir.Size = new System.Drawing.Size(89, 34);
-            this.BT_SelSaveDir.TabIndex = 29;
-            this.BT_SelSaveDir.Text = "Open";
+            this.BT_SelSaveDir.TabIndex = 27;
+            this.BT_SelSaveDir.Text = "Browse";
             this.BT_SelSaveDir.TextColor = System.Drawing.Color.Black;
             this.BT_SelSaveDir.UseVisualStyleBackColor = false;
-            this.BT_SelSaveDir.Click += new System.EventHandler(this.BT_OpenSavePath_Click);
+            this.BT_SelSaveDir.Click += new System.EventHandler(this.BT_SelSaveDir_Click);
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.BorderColor = System.Drawing.Color.LightGray;
             this.BT_OpenSavePath.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_OpenSavePath.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.BT_OpenSavePath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_OpenSavePath.Location = new System.Drawing.Point(460, 96);
+            this.BT_OpenSavePath.Location = new System.Drawing.Point(554, 96);
+            this.BT_OpenSavePath.Margin = new System.Windows.Forms.Padding(2);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
-            this.BT_OpenSavePath.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.BT_OpenSavePath.OnHoverButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_OpenSavePath.OnHoverTextColor = System.Drawing.Color.Black;
             this.BT_OpenSavePath.Size = new System.Drawing.Size(89, 34);
-            this.BT_OpenSavePath.TabIndex = 27;
-            this.BT_OpenSavePath.Text = "Browse";
+            this.BT_OpenSavePath.TabIndex = 29;
+            this.BT_OpenSavePath.Text = "Open";
             this.BT_OpenSavePath.TextColor = System.Drawing.Color.Black;
             this.BT_OpenSavePath.UseVisualStyleBackColor = false;
-            this.BT_OpenSavePath.Click += new System.EventHandler(this.BT_SelSaveDir_Click);
+            this.BT_OpenSavePath.Click += new System.EventHandler(this.BT_OpenSavePath_Click);
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_StartDown.BorderColor = System.Drawing.Color.LightGray;
             this.BT_StartDown.ButtonColor = System.Drawing.Color.Blue;
             this.BT_StartDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -241,9 +232,6 @@
             this.BT_StartDown.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_StartDown.Location = new System.Drawing.Point(554, 255);
             this.BT_StartDown.Name = "BT_StartDown";
-            this.BT_StartDown.OnHoverBorderColor = System.Drawing.Color.LightGray;
-            this.BT_StartDown.OnHoverButtonColor = System.Drawing.Color.Blue;
-            this.BT_StartDown.OnHoverTextColor = System.Drawing.Color.White;
             this.BT_StartDown.Size = new System.Drawing.Size(89, 36);
             this.BT_StartDown.TabIndex = 32;
             this.BT_StartDown.Text = "Import";
@@ -285,7 +273,8 @@
             // 
             // TB_LogMsg
             // 
-            this.TB_LogMsg.BackColor = System.Drawing.Color.White;
+            this.TB_LogMsg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.TB_LogMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TB_LogMsg.Font = new System.Drawing.Font("돋움체", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.TB_LogMsg.Location = new System.Drawing.Point(27, 319);
             this.TB_LogMsg.Multiline = true;
@@ -313,7 +302,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.ClientSize = new System.Drawing.Size(668, 612);
+            this.ClientSize = new System.Drawing.Size(674, 619);
             this.ControlBox = false;
             this.Controls.Add(this.PB_Progress);
             this.Controls.Add(this.CB_ComPortNameList);

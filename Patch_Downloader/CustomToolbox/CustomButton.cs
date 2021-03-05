@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CustomButton
@@ -27,123 +28,124 @@ namespace CustomButton
 
     public class RoundButton : Button
     {
-        private Color _borderColor = Color.LightGray;
-        private Color _onHoverBorderColor = Color.LightGray;
-        private Color _buttonColor = Color.Blue;
-        private Color _onHoverButtonColor = Color.Blue;
-        private Color _textColor = Color.White;
-        private Color _onHoverTextColor = Color.White;
+        public int cornerRadius = 30; //라운드 너비
+        public int borderWidth = 1;//외곽선 두께
 
-        private bool _isHovering;
-        private int _borderThickness = 3;
-        private int _borderThicknessByTwo = 1;
+        private Color buttonColor = Color.Blue;//버튼 색상
+        private Color textColor = Color.White;//글자 색상
+        private Color borderColor = Color.LightGray;//외곽선 색상
 
+        public bool isFillLeftTop = false;//왼쪽위 사각으로 채우기(라운드 적용X)
+        public bool isFillRightTop = false;//오른쪽위 사각으로 채우기(라운드 적용X)
+        public bool isFillLeftBtm = false;//왼쪽아래 사각으로 채우기(라운드 적용X)
+        public bool isFillRightBtm = false;//오른쪽아래 사각으로 채우기(라운드 적용X)
+
+        //int diminisher = 1;
 
         public RoundButton()
         {
-            DoubleBuffered = true;
-            MouseEnter += (sender, e) =>
-            {
-                _isHovering = false;
-                Invalidate();
-            };
-            MouseLeave += (sender, e) =>
-            {
-                _isHovering = false;
-                Invalidate();
-            };
+            this.DoubleBuffered = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Graphics g = e.Graphics;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            Brush brush = new SolidBrush(_isHovering ? _onHoverBorderColor : _borderColor);
-
-            //Border
-            g.FillEllipse(brush, 0, 0, Height, Height);
-            g.FillEllipse(brush, Width - Height, 0, Height, Height);
-            g.FillRectangle(brush, Height / 2, 0, Width - Height, Height);
-
-            brush.Dispose();
-
-            brush = new SolidBrush(_isHovering ? _onHoverButtonColor : _buttonColor);
-
-            //Inner part. Button itself
-            g.FillEllipse(brush, _borderThicknessByTwo, _borderThicknessByTwo, Height - _borderThickness,
-                Height - _borderThickness);
-            g.FillEllipse(brush, (Width - Height) + _borderThicknessByTwo, _borderThicknessByTwo,
-                Height - _borderThickness, Height - _borderThickness);
-            g.FillRectangle(brush, Height / 2 + _borderThicknessByTwo, _borderThicknessByTwo,
-                Width - Height - _borderThickness, Height - _borderThickness);
-
-            brush.Dispose();
-            brush = new SolidBrush(_isHovering ? _onHoverTextColor : _textColor);
-
-            //Button Text
-            SizeF stringSize = g.MeasureString(Text, Font);
-            g.DrawString(Text, Font, brush, (Width - stringSize.Width) / 2, (Height - stringSize.Height) / 2);
-        }
-
-
-        public Color BorderColor
-        {
-            get => _borderColor;
-            set
+            using (var graphicsPath = _getRoundRectangle(this.ClientRectangle))
             {
-                _borderColor = value;
-                Invalidate();
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                var brush = new SolidBrush(buttonColor);
+                var pen = new Pen(borderColor, borderWidth);
+                e.Graphics.FillPath(brush, graphicsPath);
+                e.Graphics.DrawPath(pen, graphicsPath);
+
+                brush.Dispose();
+                brush = new SolidBrush(textColor);
+
+                //Button Text
+                SizeF stringSize = e.Graphics.MeasureString(Text, Font);
+                e.Graphics.DrawString(Text, Font, brush, (Width - stringSize.Width) / 2, (Height - stringSize.Height) / 2);
             }
         }
 
-        public Color OnHoverBorderColor
+        private GraphicsPath _getRoundRectangle(Rectangle rectangle)
         {
-            get => _onHoverBorderColor;
+            GraphicsPath path = new GraphicsPath();
+
+            //path.AddArc(rectangle.X, rectangle.Y, cornerRadius, cornerRadius, 180, 90);
+
+            int left = rectangle.X;
+            int top = rectangle.Y;
+            int right = rectangle.X + rectangle.Width - borderWidth;
+            int bottom = rectangle.Y + rectangle.Height - borderWidth;
+
+            if (isFillLeftTop)
+            {//좌상
+                path.AddLine(left, top + cornerRadius, left, top);
+                path.AddLine(left, top, left + cornerRadius, top);
+            }
+            else
+            {
+                path.AddArc(rectangle.X, rectangle.Y, cornerRadius, cornerRadius, 180, 90);
+            }
+            if (isFillRightTop)
+            {//우상
+                path.AddLine(right - cornerRadius, top, right, top);
+                path.AddLine(right, top, right, top + cornerRadius);
+            }
+            else
+            {
+                path.AddArc(rectangle.X + rectangle.Width - cornerRadius - borderWidth, rectangle.Y, cornerRadius, cornerRadius, 270, 90);
+            }
+            if (isFillRightBtm)
+            {//우하
+                path.AddLine(right, bottom - cornerRadius, right, bottom);
+                path.AddLine(right, bottom, right - cornerRadius, bottom);
+            }
+            else
+            {
+                path.AddArc(rectangle.X + rectangle.Width - cornerRadius - borderWidth, rectangle.Y + rectangle.Height - cornerRadius - borderWidth, cornerRadius, cornerRadius, 0, 90);
+            }
+            if (isFillLeftBtm)
+            {//좌하
+                path.AddLine(left + cornerRadius, bottom, left, bottom);
+                path.AddLine(left, bottom, left, bottom - cornerRadius);
+            }
+            else
+            {
+                path.AddArc(rectangle.X, rectangle.Y + rectangle.Height - cornerRadius - borderWidth, cornerRadius, cornerRadius, 90, 90);
+            }
+
+            path.CloseAllFigures();
+
+            return path;
+        }
+
+        public Color BorderColor
+        {
+            get => borderColor;
             set
             {
-                _onHoverBorderColor = value;
+                borderColor = value;
                 Invalidate();
             }
         }
 
         public Color ButtonColor
         {
-            get => _buttonColor;
+            get => buttonColor;
             set
             {
-                _buttonColor = value;
+                buttonColor = value;
                 Invalidate();
             }
         }
-
-        public Color OnHoverButtonColor
-        {
-            get => _onHoverButtonColor;
-            set
-            {
-                _onHoverButtonColor = value;
-                Invalidate();
-            }
-        }
-
         public Color TextColor
         {
-            get => _textColor;
+            get => textColor;
             set
             {
-                _textColor = value;
-                Invalidate();
-            }
-        }
-
-        public Color OnHoverTextColor
-        {
-            get => _onHoverTextColor;
-            set
-            {
-                _onHoverTextColor = value;
+                textColor = value;
                 Invalidate();
             }
         }

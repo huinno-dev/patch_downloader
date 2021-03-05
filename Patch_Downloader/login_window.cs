@@ -156,8 +156,10 @@ namespace Huinno_Downloader
                 {
                     // failed to login 
                     //MessageBox.Show("Failed to login. Check user name or password", "Error", MessageBoxButtons.OK);
+                    this.Opacity = 0.7;
                     login_fail_alert login_fail = new login_fail_alert();
                     login_fail.ShowDialog();
+                    this.Opacity = 1;
                     return;
                 }
             }
