@@ -232,5 +232,12 @@ namespace Huinno_Downloader
             Application.ExitThread();
             Environment.Exit(0);
         }
+
+        private void btn_exit2_Click(object sender, EventArgs e)
+        {
+            //Exit program
+            Application.ExitThread();
+            Environment.Exit(0);
+        }
     }
 }

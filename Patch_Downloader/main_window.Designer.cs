@@ -50,6 +50,7 @@
             this.TB_LogMsg = new CustomTextBox.RoundTextBox();
             this.LB_Progress = new CustomLabel.RoundLabel();
             this.LB_LogMsg = new CustomLabel.RoundLabel();
+            this.BT_Clear = new CustomButton.RoundButton();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Progress)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,9 +61,9 @@
             this.label1.Location = new System.Drawing.Point(25, 147);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 20);
+            this.label1.Size = new System.Drawing.Size(77, 20);
             this.label1.TabIndex = 19;
-            this.label1.Text = "Serial Port";
+            this.label1.Text = "COM Port";
             // 
             // label2
             // 
@@ -71,9 +72,9 @@
             this.label2.Location = new System.Drawing.Point(257, 147);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(126, 20);
+            this.label2.Size = new System.Drawing.Size(85, 20);
             this.label2.TabIndex = 20;
-            this.label2.Text = "Device Serial No.";
+            this.label2.Text = "Patch Info.";
             // 
             // label3
             // 
@@ -82,9 +83,9 @@
             this.label3.Location = new System.Drawing.Point(26, 70);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(97, 20);
+            this.label3.Size = new System.Drawing.Size(131, 20);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Save Files To";
+            this.label3.Text = "Path to Save Files";
             // 
             // TB_SavePath
             // 
@@ -98,10 +99,12 @@
             // 
             // TB_DeviceSerial
             // 
+            this.TB_DeviceSerial.BackColor = System.Drawing.Color.White;
             this.TB_DeviceSerial.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TB_DeviceSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_DeviceSerial.Location = new System.Drawing.Point(273, 184);
             this.TB_DeviceSerial.Name = "TB_DeviceSerial";
+            this.TB_DeviceSerial.ReadOnly = true;
             this.TB_DeviceSerial.Size = new System.Drawing.Size(349, 20);
             this.TB_DeviceSerial.TabIndex = 31;
             // 
@@ -112,7 +115,7 @@
             this.LB_Import.Name = "LB_Import";
             this.LB_Import.Size = new System.Drawing.Size(125, 19);
             this.LB_Import.TabIndex = 33;
-            this.LB_Import.Text = "Import Data";
+            this.LB_Import.Text = "Download Data";
             // 
             // LB_Title
             // 
@@ -178,7 +181,7 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_ConnPort.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_ConnPort.ButtonColor = System.Drawing.Color.Blue;
             this.BT_ConnPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_ConnPort.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -195,40 +198,40 @@
             // BT_SelSaveDir
             // 
             this.BT_SelSaveDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_SelSaveDir.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_SelSaveDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_SelSaveDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_SelSaveDir.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_SelSaveDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_SelSaveDir.Location = new System.Drawing.Point(460, 96);
             this.BT_SelSaveDir.Name = "BT_SelSaveDir";
             this.BT_SelSaveDir.Size = new System.Drawing.Size(89, 34);
             this.BT_SelSaveDir.TabIndex = 27;
-            this.BT_SelSaveDir.Text = "Browse";
+            this.BT_SelSaveDir.Text = "Select\r\nFolder";
             this.BT_SelSaveDir.TextColor = System.Drawing.Color.Black;
             this.BT_SelSaveDir.UseVisualStyleBackColor = false;
             this.BT_SelSaveDir.Click += new System.EventHandler(this.BT_SelSaveDir_Click);
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_OpenSavePath.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_OpenSavePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_OpenSavePath.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_OpenSavePath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.Location = new System.Drawing.Point(554, 96);
             this.BT_OpenSavePath.Margin = new System.Windows.Forms.Padding(2);
             this.BT_OpenSavePath.Name = "BT_OpenSavePath";
             this.BT_OpenSavePath.Size = new System.Drawing.Size(89, 34);
             this.BT_OpenSavePath.TabIndex = 29;
-            this.BT_OpenSavePath.Text = "Open";
+            this.BT_OpenSavePath.Text = "Open\r\nFolder";
             this.BT_OpenSavePath.TextColor = System.Drawing.Color.Black;
             this.BT_OpenSavePath.UseVisualStyleBackColor = false;
             this.BT_OpenSavePath.Click += new System.EventHandler(this.BT_OpenSavePath_Click);
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.BT_StartDown.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
             this.BT_StartDown.ButtonColor = System.Drawing.Color.Blue;
             this.BT_StartDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_StartDown.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -237,7 +240,7 @@
             this.BT_StartDown.Name = "BT_StartDown";
             this.BT_StartDown.Size = new System.Drawing.Size(89, 36);
             this.BT_StartDown.TabIndex = 32;
-            this.BT_StartDown.Text = "Import";
+            this.BT_StartDown.Text = "Download";
             this.BT_StartDown.TextColor = System.Drawing.Color.White;
             this.BT_StartDown.UseVisualStyleBackColor = false;
             this.BT_StartDown.Click += new System.EventHandler(this.BT_StartDown_Click);
@@ -282,6 +285,7 @@
             this.TB_LogMsg.Location = new System.Drawing.Point(27, 319);
             this.TB_LogMsg.Multiline = true;
             this.TB_LogMsg.Name = "TB_LogMsg";
+            this.TB_LogMsg.ReadOnly = true;
             this.TB_LogMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.TB_LogMsg.Size = new System.Drawing.Size(616, 273);
             this.TB_LogMsg.TabIndex = 41;
@@ -300,6 +304,23 @@
             this.LB_LogMsg.Size = new System.Drawing.Size(617, 274);
             this.LB_LogMsg.TabIndex = 42;
             // 
+            // BT_Clear
+            // 
+            this.BT_Clear.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(214)))), ((int)(((byte)(214)))));
+            this.BT_Clear.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.BT_Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BT_Clear.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_Clear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.BT_Clear.Location = new System.Drawing.Point(513, 550);
+            this.BT_Clear.Margin = new System.Windows.Forms.Padding(2);
+            this.BT_Clear.Name = "BT_Clear";
+            this.BT_Clear.Size = new System.Drawing.Size(103, 34);
+            this.BT_Clear.TabIndex = 43;
+            this.BT_Clear.Text = "Clear";
+            this.BT_Clear.TextColor = System.Drawing.Color.Black;
+            this.BT_Clear.UseVisualStyleBackColor = false;
+            this.BT_Clear.Click += new System.EventHandler(this.BT_Clear_Click);
+            // 
             // main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -307,6 +328,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.ClientSize = new System.Drawing.Size(671, 627);
             this.ControlBox = false;
+            this.Controls.Add(this.BT_Clear);
             this.Controls.Add(this.PB_Progress);
             this.Controls.Add(this.CB_ComPortNameList);
             this.Controls.Add(this.btn_exit);
@@ -364,6 +386,7 @@
         private CustomTextBox.RoundTextBox TB_LogMsg;
         private CustomLabel.RoundLabel LB_LogMsg;
         private CustomProgressBar.RoundProgressBar PB_Progress;
+        private CustomButton.RoundButton BT_Clear;
     }
 }
 

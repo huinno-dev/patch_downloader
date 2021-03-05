@@ -32,11 +32,12 @@
             this.pb_logo = new System.Windows.Forms.PictureBox();
             this.tb_id = new System.Windows.Forms.TextBox();
             this.tb_pw = new System.Windows.Forms.TextBox();
+            this.btn_exit2 = new CustomButton.RoundButton();
+            this.btn_exit = new CustomButton.BorderButton();
+            this.btn_minimize = new CustomButton.BorderButton();
             this.lb_pw = new CustomLabel.RoundLabel();
             this.btn_login = new CustomButton.RoundButton();
             this.lb_id = new CustomLabel.RoundLabel();
-            this.btn_minimize = new CustomButton.BorderButton();
-            this.btn_exit = new CustomButton.BorderButton();
             ((System.ComponentModel.ISupportInitialize)(this.pb_logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,6 +77,48 @@
             this.tb_pw.Enter += new System.EventHandler(this.tb_pw_Enter);
             this.tb_pw.Leave += new System.EventHandler(this.tb_pw_Leave);
             // 
+            // btn_exit2
+            // 
+            this.btn_exit2.BorderColor = System.Drawing.Color.LightGray;
+            this.btn_exit2.ButtonColor = System.Drawing.Color.White;
+            this.btn_exit2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_exit2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_exit2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.btn_exit2.Location = new System.Drawing.Point(301, 373);
+            this.btn_exit2.Name = "btn_exit2";
+            this.btn_exit2.Size = new System.Drawing.Size(119, 40);
+            this.btn_exit2.TabIndex = 15;
+            this.btn_exit2.Text = "Exit";
+            this.btn_exit2.TextColor = System.Drawing.Color.Black;
+            this.btn_exit2.UseVisualStyleBackColor = false;
+            this.btn_exit2.Click += new System.EventHandler(this.btn_exit2_Click);
+            // 
+            // btn_exit
+            // 
+            this.btn_exit.FlatAppearance.BorderSize = 0;
+            this.btn_exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_exit.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_exit.Location = new System.Drawing.Point(560, 0);
+            this.btn_exit.Name = "btn_exit";
+            this.btn_exit.Size = new System.Drawing.Size(40, 32);
+            this.btn_exit.TabIndex = 14;
+            this.btn_exit.Text = "x";
+            this.btn_exit.UseVisualStyleBackColor = true;
+            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
+            // 
+            // btn_minimize
+            // 
+            this.btn_minimize.FlatAppearance.BorderSize = 0;
+            this.btn_minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_minimize.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_minimize.Location = new System.Drawing.Point(520, 0);
+            this.btn_minimize.Name = "btn_minimize";
+            this.btn_minimize.Size = new System.Drawing.Size(40, 32);
+            this.btn_minimize.TabIndex = 13;
+            this.btn_minimize.Text = "-";
+            this.btn_minimize.UseVisualStyleBackColor = true;
+            this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
+            // 
             // lb_pw
             // 
             this.lb_pw.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
@@ -93,9 +136,9 @@
             this.btn_login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_login.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_login.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.btn_login.Location = new System.Drawing.Point(225, 360);
+            this.btn_login.Location = new System.Drawing.Point(176, 373);
             this.btn_login.Name = "btn_login";
-            this.btn_login.Size = new System.Drawing.Size(150, 40);
+            this.btn_login.Size = new System.Drawing.Size(119, 40);
             this.btn_login.TabIndex = 9;
             this.btn_login.Text = "Log In";
             this.btn_login.TextColor = System.Drawing.Color.White;
@@ -112,32 +155,6 @@
             this.lb_id.Size = new System.Drawing.Size(280, 40);
             this.lb_id.TabIndex = 8;
             // 
-            // btn_minimize
-            // 
-            this.btn_minimize.FlatAppearance.BorderSize = 0;
-            this.btn_minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_minimize.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_minimize.Location = new System.Drawing.Point(520, 0);
-            this.btn_minimize.Name = "btn_minimize";
-            this.btn_minimize.Size = new System.Drawing.Size(40, 32);
-            this.btn_minimize.TabIndex = 13;
-            this.btn_minimize.Text = "-";
-            this.btn_minimize.UseVisualStyleBackColor = true;
-            this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
-            // 
-            // btn_exit
-            // 
-            this.btn_exit.FlatAppearance.BorderSize = 0;
-            this.btn_exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_exit.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_exit.Location = new System.Drawing.Point(560, 0);
-            this.btn_exit.Name = "btn_exit";
-            this.btn_exit.Size = new System.Drawing.Size(40, 32);
-            this.btn_exit.TabIndex = 14;
-            this.btn_exit.Text = "x";
-            this.btn_exit.UseVisualStyleBackColor = true;
-            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
-            // 
             // login_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -145,6 +162,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.ClientSize = new System.Drawing.Size(600, 540);
             this.ControlBox = false;
+            this.Controls.Add(this.btn_exit2);
             this.Controls.Add(this.btn_exit);
             this.Controls.Add(this.btn_minimize);
             this.Controls.Add(this.tb_pw);
@@ -172,5 +190,6 @@
         private System.Windows.Forms.TextBox tb_pw;
         private CustomButton.BorderButton btn_minimize;
         private CustomButton.BorderButton btn_exit;
+        private CustomButton.RoundButton btn_exit2;
     }
 }

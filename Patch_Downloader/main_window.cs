@@ -1686,5 +1686,10 @@ namespace Huinno_Downloader
             Application.ExitThread();
             Environment.Exit(0);
         }
+
+        private void BT_Clear_Click(object sender, EventArgs e)
+        {
+            TB_LogMsg.Clear();
+        }
     }
 }
