@@ -34,7 +34,17 @@ namespace Huinno_Downloader
 
         public static string Open(string cport_name, int cport_baud)
         {
-            gComPort = new SerialPort(cport_name, cport_baud);
+            try
+            {
+                gComPort = new SerialPort(cport_name, cport_baud);
+            }
+#pragma warning disable 0168
+            catch (Exception exception)
+#pragma warning restore 0168
+            {
+                return "Fail";
+            }
+
             gComPort.ReadTimeout = 1000; //Setting ReadTimeout =3500 ms or 3.5 seconds
 
             //int size = gComPort.ReadBufferSize;
@@ -97,7 +107,9 @@ namespace Huinno_Downloader
 
         public static void Close()
         {
-            gComPort.Close();
+            if(gComPort != null)
+                gComPort.Close();
+
             isConnected = false;
             //Array.Clear(adcDrawArray, 0, adcDrawArray.Length);
         }

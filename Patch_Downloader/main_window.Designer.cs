@@ -56,57 +56,59 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(25, 147);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 15);
+            this.label1.Size = new System.Drawing.Size(81, 20);
             this.label1.TabIndex = 19;
             this.label1.Text = "Serial Port";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(257, 147);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 15);
+            this.label2.Size = new System.Drawing.Size(126, 20);
             this.label2.TabIndex = 20;
             this.label2.Text = "Device Serial No.";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(26, 70);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(111, 15);
+            this.label3.Size = new System.Drawing.Size(97, 20);
             this.label3.TabIndex = 21;
             this.label3.Text = "Save Files To";
             // 
             // TB_SavePath
             // 
             this.TB_SavePath.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TB_SavePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_SavePath.ForeColor = System.Drawing.Color.Black;
-            this.TB_SavePath.Location = new System.Drawing.Point(44, 106);
+            this.TB_SavePath.Location = new System.Drawing.Point(44, 104);
             this.TB_SavePath.Name = "TB_SavePath";
-            this.TB_SavePath.Size = new System.Drawing.Size(376, 18);
+            this.TB_SavePath.Size = new System.Drawing.Size(383, 20);
             this.TB_SavePath.TabIndex = 26;
             // 
             // TB_DeviceSerial
             // 
             this.TB_DeviceSerial.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TB_DeviceSerial.Location = new System.Drawing.Point(273, 179);
+            this.TB_DeviceSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_DeviceSerial.Location = new System.Drawing.Point(273, 184);
             this.TB_DeviceSerial.Name = "TB_DeviceSerial";
-            this.TB_DeviceSerial.Size = new System.Drawing.Size(353, 18);
+            this.TB_DeviceSerial.Size = new System.Drawing.Size(349, 20);
             this.TB_DeviceSerial.TabIndex = 31;
             // 
             // LB_Import
             // 
-            this.LB_Import.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.LB_Import.Location = new System.Drawing.Point(25, 233);
+            this.LB_Import.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LB_Import.Location = new System.Drawing.Point(25, 228);
             this.LB_Import.Name = "LB_Import";
             this.LB_Import.Size = new System.Drawing.Size(125, 19);
             this.LB_Import.TabIndex = 33;
@@ -115,6 +117,7 @@
             // LB_Title
             // 
             this.LB_Title.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LB_Title.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LB_Title.Location = new System.Drawing.Point(12, 12);
             this.LB_Title.Name = "LB_Title";
             this.LB_Title.Size = new System.Drawing.Size(537, 33);
@@ -139,13 +142,13 @@
             // 
             this.CB_ComPortNameList.BackColor = System.Drawing.Color.White;
             this.CB_ComPortNameList.BorderColor = System.Drawing.Color.White;
+            this.CB_ComPortNameList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CB_ComPortNameList.ForeColor = System.Drawing.Color.Black;
             this.CB_ComPortNameList.FormattingEnabled = true;
-            this.CB_ComPortNameList.Location = new System.Drawing.Point(40, 174);
+            this.CB_ComPortNameList.Location = new System.Drawing.Point(40, 178);
             this.CB_ComPortNameList.Name = "CB_ComPortNameList";
-            this.CB_ComPortNameList.Size = new System.Drawing.Size(86, 23);
+            this.CB_ComPortNameList.Size = new System.Drawing.Size(86, 28);
             this.CB_ComPortNameList.TabIndex = 38;
-            this.CB_ComPortNameList.Text = "test";
             // 
             // btn_exit
             // 
@@ -175,12 +178,12 @@
             // 
             // BT_ConnPort
             // 
-            this.BT_ConnPort.BorderColor = System.Drawing.Color.LightGray;
+            this.BT_ConnPort.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
             this.BT_ConnPort.ButtonColor = System.Drawing.Color.Blue;
             this.BT_ConnPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_ConnPort.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.BT_ConnPort.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_ConnPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_ConnPort.Location = new System.Drawing.Point(148, 169);
+            this.BT_ConnPort.Location = new System.Drawing.Point(148, 174);
             this.BT_ConnPort.Name = "BT_ConnPort";
             this.BT_ConnPort.Size = new System.Drawing.Size(89, 36);
             this.BT_ConnPort.TabIndex = 30;
@@ -192,10 +195,10 @@
             // BT_SelSaveDir
             // 
             this.BT_SelSaveDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.LightGray;
+            this.BT_SelSaveDir.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
             this.BT_SelSaveDir.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_SelSaveDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_SelSaveDir.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.BT_SelSaveDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_SelSaveDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_SelSaveDir.Location = new System.Drawing.Point(460, 96);
             this.BT_SelSaveDir.Name = "BT_SelSaveDir";
@@ -208,10 +211,10 @@
             // 
             // BT_OpenSavePath
             // 
-            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.LightGray;
+            this.BT_OpenSavePath.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
             this.BT_OpenSavePath.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_OpenSavePath.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.BT_OpenSavePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_OpenSavePath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_OpenSavePath.Location = new System.Drawing.Point(554, 96);
             this.BT_OpenSavePath.Margin = new System.Windows.Forms.Padding(2);
@@ -225,10 +228,10 @@
             // 
             // BT_StartDown
             // 
-            this.BT_StartDown.BorderColor = System.Drawing.Color.LightGray;
+            this.BT_StartDown.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
             this.BT_StartDown.ButtonColor = System.Drawing.Color.Blue;
             this.BT_StartDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_StartDown.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.BT_StartDown.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_StartDown.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.BT_StartDown.Location = new System.Drawing.Point(554, 255);
             this.BT_StartDown.Name = "BT_StartDown";
@@ -255,7 +258,7 @@
             this.LB_DeviceSerial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LB_DeviceSerial.ForeColor = System.Drawing.Color.Black;
             this.LB_DeviceSerial.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.LB_DeviceSerial.Location = new System.Drawing.Point(257, 169);
+            this.LB_DeviceSerial.Location = new System.Drawing.Point(257, 174);
             this.LB_DeviceSerial.Name = "LB_DeviceSerial";
             this.LB_DeviceSerial.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.LB_DeviceSerial.Size = new System.Drawing.Size(386, 36);
@@ -266,7 +269,7 @@
             this.LB_ComPortNameList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.LB_ComPortNameList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LB_ComPortNameList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.LB_ComPortNameList.Location = new System.Drawing.Point(25, 169);
+            this.LB_ComPortNameList.Location = new System.Drawing.Point(25, 174);
             this.LB_ComPortNameList.Name = "LB_ComPortNameList";
             this.LB_ComPortNameList.Size = new System.Drawing.Size(118, 33);
             this.LB_ComPortNameList.TabIndex = 37;
@@ -275,7 +278,7 @@
             // 
             this.TB_LogMsg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.TB_LogMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TB_LogMsg.Font = new System.Drawing.Font("돋움체", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.TB_LogMsg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TB_LogMsg.Location = new System.Drawing.Point(27, 319);
             this.TB_LogMsg.Multiline = true;
             this.TB_LogMsg.Name = "TB_LogMsg";
@@ -302,7 +305,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.ClientSize = new System.Drawing.Size(674, 619);
+            this.ClientSize = new System.Drawing.Size(671, 627);
             this.ControlBox = false;
             this.Controls.Add(this.PB_Progress);
             this.Controls.Add(this.CB_ComPortNameList);

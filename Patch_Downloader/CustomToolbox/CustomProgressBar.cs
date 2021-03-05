@@ -101,7 +101,7 @@ namespace CustomProgressBar
             Refresh();
 
             //pbComplete++;
-            if (pbComplete > 100)
+            if (pbComplete == 100)
             {
                 //dispose
                 g.Dispose();

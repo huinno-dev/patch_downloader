@@ -24,7 +24,8 @@ namespace Huinno_Dataloader.AlertWindow
         {
             if(this.main_window != null)
             {
-                this.main_window.isUploadData(true);
+                ControlMainWindow(main_window, true);
+                this.Close();
             }
         }
 
@@ -32,8 +33,22 @@ namespace Huinno_Dataloader.AlertWindow
         {
             if (this.main_window != null)
             {
-                this.main_window.isUploadData(false);
+                ControlMainWindow(main_window, false);
                 this.Close();
+            }
+        }
+
+        delegate void ctrl_Invoke_MainWindow(main_window ctrl, bool enable);
+        public void ControlMainWindow(main_window ctr, bool enable)
+        {
+            if (ctr.InvokeRequired)
+            {
+                ctrl_Invoke_MainWindow CI = new ctrl_Invoke_MainWindow(ControlMainWindow);
+                ctr.Invoke(CI, ctr, enable);
+            }
+            else
+            {
+                ctr.isUploadData(enable);
             }
         }
     }

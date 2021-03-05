@@ -36,32 +36,36 @@ namespace Huinno_Dataloader.AlertWindow
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(20, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(330, 30);
+            this.label1.Size = new System.Drawing.Size(318, 30);
             this.label1.TabIndex = 0;
             this.label1.Text = "We couldn\'t log you in.";
             // 
             // label2
             // 
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(20, 70);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(330, 60);
+            this.label2.Size = new System.Drawing.Size(307, 60);
             this.label2.TabIndex = 1;
-            this.label2.Text = "The email and password you entered\r\n\r\ndid not match out records";
+            this.label2.Text = "The email and password you entered\r\ndid not match out records";
             // 
             // button_WOC1
             // 
-            this.button_WOC1.BackColor = System.Drawing.Color.White;          
+            this.button_WOC1.BackColor = System.Drawing.Color.White;
+            this.button_WOC1.BorderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
+            this.button_WOC1.ButtonColor = System.Drawing.Color.Blue;
             this.button_WOC1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_WOC1.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button_WOC1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_WOC1.ForeColor = System.Drawing.Color.White;
-            this.button_WOC1.Location = new System.Drawing.Point(167, 147);
-            this.button_WOC1.Name = "button_WOC1";           
-            this.button_WOC1.Size = new System.Drawing.Size(147, 34);
+            this.button_WOC1.Location = new System.Drawing.Point(167, 133);
+            this.button_WOC1.Name = "button_WOC1";
+            this.button_WOC1.Size = new System.Drawing.Size(150, 40);
             this.button_WOC1.TabIndex = 2;
-            this.button_WOC1.Text = "Try Again";          
+            this.button_WOC1.Text = "Try Again";
+            this.button_WOC1.TextColor = System.Drawing.Color.White;
             this.button_WOC1.UseVisualStyleBackColor = false;
             this.button_WOC1.Click += new System.EventHandler(this.button_WOC1_Click);
             // 
@@ -70,7 +74,7 @@ namespace Huinno_Dataloader.AlertWindow
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(350, 200);
+            this.ClientSize = new System.Drawing.Size(350, 195);
             this.Controls.Add(this.button_WOC1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

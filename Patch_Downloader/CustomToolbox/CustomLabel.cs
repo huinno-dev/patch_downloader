@@ -10,7 +10,7 @@ namespace CustomLabel
     {
 
         public int cornerRadius = 30; //라운드 너비
-        public Color borderColor = Color.LightGray;//외곽선 색상
+        public Color borderColor = System.Drawing.Color.FromArgb((int)0xd6, (int)0xd6, (int)0xd6);//외곽선 색상
         public int borderWidth = 1;//외곽선 두께
         public Color backColor = Color.White;//배경 색상
 
