@@ -76,6 +76,12 @@ namespace Huinno_Downloader
         int m_wrCnt = 0;
         UInt32 uintqBSymKey;
 
+        public enum FLASH_SIZE_T
+        {
+            FLASH_SIZE_2G = 0,               // 0
+            FLASH_SIZE_4G,              // 1
+            MODEL_NAME_MAX
+        }
 
         public enum UART_RX_CMD_T
         {
@@ -362,6 +368,35 @@ namespace Huinno_Downloader
                 ControlCustomRoundButton(BT_ConnPort, true);
         }
 
+        private int GetFlashSize(string version, string type)
+        {
+            Console.WriteLine(String.Format("version : {0}, type : {1}", version, type));
+
+            if (version.Equals("0") && type.Equals("D"))  //Patch-1
+            {
+                return (int)FLASH_SIZE_T.FLASH_SIZE_2G;
+            }
+            else if (version.Equals("2") && type.Equals("D")) //Patch-1 Prime
+            {
+                return (int)FLASH_SIZE_T.FLASH_SIZE_2G;
+            }
+            else if (version.Equals("0") && type.Equals("B"))  //Patch-2
+            {
+                return (int)FLASH_SIZE_T.FLASH_SIZE_4G;
+            }
+            else if (version.Equals("1") && type.Equals("B"))  //Patch-2 Prime(1회용)
+            {
+                return (int)FLASH_SIZE_T.FLASH_SIZE_4G;
+            }
+            else if (version.Equals("2") && type.Equals("B"))  //Patch-2 Prime(다회용)
+            {
+                return (int)FLASH_SIZE_T.FLASH_SIZE_4G;
+            }
+            else
+                return (int)FLASH_SIZE_T.FLASH_SIZE_2G;
+
+        }
+
         private void ParseDeviceInfo(string str_tx)
         {
             int pos = str_tx.IndexOf("[INFO] ");
@@ -375,8 +410,8 @@ namespace Huinno_Downloader
             m_productName[(int)PD_NAME_T.PD_NAME_COUNTRY  ] = str_tx.Substring(pos, 2); pos += 3;
             m_productName[(int)PD_NAME_T.PD_NAME_SERIALNUM] = str_tx.Substring(pos, 5); pos += 6;
 
-            //patch prime is 0, patch2 is 1
-            if (m_productName[(int)PD_NAME_T.PD_NAME_VERSION].Equals("0"))
+            int flashSize = GetFlashSize(m_productName[(int)PD_NAME_T.PD_NAME_VERSION], m_productName[(int)PD_NAME_T.PD_NAME_USAGETYPE]);
+            if (flashSize == (int)FLASH_SIZE_T.FLASH_SIZE_2G)
             {
                 MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
                 MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
