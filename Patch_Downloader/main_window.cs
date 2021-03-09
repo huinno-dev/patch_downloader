@@ -187,7 +187,6 @@ namespace Huinno_Downloader
             m_form_login.ProgRunning = m_progRunning;
             m_form_login.ShowDialog();
 
-            m_form_login.LoginPass = true;
             m_loginPass = m_form_login.LoginPass;
             if (!m_loginPass)
                 return;
@@ -1606,11 +1605,13 @@ namespace Huinno_Downloader
 
         private void main_window_FormClosing(object sender, FormClosingEventArgs e)
         {
+#if false
             if (MessageBox.Show("Are you sure you want to quit?" , "Quit", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 e.Cancel = true;
                 return;
             }
+#endif
 
             if (cSerialPort.isConnected)
             {
