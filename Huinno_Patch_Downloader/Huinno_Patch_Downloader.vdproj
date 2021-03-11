@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0DEBDD2AE41F4F81BAB45918B5C056B8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0E1A358D785A426594DC17C7EEDC6B38"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -27,7 +33,115 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_57B362AE539C426CB09733B3E3E7AB84"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_65FDC429F26349599717464A8169ACC1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_669E267538B54636BD06DDDB5F73AF14"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A2606EF22EF145F891B738EF63644B66"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A5E4634FB8FF42328E1939345465B7A2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AEBF49B861064969BB91B0FFC7762760"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF0A64916ABA4F68AAF18670510199BF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF8D355A41E24E6992E15D8972A26D41"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C0D0786519FE4C2CB069C59AFBC66D9B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CC47E7F1E059465698358B1182CF5DF0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D0B3447CEBA140A69D7893CB3DFE18A6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD6269068DEA49AD9ED50318041A486D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E2D51D0E618B4633884CC6F4C5DC1A27"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EA2958988FC8431EB04BEE84E1CD1E44"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EB7D43ED12F444DEB6733CBAC38D29B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ECD49EDAF6124626A8B110C75724C5EF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3DAB50063C448D3B67C4C4BA99F9644"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F5246E47C13F41789FD0EC3FB4EDBD8A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9B3E37F09B7492EA1E11E838F3B96E0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -109,6 +223,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_9CD4A900BD694B4998A99EAF781C1D7E"
+            {
+            "Name" = "8:SetupDriver.exe"
+            "Condition" = "8:"
+            "Object" = "8:_57B362AE539C426CB09733B3E3E7AB84"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:/Install"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_9631CA30_8D38_44EC_81AA_9E759EEDDBC1"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -132,6 +260,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0DEBDD2AE41F4F81BAB45918B5C056B8"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.pdb"
+            "TargetName" = "8:SetupDriver.pdb"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E1A358D785A426594DC17C7EEDC6B38"
             {
             "SourcePath" = "8:..\\Patch_Downloader\\huinno-icon01.ico"
@@ -183,12 +331,383 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57B362AE539C426CB09733B3E3E7AB84"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.exe"
+            "TargetName" = "8:SetupDriver.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65FDC429F26349599717464A8169ACC1"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\install.bat"
+            "TargetName" = "8:install.bat"
+            "Tag" = "8:"
+            "Folder" = "8:_15BA3970315148FCA6BE8933E606C359"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_669E267538B54636BD06DDDB5F73AF14"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.runtimeconfig.dev.json"
+            "TargetName" = "8:SetupDriver.runtimeconfig.dev.json"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A2606EF22EF145F891B738EF63644B66"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x64\\xrusbser.inf"
+            "TargetName" = "8:xrusbser.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_32C6B81D9E69414B857CED33DCE7AB47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5E4634FB8FF42328E1939345465B7A2"
             {
             "SourcePath" = "8:..\\Patch_Downloader\\huinno-icon02.ico"
             "TargetName" = "8:huinno-icon02.ico"
             "Tag" = "8:"
             "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AEBF49B861064969BB91B0FFC7762760"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SetupDriver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_AEBF49B861064969BB91B0FFC7762760"
+                    {
+                    "Name" = "8:SetupDriver.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AF0A64916ABA4F68AAF18670510199BF"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.deps.json"
+            "TargetName" = "8:SetupDriver.deps.json"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AF8D355A41E24E6992E15D8972A26D41"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\readme.txt"
+            "TargetName" = "8:readme.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_15BA3970315148FCA6BE8933E606C359"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0D0786519FE4C2CB069C59AFBC66D9B"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x86\\xrusbser.sys"
+            "TargetName" = "8:xrusbser.sys"
+            "Tag" = "8:"
+            "Folder" = "8:_AAE05CF81B6440BEB08D457A7F8704EA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CC47E7F1E059465698358B1182CF5DF0"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x86\\xrusbser.inf"
+            "TargetName" = "8:xrusbser.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_AAE05CF81B6440BEB08D457A7F8704EA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0B3447CEBA140A69D7893CB3DFE18A6"
+            {
+            "SourcePath" = "8:..\\Patch_Downloader\\bin\\Release\\Huinno_Dataloader.exe.config"
+            "TargetName" = "8:Huinno_Dataloader.exe.config"
+            "Tag" = "8:"
+            "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DD6269068DEA49AD9ED50318041A486D"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x86\\xrusbser.cat"
+            "TargetName" = "8:xrusbser.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_AAE05CF81B6440BEB08D457A7F8704EA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2D51D0E618B4633884CC6F4C5DC1A27"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x64\\xrusbserx64.cat"
+            "TargetName" = "8:xrusbserx64.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_32C6B81D9E69414B857CED33DCE7AB47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA2958988FC8431EB04BEE84E1CD1E44"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x64\\xrusbser.sys"
+            "TargetName" = "8:xrusbser.sys"
+            "Tag" = "8:"
+            "Folder" = "8:_32C6B81D9E69414B857CED33DCE7AB47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB7D43ED12F444DEB6733CBAC38D29B4"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x64\\xrusbserco.dll"
+            "TargetName" = "8:xrusbserco.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_32C6B81D9E69414B857CED33DCE7AB47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECD49EDAF6124626A8B110C75724C5EF"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x86\\xrusbports.dll"
+            "TargetName" = "8:xrusbports.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_AAE05CF81B6440BEB08D457A7F8704EA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F3DAB50063C448D3B67C4C4BA99F9644"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x64\\xrusbports.dll"
+            "TargetName" = "8:xrusbports.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_32C6B81D9E69414B857CED33DCE7AB47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5246E47C13F41789FD0EC3FB4EDBD8A"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.runtimeconfig.json"
+            "TargetName" = "8:SetupDriver.runtimeconfig.json"
+            "Tag" = "8:"
+            "Folder" = "8:_937043FDF88B43789FAFC5FEEF9A1E26"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F9B3E37F09B7492EA1E11E838F3B96E0"
+            {
+            "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\x86\\xrusbserco.dll"
+            "TargetName" = "8:xrusbserco.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_AAE05CF81B6440BEB08D457A7F8704EA"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -228,6 +747,61 @@
                     "Property" = "8:_F475D616DCCB48D3B1FB2A5A6DF06B3D"
                         "Folders"
                         {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_937043FDF88B43789FAFC5FEEF9A1E26"
+                    {
+                    "Name" = "8:SetupDriver"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9DCE985835CD4295A7849611C03A0188"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_E249D21E576D494AA01FFBABF8A61BCF"
+                            {
+                            "Name" = "8:driver"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_7536D40DAC944E16AB025097C9EEEE85"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_15BA3970315148FCA6BE8933E606C359"
+                                    {
+                                    "Name" = "8:V2.6.0.0"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_DE050BBC2CFE4FC583B3B5B4BB572AC9"
+                                        "Folders"
+                                        {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_32C6B81D9E69414B857CED33DCE7AB47"
+                                            {
+                                            "Name" = "8:x64"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_DB3ADB7ECC94469189BE86C2D72C0493"
+                                                "Folders"
+                                                {
+                                                }
+                                            }
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_AAE05CF81B6440BEB08D457A7F8704EA"
+                                            {
+                                            "Name" = "8:x86"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_F592FD10FF9140BAB1084D9C11A5C595"
+                                                "Folders"
+                                                {
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -282,7 +856,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Huinno_Dataloader"
         "ProductCode" = "8:{5FCF9D3C-4221-4631-9F9E-6C140C65E8E7}"
-        "PackageCode" = "8:{43E74A41-9128-4FCF-8C99-C651824725EC}"
+        "PackageCode" = "8:{1CAF87CE-6B71-47E7-98B2-44D2A549375F}"
         "UpgradeCode" = "8:{7F2605F6-48C0-4321-B4C0-2D008E6CF755}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
