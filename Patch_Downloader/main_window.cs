@@ -139,10 +139,10 @@ namespace Huinno_Downloader
         const int MEM_2G_PAGE_FULL_SZ = 2048;
         const int MEM_2G_PAGE_USE_SZ = 2046;
 
-        const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
-        const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
-       // const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
-       // const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
+        //const int MEM_PAGE_SZ = MEM_4G_PAGE_FULL_SZ;
+        //const int MEM_PAGE_USE_SZ = MEM_4G_PAGE_USE_SZ;
+        const int MEM_PAGE_SZ = MEM_2G_PAGE_FULL_SZ;
+        const int MEM_PAGE_USE_SZ = MEM_2G_PAGE_USE_SZ;
         //////////////////////////////////////////////////
         
         //
@@ -167,7 +167,7 @@ namespace Huinno_Downloader
 
             //
             InitializeComponent();
-            CB_ComPortBaudList.SelectedIndex = 0;
+            CB_ComPortBaudList.SelectedIndex = 1;
             m_progRunning = true;
 
             initUserParams();
@@ -325,7 +325,7 @@ namespace Huinno_Downloader
 
             if (!cSerialPort.isConnected)
             {
-                CB_ComPortBaudList.SelectedIndex = 0;
+                CB_ComPortBaudList.SelectedIndex = 1;
                 int selPortIdx = CB_ComPortNameList.SelectedIndex;
                 if (selPortIdx < 0)
                     return;
@@ -454,6 +454,7 @@ namespace Huinno_Downloader
 
             timer_logout.Stop();
 
+#if false  //To fix 3M
             // Re connect with maximum baudrate 3M
             CloseSerial();
             Thread.Sleep(2000);
@@ -468,6 +469,7 @@ namespace Huinno_Downloader
             }
             AppConfiguration.SetAppConfig("ComPortName", CB_ComPortNameList.Text);
             AppConfiguration.SetAppConfig("ComPortBaud", CB_ComPortBaudList.Text);
+#endif
 
             ControlButtonText(BT_ConnPort, "Disconnect");
             Thread.Sleep(2000);
