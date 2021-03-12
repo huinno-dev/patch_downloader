@@ -1,6 +1,6 @@
 # patch_downloader
 
-# win-x64 machine msi 릴리즈 방법(Uart Driver 자동 설치 버전)
+# win-x86 & win-x64 msi 릴리즈 방법(Uart Driver 자동 설치 버전)
 1. Patch_DataLoader 프로젝트 빌드
 2. SetupDriver에서 오른쪽 마우스 클릭 후 "게시" 클릭 후 대상 런타임을 win-x64로 선택
 3. 게시 버튼 클릭(자동으로 프로젝트 빌드 됨)
