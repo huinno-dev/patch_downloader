@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using static System.Net.Mime.MediaTypeNames;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.IO;
 
 namespace SetupDriver
 {
@@ -15,10 +18,7 @@ namespace SetupDriver
             ProcessStartInfo ProcessInfo;
             Process Process;
 
-            // Get the driver path.
-            int appNameLen = System.Reflection.Assembly.GetExecutingAssembly().ManifestModule.ScopeName.Length;
-            string path = System.Reflection.Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName;
-            string driverPath = path.Substring(0, path.Length - appNameLen) + "driver\\V2.6.0.0\\install.bat";
+            string driverPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\driver\\V2.6.0.0\\install.bat";
             Console.WriteLine(driverPath);
 
             ProcessInfo = new ProcessStartInfo("cmd.exe", "/c " + driverPath);
@@ -33,7 +33,7 @@ namespace SetupDriver
 
             Console.WriteLine("ExitCode: " + ExitCode.ToString(), "ExecuteCommand");
 
-            //Thread.Sleep(20000);
+            //Thread.Sleep(50000);
         }
     }
 }

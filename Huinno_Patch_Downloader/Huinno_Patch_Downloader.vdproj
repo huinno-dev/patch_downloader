@@ -27,12 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_138CF021EA3F4E2B8556FBCDE2AA088C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1BFBE5C9216949BB9557C6A70FEC9896"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -45,13 +39,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E215A986C784C799EF5282F537DFB00"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_39F135B33D36427199F7348DC0280744"
+        "MsmKey" = "8:_38DB99556CDB44BD88F53FC1EA8BD930"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -87,19 +75,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_92A30B755FB7436097CB48C1D3D16010"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A5E4634FB8FF42328E1939345465B7A2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A71D18976ED54020B6466AA798C3014F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -124,12 +100,6 @@
         "Entry"
         {
         "MsmKey" = "8:_D0AAD2862D5848CB8560476519AF1EB1"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D5A3ACA1FECE45498AE8465544E48F72"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -223,17 +193,17 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_7E955EF5D3C8425292D94BC250EC56AF"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_AC4FA1C2F8B9424BB1D795DA4EA08242"
             {
             "Name" = "8:SetupDriver.exe"
             "Condition" = "8:"
-            "Object" = "8:_A71D18976ED54020B6466AA798C3014F"
+            "Object" = "8:_38DB99556CDB44BD88F53FC1EA8BD930"
             "FileType" = "3:2"
             "InstallAction" = "3:1"
             "Arguments" = "8:/Install"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_90571B38_DC9E_43BD_B5ED_8F9C76F7EB58"
+            "Identifier" = "8:_B71D455B_4178_40F5_B55B_6FBEDC519923"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
             }
@@ -300,26 +270,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_138CF021EA3F4E2B8556FBCDE2AA088C"
-            {
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.pdb"
-            "TargetName" = "8:SetupDriver.pdb"
-            "Tag" = "8:"
-            "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1BFBE5C9216949BB9557C6A70FEC9896"
             {
             "SourcePath" = "8:..\\SetupDriver\\driver\\V2.6.0.0\\install.bat"
@@ -360,30 +310,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E215A986C784C799EF5282F537DFB00"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38DB99556CDB44BD88F53FC1EA8BD930"
             {
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.deps.json"
-            "TargetName" = "8:SetupDriver.deps.json"
-            "Tag" = "8:"
-            "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_39F135B33D36427199F7348DC0280744"
-            {
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.runtimeconfig.dev.json"
-            "TargetName" = "8:SetupDriver.runtimeconfig.dev.json"
+            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\publish\\SetupDriver.exe"
+            "TargetName" = "8:SetupDriver.exe"
             "Tag" = "8:"
             "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
             "Condition" = "8:"
@@ -511,52 +441,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_92A30B755FB7436097CB48C1D3D16010"
-            {
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.runtimeconfig.json"
-            "TargetName" = "8:SetupDriver.runtimeconfig.json"
-            "Tag" = "8:"
-            "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5E4634FB8FF42328E1939345465B7A2"
             {
             "SourcePath" = "8:..\\Patch_Downloader\\huinno-icon02.ico"
             "TargetName" = "8:huinno-icon02.ico"
             "Tag" = "8:"
             "Folder" = "8:_12ADA5DAB1B34EA1A1352FA9B8E7E45C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A71D18976ED54020B6466AA798C3014F"
-            {
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.exe"
-            "TargetName" = "8:SetupDriver.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -637,37 +527,6 @@
             "TargetName" = "8:xrusbserx64.cat"
             "Tag" = "8:"
             "Folder" = "8:_92A616881CB9402EA819F4FAE55F437C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D5A3ACA1FECE45498AE8465544E48F72"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SetupDriver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_D5A3ACA1FECE45498AE8465544E48F72"
-                    {
-                    "Name" = "8:SetupDriver.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\SetupDriver\\bin\\Release\\netcoreapp3.1\\SetupDriver.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BD8251AFAB8F4602AEFA52C7F4B680D1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -856,7 +715,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Huinno_Dataloader"
         "ProductCode" = "8:{5FCF9D3C-4221-4631-9F9E-6C140C65E8E7}"
-        "PackageCode" = "8:{7235C387-8D71-4336-A2DE-4BAC877F1106}"
+        "PackageCode" = "8:{D827F00E-6BC7-4BFC-8A1F-CD41C0B222BA}"
         "UpgradeCode" = "8:{7F2605F6-48C0-4321-B4C0-2D008E6CF755}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -877,7 +736,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"

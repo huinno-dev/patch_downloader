@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patch_Dataloader", "Patch_D
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Huinno_Patch_Dataloader", "Huinno_Patch_Downloader\Huinno_Patch_Downloader.vdproj", "{523DC7EA-B29A-4A75-AA07-2C88B0E1FAB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetupDriver", "SetupDriver\SetupDriver.csproj", "{67BDD0E3-65D6-4919-B682-110F3C2F15E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SetupDriver", "SetupDriver\SetupDriver.csproj", "{67BDD0E3-65D6-4919-B682-110F3C2F15E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
