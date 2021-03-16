@@ -92,6 +92,7 @@ namespace Huinno_Downloader
             URX_CMD_SYSTEM_RESET,           // 4
             URX_CMD_GET_SYS_INFO,           // 5
             URX_CMD_RD_NAND_PAGE_ST_ED,     // 6
+            URX_CMD_CHANGE_LOW_BAUDRATE,    //7
             URX_CMD_RD_NAND_PAGE = 20,
             UART_RX_CMD_NUM_MAX
         }
@@ -536,8 +537,6 @@ namespace Huinno_Downloader
                     + "]");
             }
 
-            setButtonEnabledUI(false);
-
             timer_logout.Stop();
 
             // Re connect with maximum baudrate 3M
@@ -720,6 +719,9 @@ namespace Huinno_Downloader
             int val = 100;
             ControlCustomProgressBar(PB_Progress, val);
 
+            //Restore baudrate to 115200
+            setPatchBaudRate(false);
+
             ControlOpacity(0.7);
             m_import_complete.ShowDialog();
         }
@@ -751,7 +753,7 @@ namespace Huinno_Downloader
             byte[] rBuf = new byte[MEM_PAGE_SZ];
             while (true)
             {   
-                m_uartSendMsg[0] = (byte)20;
+                m_uartSendMsg[0] = (byte)RxCmd;
                 m_uartSendMsg[1] = (byte)(pageIndex >> 24);
                 m_uartSendMsg[2] = (byte)(pageIndex >> 16);
                 m_uartSendMsg[3] = (byte)(pageIndex >> 8);
@@ -1689,6 +1691,15 @@ namespace Huinno_Downloader
             fs1.Close();
         }
 
+        public void setPatchBaudRate(bool isExit = true)
+        {
+            m_uartSendMsg[0] = (byte)UART_RX_CMD_T.URX_CMD_CHANGE_LOW_BAUDRATE;
+
+            cSerialPort.Clear();
+            cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
+            Thread.Sleep(500);
+        }
+
         private void main_window_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if false
@@ -1805,6 +1816,9 @@ namespace Huinno_Downloader
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
+            //Restore baudrate to 115200
+            setPatchBaudRate();
+
             //Exit program
             Application.ExitThread();
             Environment.Exit(0);
