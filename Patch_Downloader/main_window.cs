@@ -566,7 +566,6 @@ namespace Huinno_Downloader
             while(true)
             {
                 Thread.Sleep(500);
-                Console.WriteLine(String.Format("TEST"));
                 if (m_stopThd_1st != true)
                     continue;
 
@@ -630,7 +629,7 @@ namespace Huinno_Downloader
                     continue;
                 }
 
-                Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, m_wrCnt));
+                //Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, m_wrCnt));
 
                 //
                 m_bw.Write(rBuf, 0, MEM_PAGE_SZ);
@@ -1008,11 +1007,20 @@ namespace Huinno_Downloader
 
         private void main_window_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to quit?" , "Quit", MessageBoxButtons.YesNo) == DialogResult.No)
+            DialogResult result = MessageBox.Show("Are you sure you want to quit?", "Quit", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                //Exit program
+                Application.ExitThread();
+                Environment.Exit(0);
+            }
+            else if (result == DialogResult.No)
             {
                 e.Cancel = true;
                 return;
             }
+
 
             if (cSerialPort.isConnected)
             {
