@@ -92,6 +92,7 @@ namespace Huinno_Downloader
             URX_CMD_SYSTEM_RESET,           // 4
             URX_CMD_GET_SYS_INFO,           // 5
             URX_CMD_RD_NAND_PAGE_ST_ED,     // 6
+            URX_CMD_RD_NAND_PAGE = 20,
             UART_RX_CMD_NUM_MAX
         }
 
@@ -473,6 +474,10 @@ namespace Huinno_Downloader
             m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK]);
             m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
             m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA] = Int32.Parse(m_strNandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]);
+
+#if USE_DEBUG
+            Console.WriteLine(String.Format("usermark:{0},{1}, ecg:{2},{3}", m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK], m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK], m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA], m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA]));
+#endif
         }
 
         private void setButtonEnabledUI(bool bEnable)
@@ -627,10 +632,12 @@ namespace Huinno_Downloader
                 m_resFilePathECGExp = m_resFilePath + strFileExp;
             }
 
+#if false
             // send command to get data
             m_uartSendMsg[0] = (byte)RxCmd;
             cSerialPort.Clear();
             cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
+#endif         
 
             // set file path
             m_resFilePathExp = m_resFilePath + strFileExp;
@@ -718,9 +725,62 @@ namespace Huinno_Downloader
         {
             //cSerialPort.Clear();
 
+            int pageIndex = 0, pageIndex_end = 0;
+            UART_RX_CMD_T RxCmd = UART_RX_CMD_T.URX_CMD_RD_NAND_PAGE;
+
+            if (m_downMode == DOWN_MODE_T.DOWN_MODE_USRMARK)
+            {
+                pageIndex = m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_USRMARK];
+                pageIndex_end = m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_USRMARK];
+               
+            }
+            else if (m_downMode == DOWN_MODE_T.DOWN_MODE_ECGDATA)
+            {
+                pageIndex = m_nandIdx_St[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA];
+                pageIndex_end = m_nandIdx_Ed[(int)DOWN_MODE_T.DOWN_MODE_ECGDATA];
+            }
+
+#if USE_DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+#endif
+
             byte[] rBuf = new byte[MEM_PAGE_SZ];
             while (true)
-            {
+            {   
+                m_uartSendMsg[0] = (byte)20;
+                m_uartSendMsg[1] = (byte)(pageIndex >> 24);
+                m_uartSendMsg[2] = (byte)(pageIndex >> 16);
+                m_uartSendMsg[3] = (byte)(pageIndex >> 8);
+                m_uartSendMsg[4] = (byte)(pageIndex);
+                m_uartSendMsg[5] = (byte)(pageIndex >> 24);
+                m_uartSendMsg[6] = (byte)(pageIndex >> 16);
+                m_uartSendMsg[7] = (byte)(pageIndex >> 8);
+                m_uartSendMsg[8] = (byte)(pageIndex);
+
+                cSerialPort.Clear();
+                cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
+
+                int delayCnt = 0;
+                while (true)
+                {
+                    int BytesToRead = cSerialPort.BytesToRead();
+                    //Console.WriteLine(String.Format("BytesToRead: {0}", BytesToRead));
+
+                    if (BytesToRead == MEM_PAGE_SZ)
+                        break;
+                    else
+                    {
+                        Thread.Sleep(1);
+                        delayCnt++;
+                        if (delayCnt == 10)
+                            break;
+                    }
+                }
+
+                if (delayCnt == 10)
+                    continue;
+
                 int rCnt = cSerialPort.Read(rBuf, MEM_PAGE_SZ);
                 if (rCnt < 0)
                 {
@@ -729,12 +789,13 @@ namespace Huinno_Downloader
                     continue;
                 }
 #if USE_DEBUG
-                Console.WriteLine(String.Format("r:{0}, w:{1}", rCnt, m_wrCnt));
+                //Console.WriteLine(String.Format("r:{0}, w:{1}, t:{2}", rCnt, pageIndex, pageIndex_end));
 #endif
 
                 //
                 m_bw.Write(rBuf, 0, MEM_PAGE_SZ);
                 m_wrCnt += 1;
+                pageIndex += 1;
                 Array.Clear(rBuf, 0, rCnt);
 
                 // ui: progress bar
@@ -745,8 +806,19 @@ namespace Huinno_Downloader
                 }
 
                 if (m_wrCnt == m_RdPageTotalCnt)
+                {
+#if USE_DEBUG
+                    Console.WriteLine(String.Format("count:{0}, totalCnt:{1}", m_wrCnt, m_RdPageTotalCnt));
+#endif
                     break;
+                }
             }
+
+#if USE_DEBUG
+            sw.Stop();
+            Console.WriteLine(String.Format("Elapsed: {0} ms", sw.ElapsedMilliseconds.ToString()));
+#endif
+
             m_wrCnt = 0;
             m_bw.Close();
             m_fs.Close();
@@ -1399,6 +1471,12 @@ namespace Huinno_Downloader
             m_fs = new FileStream(filePath + "_ecg_conv.bin", FileMode.CreateNew, FileAccess.Write);
             m_bw = new BinaryWriter(m_fs);
 
+#if USE_DEBUG
+            //For python data
+            FileStream m_fs2 = new FileStream(filePath + "_ecg_conv_python.bin", FileMode.CreateNew, FileAccess.Write);
+            BinaryWriter m_bw2 = new BinaryWriter(m_fs2);
+#endif
+
             //m_fs = new FileStream(filePath + "_output.bin", FileMode.CreateNew, FileAccess.Write);
             //m_bw = new BinaryWriter(m_fs);
 
@@ -1424,7 +1502,12 @@ namespace Huinno_Downloader
                     break;
 
                 //write ecg data to output file
-                m_bw.Write(ecg, 0, ECG_BLOCK_SIZE); 
+                m_bw.Write(ecg, 0, ECG_BLOCK_SIZE);
+
+#if USE_DEBUG
+                //for python 
+                m_bw2.Write(ecg, 0, ECG_BLOCK_SIZE);
+#endif
 
                 // increase count
                 rCnt += ECG_BLOCK_SIZE;
@@ -1460,6 +1543,11 @@ namespace Huinno_Downloader
 
             //close ecg binary output file
             m_bw.Close();
+
+#if USE_DEBUG
+            //For python
+            m_bw2.Close();
+#endif
 
             /**********************************************************************
              *  Make Header

@@ -99,6 +99,11 @@ namespace Huinno_Downloader
             return "OK";
         }
 
+        public static int BytesToRead()
+        {
+            return gComPort.BytesToRead;
+        }
+       
         public static void Clear()
         {
             gComPort.DiscardInBuffer();
