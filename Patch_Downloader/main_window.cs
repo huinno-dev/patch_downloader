@@ -183,6 +183,8 @@ namespace Huinno_Downloader
 
         import_complete_alert m_import_complete = new import_complete_alert();
 
+        private Point mousePoint;
+
         public main_window()
         {
            
@@ -198,6 +200,7 @@ namespace Huinno_Downloader
 
             //
             InitializeComponent();
+
             m_strCfg_baudrate = "115200";
             m_progRunning = true;
 
@@ -784,7 +787,10 @@ namespace Huinno_Downloader
                 }
 
                 if (delayCnt == 10)
+                {
+                    Console.WriteLine(String.Format("thd_Read retry : {0}", pageIndex));
                     continue;
+                }
 
                 int rCnt = cSerialPort.Read(rBuf, MEM_PAGE_SZ);
                 if (rCnt < 0)
@@ -1697,7 +1703,7 @@ namespace Huinno_Downloader
 
             cSerialPort.Clear();
             cSerialPort.Write(m_uartSendMsg, UART_RX_CHAR_LEN_MAX);
-            Thread.Sleep(500);
+            Thread.Sleep(3000);
         }
 
         private void main_window_FormClosing(object sender, FormClosingEventArgs e)
@@ -1827,6 +1833,33 @@ namespace Huinno_Downloader
         private void CB_ComPortNameList_Click(object sender, MouseEventArgs e)
         {
             RefreshComPortList();
+        }
+
+        private void main_window_MouseDown(object sender, MouseEventArgs e)
+        {
+            mousePoint = new Point(e.X, e.Y);
+        }
+
+        private void main_window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (mousePoint.X - e.X),
+                    this.Top - (mousePoint.Y - e.Y));
+            }
+        }
+        private void LB_Title_MouseDown(object sender, MouseEventArgs e)
+        {
+            mousePoint = new Point(e.X, e.Y);
+        }
+
+        private void LB_Title_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (mousePoint.X - e.X),
+                    this.Top - (mousePoint.Y - e.Y));
+            }
         }
     }
 }

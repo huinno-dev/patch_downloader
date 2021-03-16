@@ -122,8 +122,10 @@
             this.LB_Title.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LB_Title.Location = new System.Drawing.Point(12, 12);
             this.LB_Title.Name = "LB_Title";
-            this.LB_Title.Size = new System.Drawing.Size(537, 33);
+            this.LB_Title.Size = new System.Drawing.Size(220, 33);
             this.LB_Title.TabIndex = 34;
+            this.LB_Title.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LB_Title_MouseDown);
+            this.LB_Title.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LB_Title_MouseMove);
             // 
             // PB_Progress
             // 
@@ -340,6 +342,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.main_window_FormClosing);
             this.Load += new System.EventHandler(this.main_window_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.main_window_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.main_window_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.PB_Progress)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

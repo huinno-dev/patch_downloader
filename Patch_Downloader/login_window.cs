@@ -18,6 +18,8 @@ namespace Huinno_Downloader
 
         private const bool m_useAdminAccount = true;
 
+        private Point mousePoint;
+
         public login_window()
         {
             InitializeComponent();
@@ -231,6 +233,20 @@ namespace Huinno_Downloader
             //Exit program
             Application.ExitThread();
             Environment.Exit(0);
+        }
+
+        private void login_window_MouseDown(object sender, MouseEventArgs e)
+        {
+            mousePoint = new Point(e.X, e.Y);
+        }
+
+        private void login_window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (mousePoint.X - e.X),
+                    this.Top - (mousePoint.Y - e.Y));
+            }
         }
     }
 }

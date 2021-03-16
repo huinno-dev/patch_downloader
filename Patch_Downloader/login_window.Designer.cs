@@ -157,6 +157,8 @@
             this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.Name = "login_window";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.login_window_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.login_window_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pb_logo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
