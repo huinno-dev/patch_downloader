@@ -151,6 +151,7 @@
             this.CB_ComPortNameList.Name = "CB_ComPortNameList";
             this.CB_ComPortNameList.Size = new System.Drawing.Size(86, 28);
             this.CB_ComPortNameList.TabIndex = 38;
+            this.CB_ComPortNameList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CB_ComPortNameList_Click);
             // 
             // btn_exit
             // 

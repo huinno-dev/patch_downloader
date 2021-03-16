@@ -300,6 +300,9 @@ namespace Huinno_Downloader
 
             CB_ComPortNameList.Items.Clear();
             CB_ComPortNameList.Items.AddRange(nameArray);
+
+            CB_ComPortNameList.Text = "";
+
             for (int i = 0; i < nameArray.Length; ++i)
             {
                 if (nameArray[i] == m_strCfg_comport)
@@ -1104,11 +1107,6 @@ namespace Huinno_Downloader
 
         }
 
-        private void CB_ComPortNameList_Click(object sender, EventArgs e)
-        {
-            RefreshComPortList();
-        }
-
         private void ConvertEcgData(string tempFile)
         {
             byte[] d = File.ReadAllBytes(tempFile);
@@ -1810,6 +1808,11 @@ namespace Huinno_Downloader
             //Exit program
             Application.ExitThread();
             Environment.Exit(0);
+        }
+
+        private void CB_ComPortNameList_Click(object sender, MouseEventArgs e)
+        {
+            RefreshComPortList();
         }
     }
 }
